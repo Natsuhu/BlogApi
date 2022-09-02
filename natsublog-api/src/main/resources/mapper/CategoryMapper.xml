@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.natsu.blog.mapper.CategoryMapper">
+
+    <select id="getCategoryById" parameterType="int" resultType="com.natsu.blog.pojo.Category" >
+        select * from category where id = #{id}
+    </select>
+
+    <select id="getCategoryList" resultType="com.natsu.blog.pojo.Category" >
+        select * from category
+    </select>
+
+
+</mapper>

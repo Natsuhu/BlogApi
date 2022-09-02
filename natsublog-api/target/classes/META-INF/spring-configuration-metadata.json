@@ -1,0 +1,47 @@
+{
+  "groups": [
+    {
+      "name": "blog",
+      "type": "com.natsu.blog.config.properties.BlogProperties",
+      "sourceType": "com.natsu.blog.config.properties.BlogProperties"
+    },
+    {
+      "name": "upload.file",
+      "type": "com.natsu.blog.config.properties.UploadProperties",
+      "sourceType": "com.natsu.blog.config.properties.UploadProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "blog.api",
+      "type": "java.lang.String",
+      "sourceType": "com.natsu.blog.config.properties.BlogProperties"
+    },
+    {
+      "name": "blog.front",
+      "type": "java.lang.String",
+      "sourceType": "com.natsu.blog.config.properties.BlogProperties"
+    },
+    {
+      "name": "blog.name",
+      "type": "java.lang.String",
+      "sourceType": "com.natsu.blog.config.properties.BlogProperties"
+    },
+    {
+      "name": "upload.file.access-path",
+      "type": "java.lang.String",
+      "sourceType": "com.natsu.blog.config.properties.UploadProperties"
+    },
+    {
+      "name": "upload.file.path",
+      "type": "java.lang.String",
+      "sourceType": "com.natsu.blog.config.properties.UploadProperties"
+    },
+    {
+      "name": "upload.file.resources-locations",
+      "type": "java.lang.String",
+      "sourceType": "com.natsu.blog.config.properties.UploadProperties"
+    }
+  ],
+  "hints": []
+}

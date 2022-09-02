@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.natsu.blog.mapper.TagMapper">
+
+    <select id="getTagsByArticleId" parameterType="int" resultType="com.natsu.blog.pojo.Tag" >
+        select * from tag where id in
+            ( select tag_id from article_tag_ref where article_id = #{articleId} )
+    </select>
+
+
+    <select id="getTagList" resultType="com.natsu.blog.pojo.Tag">
+            select * from tag
+    </select>
+
+    <select id="getTagById" parameterType="int" resultType="com.natsu.blog.pojo.Tag">
+        select * from tag where id = #{tagId}
+    </select>
+
+</mapper>
