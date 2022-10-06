@@ -4,67 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14d9ffe7-4d28-423a-8ccf-7e400619eb11" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/acfa40c7-b29a-4ce1-8c33-21433a6ee469.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/acfa40c7-b29a-4ce1-8c33-21433a6ee469.xml" afterDir="false" />
+    <list default="true" id="14d9ffe7-4d28-423a-8ccf-7e400619eb11" name="Default Changelist" comment="代码规范化">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/mapper/CategoryMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/mapper/CategoryMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/mapper/CommentMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/mapper/CommentMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/mapper/MomentMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/mapper/MomentMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/mapper/SiteSettingMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/mapper/SiteSettingMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/mapper/TagMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/mapper/TagMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/mapper/UserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/mapper/UserMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/pojo/Article.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/pojo/Category.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/pojo/Comment.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/pojo/Moment.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/pojo/SiteSetting.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/pojo/Tag.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/pojo/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/pojo/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/ArticleService.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/ArticleService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/CategoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/CategoryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/CommentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/CommentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/MomentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/MomentService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/SiteSettingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/SiteSettingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/TagService.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/TagService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/impl/ArticleServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/impl/ArticleServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/impl/CategoryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/impl/CategoryServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/impl/CommentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/impl/CommentServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/impl/MomentServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/impl/MomentServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/impl/SiteSettingServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/impl/SiteSettingServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/impl/TagServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/impl/TagServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/service/impl/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/test/java/test/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/test/java/test/Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/controller/CommentController.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/controller/CommentController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/mapper/CategoryMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/mapper/CategoryMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/mapper/CommentMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/mapper/CommentMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/mapper/MomentMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/mapper/MomentMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/mapper/SiteSettingMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/mapper/SiteSettingMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/mapper/TagMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/mapper/TagMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/mapper/UserMapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/mapper/UserMapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/pojo/Article.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/pojo/Article.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/pojo/Category.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/pojo/Category.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/pojo/Comment.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/pojo/Comment.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/pojo/Moment.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/pojo/Moment.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/pojo/SiteSetting.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/pojo/SiteSetting.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/pojo/Tag.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/pojo/Tag.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/pojo/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/pojo/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/ArticleService.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/ArticleService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/CategoryService.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/CategoryService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/CommentService.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/CommentService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/MomentService.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/MomentService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/SiteSettingService.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/SiteSettingService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/TagService.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/TagService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/UserService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/impl/ArticleServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/impl/ArticleServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/impl/CategoryServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/impl/CategoryServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/impl/CommentServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/impl/CommentServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/impl/MomentServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/impl/MomentServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/impl/SiteSettingServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/impl/SiteSettingServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/impl/TagServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/impl/TagServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/impl/UserServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/service/impl/UserServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/utils/ThreadUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/classes/com/natsu/blog/utils/ThreadUtils.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/target/test-classes/test/Test.class" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/target/test-classes/test/Test.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/BlogApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/BlogApp.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,7 +80,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.20344828" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="ReactorSettings">
@@ -176,15 +119,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -421,7 +362,9 @@
       <workItem from="1662704990317" duration="1136000" />
       <workItem from="1663146792044" duration="483000" />
       <workItem from="1663171400208" duration="1479000" />
-      <workItem from="1665036205633" duration="4028000" />
+      <workItem from="1665036205633" duration="4594000" />
+      <workItem from="1665041000990" duration="83000" />
+      <workItem from="1665041383075" duration="1190000" />
     </task>
     <task id="LOCAL-00001" summary="第一次提交">
       <created>1660786863205</created>
@@ -437,7 +380,14 @@
       <option name="project" value="LOCAL" />
       <updated>1660786904374</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="代码规范化">
+      <created>1665040468593</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1665040468593</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -457,7 +407,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="第一次提交" />
-    <option name="LAST_COMMIT_MESSAGE" value="第一次提交" />
+    <MESSAGE value="代码规范化" />
+    <option name="LAST_COMMIT_MESSAGE" value="代码规范化" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
