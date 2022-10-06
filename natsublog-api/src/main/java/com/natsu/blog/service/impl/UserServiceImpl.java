@@ -2,6 +2,7 @@ package com.natsu.blog.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.natsu.blog.model.vo.Result;
 import com.natsu.blog.model.params.LoginParams;
 import com.natsu.blog.model.vo.UserVO;
@@ -20,7 +21,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements UserService {
 
 
     @Autowired

@@ -1,5 +1,6 @@
 package com.natsu.blog.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.natsu.blog.mapper.CommentMapper;
 import com.natsu.blog.pojo.Comment;
 import com.natsu.blog.service.CommentService;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class CommentServiceImpl implements CommentService {
+public class CommentServiceImpl extends ServiceImpl<CommentMapper , Comment> implements CommentService {
 
     @Autowired
     private CommentMapper commentMapper;

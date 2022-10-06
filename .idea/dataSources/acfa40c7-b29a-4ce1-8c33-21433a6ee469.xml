@@ -55,10 +55,10 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     <schema id="6" parent="1" name="performance_schema">
       <Collation>utf8_general_ci</Collation>
     </schema>
-    <schema id="7" parent="1" name="ry_vue">
-      <Collation>utf8_bin</Collation>
+    <schema id="7" parent="1" name="sys">
+      <Collation>utf8_general_ci</Collation>
     </schema>
-    <schema id="8" parent="1" name="sys">
+    <schema id="8" parent="1" name="willingbot">
       <Collation>utf8_general_ci</Collation>
     </schema>
     <collation id="9" parent="1" name="armscii8_bin">
@@ -775,7 +775,9 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <Host>localhost</Host>
     </user>
     <user id="233" parent="1" name="root"/>
-    <table id="234" parent="2" name="article"/>
+    <table id="234" parent="2" name="article">
+      <Collation>utf8mb4_bin</Collation>
+    </table>
     <table id="235" parent="2" name="article_tag_ref">
       <Collation>utf8_general_ci</Collation>
     </table>
@@ -783,10 +785,14 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
       <Collation>utf8_general_ci</Collation>
     </table>
     <table id="237" parent="2" name="comment">
-      <Collation>utf8_general_ci</Collation>
+      <Collation>utf8mb4_unicode_ci</Collation>
     </table>
-    <table id="238" parent="2" name="moment"/>
-    <table id="239" parent="2" name="site_setting"/>
+    <table id="238" parent="2" name="moment">
+      <Collation>utf8mb4_unicode_ci</Collation>
+    </table>
+    <table id="239" parent="2" name="site_setting">
+      <Collation>utf8mb4_unicode_ci</Collation>
+    </table>
     <table id="240" parent="2" name="tag">
       <Collation>utf8_general_ci</Collation>
     </table>

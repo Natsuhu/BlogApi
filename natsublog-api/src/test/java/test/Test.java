@@ -2,6 +2,8 @@ package test;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Test{
 /*    @org.junit.jupiter.api.Test
@@ -41,6 +43,18 @@ public class Test{
         for (Map.Entry<Integer,Integer> entry : hashMap.entrySet()) {
             System.out.println(entry.getKey()+"出现"+entry.getValue()+"次");
         }
+    }
+
+    @org.junit.jupiter.api.Test
+    public void test4() {
+        Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run(){
+                System.out.println("执行定时任务！");
+            }
+        };
+        timer.schedule(timerTask,0,2000);
     }
 
 

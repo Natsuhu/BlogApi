@@ -1,5 +1,6 @@
 package com.natsu.blog.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.natsu.blog.model.params.PageParams;
 import com.natsu.blog.model.vo.ArticleReadVO;
 import com.natsu.blog.model.vo.HomeArticleList;
@@ -10,7 +11,7 @@ import com.natsu.blog.pojo.Article;
 import java.util.List;
 import java.util.Map;
 
-public interface ArticleService {
+public interface ArticleService extends IService<Article> {
     Integer getPublicArticleCount();
 
     Map getArchives();

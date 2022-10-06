@@ -1,5 +1,6 @@
 package com.natsu.blog.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.natsu.blog.mapper.SiteSettingMapper;
 import com.natsu.blog.pojo.SiteSetting;
 import com.natsu.blog.service.SiteSettingService;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class SiteSettingServiceImpl implements SiteSettingService {
+public class SiteSettingServiceImpl extends ServiceImpl<SiteSettingMapper , SiteSetting> implements SiteSettingService {
 
     @Autowired
     private SiteSettingMapper siteSettingMapper;

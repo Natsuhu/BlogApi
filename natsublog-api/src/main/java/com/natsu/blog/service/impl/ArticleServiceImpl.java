@@ -2,6 +2,7 @@ package com.natsu.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.natsu.blog.mapper.ArticleMapper;
@@ -19,7 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class ArticleServiceImpl implements ArticleService {
+public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> implements ArticleService {
 
     @Autowired
     private ArticleMapper articleMapper;
