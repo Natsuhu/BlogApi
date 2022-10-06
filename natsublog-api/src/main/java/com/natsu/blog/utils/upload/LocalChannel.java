@@ -32,7 +32,7 @@ public class LocalChannel{
         FileOutputStream fileOutputStream = new FileOutputStream(uploadProperties.getPath() + fileName);
         fileOutputStream.write(image.getData());
         fileOutputStream.close();
-        return blogProperties.getApi() + "/image/" + fileName;
+        return fileName;
     }
 }
 

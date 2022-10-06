@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14d9ffe7-4d28-423a-8ccf-7e400619eb11" name="Default Changelist" comment="代码规范化">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/BlogApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/BlogApp.java" afterDir="false" />
-    </list>
+    <list default="true" id="14d9ffe7-4d28-423a-8ccf-7e400619eb11" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -364,7 +360,7 @@
       <workItem from="1663171400208" duration="1479000" />
       <workItem from="1665036205633" duration="4594000" />
       <workItem from="1665041000990" duration="83000" />
-      <workItem from="1665041383075" duration="1190000" />
+      <workItem from="1665041383075" duration="1899000" />
     </task>
     <task id="LOCAL-00001" summary="第一次提交">
       <created>1660786863205</created>
@@ -387,7 +383,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665040468593</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="添加gitignore文件，并排除target文件">
+      <created>1665042619799</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1665042619799</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -408,7 +411,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="第一次提交" />
     <MESSAGE value="代码规范化" />
-    <option name="LAST_COMMIT_MESSAGE" value="代码规范化" />
+    <MESSAGE value="添加gitignore文件，并排除target文件" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加gitignore文件，并排除target文件" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
