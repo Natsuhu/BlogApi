@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14d9ffe7-4d28-423a-8ccf-7e400619eb11" name="Default Changelist" comment="" />
+    <list default="true" id="14d9ffe7-4d28-423a-8ccf-7e400619eb11" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -70,7 +72,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/pojo" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../willingbot_server" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -99,6 +101,7 @@
       <command value="mvn spring-boot:run" />
       <command value="mvn clean:install" />
       <command value="mvn clean install" />
+      <command value="mvn package" />
     </option>
   </component>
   <component name="RunManager" selected="Spring Boot.BlogApp">
@@ -115,13 +118,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -360,7 +365,8 @@
       <workItem from="1663171400208" duration="1479000" />
       <workItem from="1665036205633" duration="4594000" />
       <workItem from="1665041000990" duration="83000" />
-      <workItem from="1665041383075" duration="1899000" />
+      <workItem from="1665041383075" duration="2373000" />
+      <workItem from="1665044484297" duration="355000" />
     </task>
     <task id="LOCAL-00001" summary="第一次提交">
       <created>1660786863205</created>
@@ -390,7 +396,14 @@
       <option name="project" value="LOCAL" />
       <updated>1665042619799</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="通过qq获取评论人的头像时，直接将头像名存储在数据库，而不需要存储完整的路径，因为Nginx已经配置图片映射。">
+      <created>1665043504801</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1665043504801</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -412,7 +425,8 @@
     <MESSAGE value="第一次提交" />
     <MESSAGE value="代码规范化" />
     <MESSAGE value="添加gitignore文件，并排除target文件" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加gitignore文件，并排除target文件" />
+    <MESSAGE value="通过qq获取评论人的头像时，直接将头像名存储在数据库，而不需要存储完整的路径，因为Nginx已经配置图片映射。" />
+    <option name="LAST_COMMIT_MESSAGE" value="通过qq获取评论人的头像时，直接将头像名存储在数据库，而不需要存储完整的路径，因为Nginx已经配置图片映射。" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
