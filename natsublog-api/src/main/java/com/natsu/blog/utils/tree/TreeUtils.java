@@ -18,7 +18,7 @@ public class TreeUtils {
             treeNode.getContent().put("content",comment.getContent());
             treeNode.getContent().put("avatar",comment.getAvatar());
             treeNode.getContent().put("createTime",comment.getCreateTime());
-            treeNode.getContent().put("replayNickname",comment.getReplayNickname());
+            treeNode.getContent().put("replayNickname",comment.getReplyNickname());
             treeNodes.add(treeNode);
         }
         return treeNodes;
