@@ -1,17 +1,15 @@
 package com.natsu.blog.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.natsu.blog.pojo.Comment;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.natsu.blog.model.dto.CommentQueryDTO;
+import com.natsu.blog.model.entity.Comment;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface CommentMapper extends BaseMapper<Comment> {
 
-    Integer getPublicCommentCount();
+    IPage<Comment> getCommentsByQueryParams(IPage<Comment> page , @Param("commentQueryDTO") CommentQueryDTO commentQueryDTO);
 
-    List<Comment> getPublicCommentsByPage(int page);
-
-    List<Comment> getPublicCommentsByArticleId(int articleId);
 }

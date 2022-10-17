@@ -3,8 +3,5 @@
 
 <mapper namespace="com.natsu.blog.mapper.SiteSettingMapper">
 
-    <select id="getPageSetting" parameterType="int" resultType="com.natsu.blog.pojo.SiteSetting" >
-        select * from site_setting where page = #{page}
-    </select>
 
 </mapper>

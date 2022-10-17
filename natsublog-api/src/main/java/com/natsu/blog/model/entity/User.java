@@ -1,4 +1,4 @@
-package com.natsu.blog.pojo;
+package com.natsu.blog.model.entity;
 
 import lombok.Data;
 

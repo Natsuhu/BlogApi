@@ -1,10 +1,12 @@
 package com.natsu.blog.controller;
 
-import com.natsu.blog.model.params.PageParams;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.natsu.blog.model.dto.ArticleQueryDTO;
+import com.natsu.blog.model.dto.BaseQueryDTO;
+import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.vo.*;
 import com.natsu.blog.service.ArticleService;
 import com.natsu.blog.service.CategoryService;
-import com.natsu.blog.service.CommentService;
 import com.natsu.blog.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,9 +27,6 @@ public class ArticleController {
     private ArticleService articleService;
 
     @Autowired
-    private CommentService commentService;
-
-    @Autowired
     private CategoryService categoryService;
 
     @Autowired
@@ -35,8 +34,8 @@ public class ArticleController {
 
     /*首页文章列表*/
     @GetMapping
-    public Result getHomeArticleList(PageParams params) {
-        PageResult<HomeArticleList> pageResult = articleService.getHomeArticleList(params);
+    public Result getHomeArticles(BaseQueryDTO baseQueryDTO) {
+        PageResult<HomeArticles> pageResult = articleService.getHomeArticles(baseQueryDTO);
         System.out.println(new Date()+"访问网站！");
         return Result.success(pageResult);
     }
@@ -51,14 +50,16 @@ public class ArticleController {
     /*文章数量*/
     @GetMapping("/count")
     public Result getPublicArticleCount(){
-        Integer articleCount = articleService.getPublicArticleCount();
+        LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Article::getIsPublished , 1);
+        Integer articleCount = articleService.count(wrapper);
         return Result.success(articleCount);
     }
 
     /*阅读文章*/
     @GetMapping("/read")
-    public Result getArticleReadVOById(@RequestParam int id){
-        ArticleReadVO article = articleService.getArticleReadVOById(id);
+    public Result getReadArticleById(@RequestParam int id){
+        ReadArticle article = articleService.getReadArticleById(id);
         if (article == null) {
             return Result.fail(404,"没有这篇文章！");
         }
@@ -74,31 +75,28 @@ public class ArticleController {
 
     /*根据分类获取文章*/
     @GetMapping("/category")
-    public Result getArticleByCategoryId(PageParams params , int categoryId) {
-        if (categoryService.getCategoryById(categoryId) == null) {
+    public Result getArticlesByCategoryId(ArticleQueryDTO articleQueryDTO) {
+        articleQueryDTO.setTagIds(null);
+        articleQueryDTO.setKeyword(null);
+        articleQueryDTO.setIsPublished(true);
+        if (categoryService.getById(articleQueryDTO.getCategoryId()) == null) {
             return Result.fail(404,"没有这个分类");
         }
-        PageResult<HomeArticleList> articles = articleService.getArticlesByCategoryId(params,categoryId);
+        PageResult<HomeArticles> articles = articleService.getArticlesByQueryParams(articleQueryDTO);
         return Result.success(articles);
     }
 
     /*根据标签获取文章*/
     @GetMapping("/tag")
-    public Result getArticlesByTagId(PageParams params , int tagId) {
-        if(tagService.getTagById(tagId) == null) {
-            return Result.fail(404,"此标签不存在");
+    public Result getArticlesByTagId(ArticleQueryDTO articleQueryDTO) {
+        articleQueryDTO.setCategoryId(null);
+        articleQueryDTO.setKeyword(null);
+        articleQueryDTO.setIsPublished(true);
+        if(tagService.getById(articleQueryDTO.getTagIds().get(0)) == null) {
+            return Result.fail(404,"没有这个标签");
         }
-        PageResult<HomeArticleList> articles = articleService.getArticlesByTagId(params,tagId);
+        PageResult<HomeArticles> articles = articleService.getArticlesByQueryParams(articleQueryDTO);
         return Result.success(articles);
     }
 
-    /*获取文章评论*/
-    @GetMapping("/read/comments")
-    public Result getArticleComments(int articleId) {
-        if(articleService.getArticleById(articleId) == null) {
-            return Result.fail(404,"此文章不存在");
-        }
-        Map comments = commentService.getCommentsVOByArticleId(articleId);
-        return Result.success(comments);
-    }
 }

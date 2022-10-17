@@ -4,10 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.natsu.blog.model.vo.Result;
-import com.natsu.blog.model.params.LoginParams;
+import com.natsu.blog.model.dto.LoginParams;
 import com.natsu.blog.model.vo.UserVO;
 import com.natsu.blog.mapper.UserMapper;
-import com.natsu.blog.pojo.User;
 import com.natsu.blog.service.UserService;
 import com.natsu.blog.utils.JWTUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -21,7 +20,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper , com.natsu.blog.model.entity.User> implements UserService {
 
 
     @Autowired
@@ -31,28 +30,28 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
     private RedisTemplate<String,String> redisTemplate;
 
 
-    public int insertUser(User user) {
+    public int insertUser(com.natsu.blog.model.entity.User user) {
         return userMapper.insert(user);
     }
 
-    public User getUserById(int id) {
+    public com.natsu.blog.model.entity.User getUserById(int id) {
         return null;
     }
 
-    public User getUserByEmailAndPsd(String email,String psd) {
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getUserEmail,email);
-        queryWrapper.eq(User::getUserPass,psd);
+    public com.natsu.blog.model.entity.User getUserByEmailAndPsd(String email, String psd) {
+        LambdaQueryWrapper<com.natsu.blog.model.entity.User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(com.natsu.blog.model.entity.User::getUserEmail,email);
+        queryWrapper.eq(com.natsu.blog.model.entity.User::getUserPass,psd);
         queryWrapper.last("limit 1");
-        User user = userMapper.selectOne(queryWrapper);
+        com.natsu.blog.model.entity.User user = userMapper.selectOne(queryWrapper);
         return user;
     }
 
-    public User getUserByEmail(String email) {
-        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(User::getUserEmail,email);
+    public com.natsu.blog.model.entity.User getUserByEmail(String email) {
+        LambdaQueryWrapper<com.natsu.blog.model.entity.User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(com.natsu.blog.model.entity.User::getUserEmail,email);
         queryWrapper.last("limit 1");
-        User user = userMapper.selectOne(queryWrapper);
+        com.natsu.blog.model.entity.User user = userMapper.selectOne(queryWrapper);
         return user;
     }
 
@@ -68,7 +67,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
         if(StringUtils.isBlank(userJSON)) {
             return Result.fail(-1001,"token解析失败");
         }
-        User user = JSON.parseObject(userJSON,User.class);
+        com.natsu.blog.model.entity.User user = JSON.parseObject(userJSON, com.natsu.blog.model.entity.User.class);
         UserVO userVO = new UserVO();
         BeanUtils.copyProperties(user, userVO);
         return Result.success(userVO);
@@ -82,7 +81,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
             return Result.fail(9001,"参数为空");
         }
         //通过email和密码查询用户
-        User user = getUserByEmailAndPsd(email,password);
+        com.natsu.blog.model.entity.User user = getUserByEmailAndPsd(email,password);
         if (user == null) {
             return Result.fail(9002,"用户名或密码错误");
         }
@@ -108,12 +107,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
         if(StringUtils.isBlank(account) || StringUtils.isBlank(password)) {
             return Result.fail(9000,"参数为空");
         }
-        User user = getUserByEmail(account);
+        com.natsu.blog.model.entity.User user = getUserByEmail(account);
         if (user != null) {
             return Result.fail(9000,"用户已经存在");
         }
 
-        user = new User();
+        user = new com.natsu.blog.model.entity.User();
         user.setUserEmail(account);
         user.setUserPass(password);
         user.setUserRegisterTime(new Date());
@@ -121,7 +120,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper , User> implements U
         user.setUserRole("user");
         insertUser(user);
 
-        User newUser = getUserByEmail(account);
+        com.natsu.blog.model.entity.User newUser = getUserByEmail(account);
         String token = JWTUtils.createToken(newUser.getUserId());
         redisTemplate.opsForValue().set("TOKEN_"+token, JSON.toJSONString(newUser),1, TimeUnit.DAYS);
         return Result.success(token);

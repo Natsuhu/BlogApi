@@ -1,13 +1,8 @@
 package com.natsu.blog.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.natsu.blog.pojo.Category;
-
-import java.util.List;
+import com.natsu.blog.model.entity.Category;
 
 public interface CategoryService extends IService<Category> {
 
-    List<Category> getCategoryList();
-
-    Category getCategoryById(int id);
 }

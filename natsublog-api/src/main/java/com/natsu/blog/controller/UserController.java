@@ -1,7 +1,7 @@
 package com.natsu.blog.controller;
 
 import com.natsu.blog.model.vo.Result;
-import com.natsu.blog.model.params.LoginParams;
+import com.natsu.blog.model.dto.LoginParams;
 import com.natsu.blog.service.UserService;
 import com.natsu.blog.utils.UserThreadLocal;
 import org.springframework.beans.factory.annotation.Autowired;

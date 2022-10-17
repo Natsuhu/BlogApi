@@ -1,6 +1,6 @@
 package com.natsu.blog.utils;
 
-import com.natsu.blog.pojo.User;
+import com.natsu.blog.model.entity.User;
 
 public class UserThreadLocal {
 

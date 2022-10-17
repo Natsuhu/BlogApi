@@ -1,8 +1,13 @@
 package com.natsu.blog.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.natsu.blog.mapper.CommentMapper;
-import com.natsu.blog.pojo.Comment;
+import com.natsu.blog.model.dto.CommentQueryDTO;
+import com.natsu.blog.model.entity.Comment;
+import com.natsu.blog.model.vo.PageResult;
 import com.natsu.blog.service.CommentService;
 import com.natsu.blog.utils.tree.TreeNode;
 import com.natsu.blog.utils.tree.TreeUtils;
@@ -20,69 +25,69 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper , Comment> imp
     @Autowired
     private CommentMapper commentMapper;
 
-    public Integer getPublicCommentCount() {
-        return commentMapper.getPublicCommentCount();
-    }
+    @Override
+    public Map<String , Object> buildCommentTree(CommentQueryDTO commentQueryDTO) {
+        PageResult<Comment> pageResult = this.getRootComments(commentQueryDTO);
+        List<Comment> rootComments = pageResult.getDataList();
+        List<Comment> childComments = new ArrayList<>();
+        /*根据rootComment查找childComment*/
+        LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Comment::getIsPublished , commentQueryDTO.getIsPublished());
+        for (Comment comment : rootComments) {
+            wrapper.eq(Comment::getOriginId , comment.getOriginId());
+            wrapper.ne(Comment::getId , comment.getId());
+            wrapper.orderByDesc(Comment::getCreateTime);
+            childComments.addAll(commentMapper.selectList(wrapper));
+        }
 
-    public List<Comment> getPublicCommentsByPage(int page) {
-        return commentMapper.getPublicCommentsByPage(page);
-    }
+        /*将所rootComment和childComment放在一个集合*/
+        List<Comment> allComment = new ArrayList<>();
+        allComment.addAll(rootComments);
+        allComment.addAll(childComments);
 
-    public List<Comment> getPublicCommentsByArticleId(int articleId) {
-        return commentMapper.getPublicCommentsByArticleId(articleId);
-    }
-
-    public Map getCommentsVOByPage(int page) {
-        /*获取某页面的全部评论及其数量*/
-        List<Comment> comments = getPublicCommentsByPage(page);
-        int count = comments.size();
-
-        /*评论数据封装在List，然后将数量和评论数据都封装在map*/
-        List<TreeNode> commentData = new ArrayList<>();
-        Map<String , Object> Result = new HashMap<>();
-
-        /*先构建节点，再将节点构建为树*/
-        List<TreeNode> treeNodes = TreeUtils.buildCommentTreeNode(comments);
+        /*开始构建commentTree*/
+        List<TreeNode> comments = new ArrayList<>();
+        Map<String , Object> result = new HashMap<>();
+        List<TreeNode> treeNodes = TreeUtils.buildCommentTreeNode(allComment);
         treeNodes = TreeUtils.buildCommentTree(treeNodes,-1);
 
-        /*遍历评论树，如果此评论没有子评论则直接添加到List，否则就要转换为两级的树结构*/
+        /*遍历评论树，并转为两级评论树*/
         for (TreeNode treeNode : treeNodes) {
             if (treeNode.getChildren() == null) {
-                commentData.add(treeNode);
+                comments.add(treeNode);
             }else {
-                TreeNode cache = TreeUtils.conTwoLevelCommentTree(treeNode);
-                commentData.add(cache);
+                comments.add(TreeUtils.conTwoLevelCommentTree(treeNode));
             }
         }
 
-        /*将评论数量和评论数据放入Map*/
-        Result.put("count",count);
-        Result.put("commentData",commentData);
-        return Result;
+        /*获取当前页面的评论数量和分页总页数*/
+        LambdaQueryWrapper<Comment> queryCount = new LambdaQueryWrapper<>();
+        queryCount.eq(Comment::getIsPublished , true);
+        queryCount.eq(Comment::getPage , commentQueryDTO.getPage());
+        Integer commentCount = commentMapper.selectCount(queryCount);
+        Integer totalPage = (int) pageResult.getTotalPage();
+
+        /*封装结果集*/
+        result.put("count" , commentCount);
+        result.put("totalPage" , totalPage);
+        result.put("comments" , comments);
+        return result;
+
     }
 
-    public Map getCommentsVOByArticleId(int articleId) {
-        List<Comment> comments = getPublicCommentsByArticleId(articleId);
-        int count = comments.size();
-        List<TreeNode> commentData = new ArrayList<>();
-        Map<String , Object> Result = new HashMap<>();
-        List<TreeNode> treeNodes = TreeUtils.buildCommentTreeNode(comments);
-        treeNodes = TreeUtils.buildCommentTree(treeNodes,-1);
-        for (TreeNode treeNode : treeNodes) {
-            if (treeNode.getChildren() == null) {
-                commentData.add(treeNode);
-            }else {
-                TreeNode cache = TreeUtils.conTwoLevelCommentTree(treeNode);
-                commentData.add(cache);
-            }
-        }
-        Result.put("count",count);
-        Result.put("commentData",commentData);
-        return Result;
+    @Override
+    public PageResult<Comment> getCommentsByQueryParams(CommentQueryDTO commentQueryDTO) {
+        IPage<Comment> page = new Page<>(commentQueryDTO.getPageNo(),commentQueryDTO.getPageSize());
+        IPage<Comment> comments = commentMapper.getCommentsByQueryParams(page,commentQueryDTO);
+        return new PageResult<>(comments.getPages(), comments.getRecords());
     }
 
-    public String saveComment(Comment comment) {
-        commentMapper.insert(comment);
-        return "评论成功";
+    public PageResult<Comment> getRootComments(CommentQueryDTO commentQueryDTO) {
+        commentQueryDTO.setParentCommentId(-1);
+        commentQueryDTO.setIsPublished(true);
+        IPage<Comment> page = new Page<>(commentQueryDTO.getPageNo() , commentQueryDTO.getPageSize());
+        IPage<Comment> rootComments = commentMapper.getCommentsByQueryParams(page , commentQueryDTO);
+        return new PageResult<>(rootComments.getPages(),rootComments.getRecords());
     }
+
 }

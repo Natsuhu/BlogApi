@@ -2,8 +2,8 @@ package com.natsu.blog.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.natsu.blog.model.vo.Result;
-import com.natsu.blog.model.params.LoginParams;
-import com.natsu.blog.pojo.User;
+import com.natsu.blog.model.dto.LoginParams;
+import com.natsu.blog.model.entity.User;
 
 public interface UserService extends IService<User> {
     int insertUser(User user);

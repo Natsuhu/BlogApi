@@ -3,13 +3,4 @@
 
 <mapper namespace="com.natsu.blog.mapper.CategoryMapper">
 
-    <select id="getCategoryById" parameterType="int" resultType="com.natsu.blog.pojo.Category" >
-        select * from category where id = #{id}
-    </select>
-
-    <select id="getCategoryList" resultType="com.natsu.blog.pojo.Category" >
-        select * from category
-    </select>
-
-
 </mapper>

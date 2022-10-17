@@ -1,4 +1,4 @@
-package com.natsu.blog.model.params;
+package com.natsu.blog.model.dto;
 
 import lombok.Data;
 

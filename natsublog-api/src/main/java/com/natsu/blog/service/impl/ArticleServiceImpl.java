@@ -1,17 +1,17 @@
 package com.natsu.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.natsu.blog.mapper.ArticleMapper;
-import com.natsu.blog.mapper.CategoryMapper;
-import com.natsu.blog.mapper.TagMapper;
-import com.natsu.blog.model.params.PageParams;
+import com.natsu.blog.model.dto.ArticleQueryDTO;
+import com.natsu.blog.model.dto.BaseQueryDTO;
+import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.vo.*;
-import com.natsu.blog.pojo.Article;
 import com.natsu.blog.service.ArticleService;
+import com.natsu.blog.service.CategoryService;
+import com.natsu.blog.service.TagService;
 import com.natsu.blog.utils.ThreadUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,18 +26,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
     private ArticleMapper articleMapper;
 
     @Autowired
-    private CategoryMapper categoryMapper;
+    private CategoryService categoryService;
 
     @Autowired
-    private TagMapper tagMapper;
+    private TagService tagService;
 
     @Autowired
     private ThreadUtils threadUtils;
 
-    public Integer getPublicArticleCount(){
-        return articleMapper.getPublicArticleCount();
-    }
-
+    @Override
     public Map<String , Object> getArchives() {
         /*返回的结果集*/
         Map<String,Object> map = new HashMap<>();
@@ -49,91 +46,74 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
             List<Archives> archives = articleMapper.getArchives(date);
             archivesMap.put(date,archives);
         }
-        /*调用自己的方法获取文章数量*/
-        int count = getPublicArticleCount();
+        /*获取文章数量*/
+        LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Article::getIsPublished,1);
+        int count = articleMapper.selectCount(wrapper);
         map.put("count",count);
         map.put("archives",archivesMap);
         return map;
     }
 
-    public ArticleReadVO getArticleReadVOById(int id) {
+    @Override
+    public ReadArticle getReadArticleById(int id) {
         /*获取文章，并转为readVO*/
-        Article article = articleMapper.getArticleById(id);
+        Article article = articleMapper.selectById(id);
         if(article == null || !article.getIsPublished()){
             return null;
         }
-        ArticleReadVO readVO = new ArticleReadVO();
+        ReadArticle readVO = new ReadArticle();
         BeanUtils.copyProperties(article,readVO);
         /*补充readVO中缺少的tag和category*/
-        readVO.setCategory(categoryMapper.getCategoryById(article.getCategoryId()));
-        readVO.setTags(tagMapper.getTagsByArticleId(article.getId()));
+        readVO.setCategory(categoryService.getById(article.getCategoryId()));
+        readVO.setTags(tagService.getTagsByArticleId(article.getId()));
         /*更新文章阅读数量*/
         threadUtils.updateArticleViewCount(articleMapper,article);
         return readVO;
     }
 
-    public PageResult<HomeArticleList> getHomeArticleList(PageParams params) {
-        /*分页查询article表*/
-        Page<Article> page = new Page<>(params.getPage(),params.getPageSize());
-        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Article::getIsPublished,1);
-        queryWrapper.orderByDesc(Article::getCreateTime);
-        queryWrapper.orderByDesc(Article::getIsTop);
-        Page<Article> articlePage = articleMapper.selectPage(page,queryWrapper);
-        /*获取查询结果，转为VO对象，并补充标签和分类*/
-        List<Article> articleList = articlePage.getRecords();
-        List<HomeArticleList> homeArticles = new ArrayList<>();
-        for (Article article : articleList) {
-            HomeArticleList homeArticle = new HomeArticleList();
-            BeanUtils.copyProperties(article,homeArticle);
-            homeArticle.setCategory(categoryMapper.getCategoryById(article.getCategoryId()));
-            homeArticle.setTags(tagMapper.getTagsByArticleId(article.getId()));
-            homeArticles.add(homeArticle);
-        }
-
-         return new PageResult<>(page.getPages(), homeArticles);
-    }
-
+    @Override
     public List<RandomArticles> getRandomArticles(int count) {
         return articleMapper.getRandomArticles(count);
     }
 
-    public PageResult<HomeArticleList> getArticlesByCategoryId(PageParams params , int categoryId) {
+    @Override
+    public PageResult<HomeArticles> getHomeArticles(BaseQueryDTO params) {
+        /*分页查询article表*/
+        IPage<Article> page = new Page<>(params.getPageNo(),params.getPageSize());
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Article::getIsPublished,1);
+        queryWrapper.orderByDesc(Article::getCreateTime);
+        queryWrapper.orderByDesc(Article::getIsTop);
+        IPage<Article> articlePage = articleMapper.selectPage(page,queryWrapper);
+        /*获取查询结果，转为VO对象，并补充标签和分类*/
+        List<Article> articleList = articlePage.getRecords();
+        List<HomeArticles> homeArticles = new ArrayList<>();
+        for (Article article : articleList) {
+            HomeArticles homeArticle = new HomeArticles();
+            BeanUtils.copyProperties(article,homeArticle);
+            homeArticle.setCategory(categoryService.getById(article.getCategoryId()));
+            homeArticle.setTags(tagService.getTagsByArticleId(article.getId()));
+            homeArticles.add(homeArticle);
+        }
+        return new PageResult<>(articlePage.getPages(), homeArticles);
+    }
+
+    @Override
+    public PageResult<HomeArticles> getArticlesByQueryParams(ArticleQueryDTO articleQueryDTO) {
         /*分页查询*/
-        PageHelper.startPage(params.getPage(),params.getPageSize());
-        List<Article> articles = articleMapper.getArticlesByCategoryId(categoryId);
-        PageInfo<Article> pageInfo = new PageInfo<>(articles);
-        List<HomeArticleList> homeArticles = new ArrayList<>();
+        IPage<Article> page = new Page<>(articleQueryDTO.getPageNo(),articleQueryDTO.getPageSize());
+        IPage<Article> articles = articleMapper.getArticlesByQueryParams(page,articleQueryDTO);
+        List<HomeArticles> homeArticles = new ArrayList<>();
+        System.out.println("为"+articles.getRecords());
         /*获取结果，遍历转VO对象并补充属性*/
-        for(Article article : pageInfo.getList()) {
-            HomeArticleList homeArticle = new HomeArticleList();
+        for(Article article : articles.getRecords()) {
+            HomeArticles homeArticle = new HomeArticles();
             BeanUtils.copyProperties(article,homeArticle);
-            homeArticle.setCategory(categoryMapper.getCategoryById(article.getCategoryId()));
-            homeArticle.setTags(tagMapper.getTagsByArticleId(article.getId()));
+            homeArticle.setCategory(categoryService.getById(article.getCategoryId()));
+            homeArticle.setTags(tagService.getTagsByArticleId(article.getId()));
             homeArticles.add(homeArticle);
         }
-        return new PageResult<>(pageInfo.getPages(), homeArticles);
+        return new PageResult<>(articles.getPages(), homeArticles);
     }
-
-    public PageResult<HomeArticleList> getArticlesByTagId(PageParams params , int tagId) {
-        /*分页并获取结果*/
-        PageHelper.startPage(params.getPage(),params.getPageSize());
-        List<Article> articles = articleMapper.getArticlesByTagId(tagId);
-        PageInfo<Article> pageInfo = new PageInfo<>(articles);
-        List<HomeArticleList> homeArticles = new ArrayList<>();
-        /*转VO对象并补充属性*/
-        for(Article article : pageInfo.getList()) {
-            HomeArticleList homeArticle = new HomeArticleList();
-            BeanUtils.copyProperties(article,homeArticle);
-            homeArticle.setCategory(categoryMapper.getCategoryById(article.getCategoryId()));
-            homeArticle.setTags(tagMapper.getTagsByArticleId(article.getId()));
-            homeArticles.add(homeArticle);
-        }
-        return new PageResult<>(pageInfo.getPages(), homeArticles);
-    }
-
-    public Article getArticleById(int articleId) {
-        return articleMapper.getArticleById(articleId);
-    }
-
 }

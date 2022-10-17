@@ -3,8 +3,4 @@
 
 <mapper namespace="com.natsu.blog.mapper.MomentMapper">
 
-    <select id="getPublicMoments" resultType="com.natsu.blog.pojo.Moment" >
-        select * from moment where is_published = 1 order by create_time desc
-    </select>
-
 </mapper>

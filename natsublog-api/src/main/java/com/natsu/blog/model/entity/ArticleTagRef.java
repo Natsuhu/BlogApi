@@ -1,4 +1,4 @@
-package com.natsu.blog.pojo;
+package com.natsu.blog.model.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -17,19 +17,19 @@ import java.io.Serializable;
 
 @Data
 @Accessors(chain = true)
-@TableName( "tag" )
-public class Tag implements Serializable {
+@TableName( "article_tag_ref" )
+public class ArticleTagRef implements Serializable {
+
+	/**
+	 * 文章ID
+	 */
+   	@TableId( value = "id" , type = IdType.AUTO )
+	private Integer articleId;
 
 	/**
 	 * 标签ID
 	 */
-   	@TableId( value = "id" , type = IdType.AUTO )
-	private Integer id;
-
-	/**
-	 * 标签名称
-	 */
-   	@TableField( "name" )
-	private String name;
+   	@TableField( "tag_id" )
+	private Long tagId;
 
 }

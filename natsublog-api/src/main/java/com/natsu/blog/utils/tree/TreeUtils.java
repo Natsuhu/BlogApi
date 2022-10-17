@@ -1,6 +1,6 @@
 package com.natsu.blog.utils.tree;
 
-import com.natsu.blog.pojo.Comment;
+import com.natsu.blog.model.entity.Comment;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -8,16 +8,17 @@ import java.util.stream.Collectors;
 public class TreeUtils {
 
     /*批量构建树节点*/
-    public static List<TreeNode> buildCommentTreeNode(List<Comment> commentList) {
+    public static List<TreeNode> buildCommentTreeNode(List<Comment> comments) {
         List<TreeNode> treeNodes = new ArrayList<>();
-        for (Comment comment : commentList) {
+        for (Comment comment : comments) {
             Map<String,Object> map = new HashMap<>();
             TreeNode treeNode = new TreeNode(comment.getId(),comment.getParentCommentId(),map,null);
             treeNode.getContent().put("nickname",comment.getNickname());
+            treeNode.getContent().put("originId" , comment.getOriginId());
             treeNode.getContent().put("content",comment.getContent());
             treeNode.getContent().put("avatar",comment.getAvatar());
             treeNode.getContent().put("createTime",comment.getCreateTime());
-            treeNode.getContent().put("replay_nickname",comment.getReplayNickname());
+            treeNode.getContent().put("replayNickname",comment.getReplayNickname());
             treeNodes.add(treeNode);
         }
         return treeNodes;

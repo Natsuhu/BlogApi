@@ -1,14 +1,14 @@
 package com.natsu.blog.model.vo;
 
-import com.natsu.blog.pojo.Category;
-import com.natsu.blog.pojo.Tag;
+import com.natsu.blog.model.entity.Category;
+import com.natsu.blog.model.entity.Tag;
 import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
 
 @Data
-public class ArticleReadVO {
+public class HomeArticles {
 
     private Integer id;
 
@@ -16,23 +16,20 @@ public class ArticleReadVO {
 
     private Date createTime;
 
-    private Date updateTime;
-
     private Integer views;
 
     private Integer words;
 
     private Integer readTime;
 
+    private Integer isTop;
+
     private Category category;
 
-    private String content;
+    private String description;
 
-    private String authorName;
+    private String thumbnail;
 
     private List<Tag> tags;
 
-    private Boolean isCommentEnabled;
-
-    private Boolean isAppreciation;
 }

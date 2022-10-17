@@ -29,6 +29,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
                 .addPathPatterns("/user/test");
     }
 
+    //静态资源映射
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(uploadProperties.getAccessPath()).addResourceLocations(uploadProperties.getResourcesLocations());
     }

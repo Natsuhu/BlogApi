@@ -1,4 +1,4 @@
-package com.natsu.blog.pojo;
+package com.natsu.blog.model.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -42,7 +42,7 @@ public class Moment implements Serializable {
 	/**
 	 * 点赞数
 	 */
-   	@TableField( "like" )
+   	@TableField( "`like`" )
 	private Long like;
 
 	/**

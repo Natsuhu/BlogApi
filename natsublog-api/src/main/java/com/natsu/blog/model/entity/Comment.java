@@ -1,4 +1,4 @@
-package com.natsu.blog.pojo;
+package com.natsu.blog.model.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -110,5 +110,11 @@ public class Comment implements Serializable {
 	 */
    	@TableField( "qq" )
 	private String qq;
+
+   	/**
+	 * 归属ID
+	 */
+   	@TableField( "origin_id" )
+   	private Integer originId;
 
 }

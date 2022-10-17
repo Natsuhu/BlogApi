@@ -1,30 +1,26 @@
 package com.natsu.blog.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.natsu.blog.model.params.PageParams;
-import com.natsu.blog.model.vo.ArticleReadVO;
-import com.natsu.blog.model.vo.HomeArticleList;
+import com.natsu.blog.model.dto.ArticleQueryDTO;
+import com.natsu.blog.model.dto.BaseQueryDTO;
+import com.natsu.blog.model.entity.Article;
+import com.natsu.blog.model.vo.HomeArticles;
 import com.natsu.blog.model.vo.PageResult;
 import com.natsu.blog.model.vo.RandomArticles;
-import com.natsu.blog.pojo.Article;
+import com.natsu.blog.model.vo.ReadArticle;
 
 import java.util.List;
 import java.util.Map;
 
 public interface ArticleService extends IService<Article> {
-    Integer getPublicArticleCount();
 
     Map getArchives();
 
-    ArticleReadVO getArticleReadVOById(int id);
-
-    PageResult<HomeArticleList> getHomeArticleList(PageParams params);
+    ReadArticle getReadArticleById(int id);
 
     List<RandomArticles> getRandomArticles(int count);
 
-    PageResult<HomeArticleList> getArticlesByCategoryId(PageParams params , int categoryId);
+    PageResult<HomeArticles> getHomeArticles(BaseQueryDTO baseQueryDTO);
 
-    PageResult<HomeArticleList> getArticlesByTagId(PageParams params , int tagId);
-
-    Article getArticleById(int articleId);
+    PageResult<HomeArticles> getArticlesByQueryParams(ArticleQueryDTO articleQueryDTO);
 }

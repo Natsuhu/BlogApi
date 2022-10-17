@@ -1,22 +1,16 @@
 package com.natsu.blog.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.natsu.blog.pojo.Comment;
+import com.natsu.blog.model.dto.CommentQueryDTO;
+import com.natsu.blog.model.entity.Comment;
+import com.natsu.blog.model.vo.PageResult;
 
-import java.util.List;
 import java.util.Map;
 
 public interface CommentService extends IService<Comment> {
 
-    Integer getPublicCommentCount();
+    PageResult<Comment> getCommentsByQueryParams(CommentQueryDTO commentQueryDTO);
 
-    List<Comment> getPublicCommentsByPage(int page);
+    Map<String , Object> buildCommentTree(CommentQueryDTO commentQueryDTO);
 
-    List<Comment> getPublicCommentsByArticleId(int articleId);
-
-    Map getCommentsVOByPage(int page);
-
-    Map getCommentsVOByArticleId(int articleId);
-
-    String saveComment(Comment comment);
 }

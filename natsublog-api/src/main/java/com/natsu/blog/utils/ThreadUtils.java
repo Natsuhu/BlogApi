@@ -2,7 +2,7 @@ package com.natsu.blog.utils;
 
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.natsu.blog.mapper.ArticleMapper;
-import com.natsu.blog.pojo.Article;
+import com.natsu.blog.model.entity.Article;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
