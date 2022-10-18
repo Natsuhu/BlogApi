@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @Description  
@@ -32,4 +33,9 @@ public class Tag implements Serializable {
    	@TableField( "name" )
 	private String name;
 
+	/**
+	 *  创建时间
+	 */
+	@TableField( "create_time" )
+	private Date createTime;
 }

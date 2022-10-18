@@ -105,7 +105,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
         IPage<Article> page = new Page<>(articleQueryDTO.getPageNo(),articleQueryDTO.getPageSize());
         IPage<Article> articles = articleMapper.getArticlesByQueryParams(page,articleQueryDTO);
         List<HomeArticles> homeArticles = new ArrayList<>();
-        System.out.println("为"+articles.getRecords());
         /*获取结果，遍历转VO对象并补充属性*/
         for(Article article : articles.getRecords()) {
             HomeArticles homeArticle = new HomeArticles();

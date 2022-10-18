@@ -24,7 +24,6 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper , Moment> implem
         wrapper.eq(Moment::getIsPublished , 1);
         wrapper.orderByDesc(Moment::getCreateTime);
         IPage<Moment> moments = momentMapper.selectPage(page , wrapper);
-        System.out.println("获取到："+moments);
         return new PageResult<>(moments.getPages() , moments.getRecords());
     }
 

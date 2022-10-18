@@ -84,8 +84,8 @@ public class Comment implements Serializable {
 	/**
 	 * 回复的人昵称
 	 */
-   	@TableField( "replay_nickname" )
-	private String replayNickname;
+   	@TableField( "reply_nickname" )
+	private String replyNickname;
 
 	/**
 	 * 评论的文章ID
