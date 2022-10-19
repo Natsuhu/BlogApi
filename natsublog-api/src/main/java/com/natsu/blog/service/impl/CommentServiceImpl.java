@@ -30,10 +30,11 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper , Comment> imp
         PageResult<Comment> pageResult = this.getRootComments(commentQueryDTO);
         List<Comment> rootComments = pageResult.getDataList();
         List<Comment> childComments = new ArrayList<>();
+
         /*根据rootComment查找childComment*/
-        LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Comment::getIsPublished , commentQueryDTO.getIsPublished());
         for (Comment comment : rootComments) {
+            LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(Comment::getIsPublished , commentQueryDTO.getIsPublished());
             wrapper.eq(Comment::getOriginId , comment.getOriginId());
             wrapper.ne(Comment::getId , comment.getId());
             wrapper.orderByDesc(Comment::getCreateTime);

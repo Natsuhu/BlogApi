@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("comments")
@@ -72,13 +73,45 @@ public class CommentController {
     @PostMapping("/save")
     public Result saveComment(@RequestBody Comment comment) throws Exception {
         String qq = comment.getQq();
+        if (comment.getId() != null) {
+            return Result.fail(500,"评论失败");
+        }
+        if (comment.getPage() < 0 || comment.getPage() > 2){
+            return Result.fail(500,"评论失败");
+        }
+        if (comment.getPage() != 0 && comment.getArticleId() != null) {
+            return Result.fail(500,"评论失败");
+        }
+        if (comment.getContent().equals("") || comment.getContent() == null) {
+            return Result.fail(500,"评论失败");
+        }
+        if (comment.getParentCommentId() == -1 && comment.getReplyNickname() != null) {
+            return Result.fail(500,"评论失败");
+        } else if (comment.getParentCommentId() != -1 && comment.getReplyNickname() == null) {
+            return Result.fail(500,"评论失败");
+        }
+        if (qq == null || qq.equals("")) {
+            return Result.fail(500,"评论失败");
+        }
         if(!qqInfoUtils.isQQNumber(qq)){
             return Result.fail(500,"QQ号格式错误");
+        }
+        if (comment.getPage() == 0 && comment.getArticleId() != null) {
+            Article article = articleService.getById(comment.getArticleId());
+            if (article == null || !article.getIsPublished()) {
+                return Result.fail(500,"评论失败");
+            }
+        }
+        if (comment.getParentCommentId() == -1) {
+            String uuid = UUID.randomUUID().toString();
+            Integer id = uuid.replace("-","").substring(0,8).hashCode();
+            comment.setOriginId(id);
         }
         comment.setAvatar(qqInfoUtils.getQQAvatarUrl(qq));
         comment.setNickname(qqInfoUtils.getQQNickname(qq));
         comment.setCreateTime(new Date());
         comment.setIsPublished(true);
+        comment.setIsAdminComment(false);
         commentService.save(comment);
         return Result.success("ok");
     }

@@ -35,6 +35,7 @@ public class ArticleController {
     /*首页文章列表*/
     @GetMapping
     public Result getHomeArticles(BaseQueryDTO baseQueryDTO) {
+        baseQueryDTO.setKeyword(null);
         PageResult<HomeArticles> pageResult = articleService.getHomeArticles(baseQueryDTO);
         System.out.println(new Date()+"访问网站！");
         return Result.success(pageResult);
@@ -59,6 +60,9 @@ public class ArticleController {
     /*阅读文章*/
     @GetMapping("/read")
     public Result getReadArticleById(@RequestParam int id){
+        if (id < 0) {
+            Result.fail(404,"没有这篇文章");
+        }
         ReadArticle article = articleService.getReadArticleById(id);
         if (article == null) {
             return Result.fail(404,"没有这篇文章！");
