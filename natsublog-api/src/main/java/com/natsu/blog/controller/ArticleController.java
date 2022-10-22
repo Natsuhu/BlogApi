@@ -1,6 +1,8 @@
 package com.natsu.blog.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.natsu.blog.annotation.VisitorLogger;
+import com.natsu.blog.enums.VisitorBehavior;
 import com.natsu.blog.model.dto.ArticleQueryDTO;
 import com.natsu.blog.model.dto.BaseQueryDTO;
 import com.natsu.blog.model.entity.Article;
@@ -14,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -33,11 +34,11 @@ public class ArticleController {
     private TagService tagService;
 
     /*首页文章列表*/
+    @VisitorLogger(VisitorBehavior.INDEX)
     @GetMapping
     public Result getHomeArticles(BaseQueryDTO baseQueryDTO) {
         baseQueryDTO.setKeyword(null);
         PageResult<HomeArticles> pageResult = articleService.getHomeArticles(baseQueryDTO);
-        System.out.println(new Date()+"访问网站！");
         return Result.success(pageResult);
     }
 
@@ -58,6 +59,7 @@ public class ArticleController {
     }
 
     /*阅读文章*/
+    @VisitorLogger(VisitorBehavior.ARTICLE)
     @GetMapping("/read")
     public Result getReadArticleById(@RequestParam int id){
         if (id < 0) {
@@ -71,6 +73,7 @@ public class ArticleController {
     }
 
     /*归档*/
+    @VisitorLogger(VisitorBehavior.ARCHIVE)
     @GetMapping("/archives")
     public Result getArchives(){
         Map map = articleService.getArchives();
@@ -78,6 +81,7 @@ public class ArticleController {
     }
 
     /*根据分类获取文章*/
+    @VisitorLogger(VisitorBehavior.CATEGORY)
     @GetMapping("/category")
     public Result getArticlesByCategoryId(ArticleQueryDTO articleQueryDTO) {
         articleQueryDTO.setTagIds(null);
@@ -91,6 +95,7 @@ public class ArticleController {
     }
 
     /*根据标签获取文章*/
+    @VisitorLogger(VisitorBehavior.TAG)
     @GetMapping("/tag")
     public Result getArticlesByTagId(ArticleQueryDTO articleQueryDTO) {
         articleQueryDTO.setCategoryId(null);

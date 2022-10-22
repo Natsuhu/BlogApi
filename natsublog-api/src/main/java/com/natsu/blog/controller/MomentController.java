@@ -1,5 +1,7 @@
 package com.natsu.blog.controller;
 
+import com.natsu.blog.annotation.VisitorLogger;
+import com.natsu.blog.enums.VisitorBehavior;
 import com.natsu.blog.model.dto.BaseQueryDTO;
 import com.natsu.blog.model.entity.Moment;
 import com.natsu.blog.model.vo.PageResult;
@@ -17,6 +19,7 @@ public class MomentController {
     @Autowired
     private MomentService momentService;
 
+    @VisitorLogger(VisitorBehavior.MOMENT)
     @GetMapping
     public Result getPublicMoments(BaseQueryDTO baseQueryDTO) {
         PageResult<Moment> moments = momentService.getPublicMoments(baseQueryDTO);

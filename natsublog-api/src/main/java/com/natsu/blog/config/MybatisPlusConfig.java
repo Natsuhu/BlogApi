@@ -1,14 +1,18 @@
 package com.natsu.blog.config;
 
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import org.apache.ibatis.reflection.MetaObject;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Date;
+
 @Configuration
 @MapperScan("com.natsu.blog.mapper")
-public class MybatisPlusConfig {
+public class MybatisPlusConfig implements MetaObjectHandler {
 
     //mybatis的分页插件
     @Bean
@@ -16,5 +20,19 @@ public class MybatisPlusConfig {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
         interceptor.addInnerInterceptor(new PaginationInnerInterceptor());
         return interceptor;
+    }
+
+    /*自动注入create_time字段*/
+    @Override
+    public void insertFill(MetaObject metaObject) {
+        Date date = new Date();
+        this.setFieldValByName("createTime", date,metaObject);
+        this.setFieldValByName("updateTime", date,metaObject);
+    }
+
+    /*自动注入update_time字段*/
+    @Override
+    public void updateFill(MetaObject metaObject) {
+        this.setFieldValByName("updateTime", new Date(),metaObject);
     }
 }

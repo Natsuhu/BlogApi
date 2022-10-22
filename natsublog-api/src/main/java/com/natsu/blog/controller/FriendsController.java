@@ -1,5 +1,7 @@
 package com.natsu.blog.controller;
 
+import com.natsu.blog.annotation.VisitorLogger;
+import com.natsu.blog.enums.VisitorBehavior;
 import com.natsu.blog.model.vo.Result;
 import com.natsu.blog.service.SiteSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ public class FriendsController {
     @Autowired
     private SiteSettingService siteSettingService;
 
+    @VisitorLogger(VisitorBehavior.FRIEND)
     @GetMapping
     public Result getFriendsPageSetting() {
         Map<String , String> settings = siteSettingService.getPageSetting(3);

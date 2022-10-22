@@ -12,24 +12,33 @@ import java.io.Serializable;
 /**
  * @Description  
  * @Author  NatsuKaze
- * @Date 2022-10-06 
+ * @Date 2022-10-22 
  */
 
 @Data
 @Accessors(chain = true)
-@TableName( "article_tag_ref" )
-public class ArticleTagRef implements Serializable {
+@TableName( "visit_record" )
+public class VisitRecord implements Serializable {
+
+   	@TableId(value = "id" , type = IdType.AUTO)
+	private Long id;
 
 	/**
-	 * 文章ID
+	 * 访问量
 	 */
-   	@TableId( value = "id" , type = IdType.AUTO )
-	private Integer articleId;
+   	@TableField( "pv" )
+	private Long pv;
 
 	/**
-	 * 标签ID
+	 * 独立用户
 	 */
-   	@TableField( "tag_id" )
-	private Long tagId;
+   	@TableField( "uv" )
+	private Long uv;
+
+	/**
+	 * 日期"02-23"
+	 */
+   	@TableField( "date" )
+	private String date;
 
 }
