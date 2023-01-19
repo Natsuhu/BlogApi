@@ -1,6 +1,5 @@
 package com.natsu.blog.controller;
 
-
 import com.natsu.blog.annotation.VisitorLogger;
 import com.natsu.blog.enums.VisitorBehavior;
 import com.natsu.blog.model.vo.Result;

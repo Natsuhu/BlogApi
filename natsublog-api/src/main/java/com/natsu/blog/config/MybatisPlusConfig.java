@@ -10,11 +10,19 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Date;
 
+/**
+ * MP配置
+ *
+ * @author NatsuKaze
+ * @since 2023/1/19 新增注释
+ * */
 @Configuration
 @MapperScan("com.natsu.blog.mapper")
 public class MybatisPlusConfig implements MetaObjectHandler {
 
-    //mybatis的分页插件
+    /**
+     * mybatis的分页插件
+     * */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor(){
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
@@ -22,7 +30,9 @@ public class MybatisPlusConfig implements MetaObjectHandler {
         return interceptor;
     }
 
-    /*自动注入create_time字段*/
+    /**
+     * 自动注入create_time字段
+     * */
     @Override
     public void insertFill(MetaObject metaObject) {
         Date date = new Date();
@@ -30,7 +40,9 @@ public class MybatisPlusConfig implements MetaObjectHandler {
         this.setFieldValByName("updateTime", date,metaObject);
     }
 
-    /*自动注入update_time字段*/
+    /**
+     * 自动注入update_time字段
+     * */
     @Override
     public void updateFill(MetaObject metaObject) {
         this.setFieldValByName("updateTime", new Date(),metaObject);

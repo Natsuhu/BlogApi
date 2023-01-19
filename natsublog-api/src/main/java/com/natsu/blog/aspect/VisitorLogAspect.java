@@ -20,36 +20,63 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * AOP切面配置
+ *
+ * @author NatsuKaze
+ * @since 2023/1/19 新增注解
+ * */
 @Component
 @Aspect
 public class VisitorLogAspect {
 
+    /**
+     * 注入VisitLogService
+     * */
     @Autowired
     private VisitLogService visitLogService;
 
-    ThreadLocal<Long> currentTime = new ThreadLocal<>();
+    /**
+     * 记录每次请求的响应时间
+     * */
+    private final ThreadLocal<Long> currentTime = new ThreadLocal<>();
 
+    /**
+     * 切入点配置
+     *
+     * @param visitorLogger
+     **/
     @Pointcut("@annotation(visitorLogger)")
     public void pointcut(VisitorLogger visitorLogger) {
     }
 
+    /**
+     * 环绕
+     *
+     * @param visitorLogger
+     * @param joinPoint
+     * @return Object
+     * */
     @Around("pointcut(visitorLogger)")
     public Object around(ProceedingJoinPoint joinPoint, VisitorLogger visitorLogger) throws Throwable {
-        /*计算响应时间，毫秒*/
+        //计算响应时间，毫秒
         currentTime.set(System.currentTimeMillis());
         Result result = (Result) joinPoint.proceed();
         int times = (int) (System.currentTimeMillis() - currentTime.get());
         currentTime.remove();
 
-        /*获取request对象,处理VisitLog对象并保存*/
+        //获取request对象,处理VisitLog对象并保存
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         VisitLog visitLog = handleLog(joinPoint, visitorLogger, request, result, times);
         visitLogService.saveVisitLog(visitLog);
         return result;
     }
 
+    /**
+     * 处理日志，组装参数
+     * */
     private VisitLog handleLog(ProceedingJoinPoint joinPoint, VisitorLogger visitorLogger, HttpServletRequest request, Result result, int times) {
-        /*获取并处理需要的属性*/
+        //获取并处理需要的属性
         String uri = request.getRequestURI();
         String method = request.getMethod();
         String ip = IPUtils.getIpAddress(request);
@@ -58,7 +85,7 @@ public class VisitorLogAspect {
         Object requestParams = handleParams(joinPoint);
         String remark = handleBehavior(visitorLogger.value(), requestParams, result);
 
-        /*填充属性*/
+        //填充属性
         VisitLog visitLog = new VisitLog();
         visitLog.setUri(uri);
         visitLog.setMethod(method);
@@ -74,6 +101,9 @@ public class VisitorLogAspect {
         return visitLog;
     }
 
+    /**
+     * 处理参数
+     * */
     private Object handleParams(ProceedingJoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         if (args == null || args.length == 0) {
@@ -82,6 +112,9 @@ public class VisitorLogAspect {
         return args[0];
     }
 
+    /**
+     * 翻译访客行为
+     * */
     private String handleBehavior(VisitorBehavior behavior, Object requestParams, Result result) {
         String content = null;
         BaseQueryDTO baseQueryDTO;

@@ -1,6 +1,6 @@
 package com.natsu.blog.utils.upload;
 
-import com.natsu.blog.constant.UploadConstants;
+import com.natsu.blog.constant.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ public class UploadUtils {
     public ImageResource getImageByRequest(String url) throws Exception {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<byte[]> responseEntity = restTemplate.getForEntity(url, byte[].class);
-        if (UploadConstants.IMAGE.equals(responseEntity.getHeaders().getContentType().getType())) {
+        if (Constants.IMAGE.equals(responseEntity.getHeaders().getContentType().getType())) {
             return new ImageResource(responseEntity.getBody(), responseEntity.getHeaders().getContentType().getSubtype());
         }
         throw new Exception("response contentType unlike image");
