@@ -48,6 +48,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
     /**
      * 静态资源映射
      * */
+    //TODO 测试用，生产环境统一使用Nginx代理静态资源
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(uploadProperties.getAccessPath()).addResourceLocations(uploadProperties.getResourcesLocations());
     }

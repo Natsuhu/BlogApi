@@ -3,12 +3,12 @@ package com.natsu.blog.utils;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.natsu.blog.mapper.ArticleMapper;
 import com.natsu.blog.model.entity.Article;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-
 @Component
+@Slf4j
 public class ThreadUtils {
 
     @Async("taskExecutor")
@@ -23,7 +23,7 @@ public class ThreadUtils {
         articleMapper.update(articleUpdate,updateWrapper);
         try {
             Thread.sleep(5000);
-            System.out.println(Thread.currentThread().getName()+"更新文章阅读数完成"+new Date());
+            log.info(System.currentTimeMillis() + "更新文章阅读数完成");
         }catch (InterruptedException e){
             e.printStackTrace();
         }

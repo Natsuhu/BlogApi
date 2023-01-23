@@ -4,8 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14d9ffe7-4d28-423a-8ccf-7e400619eb11" name="Default Changelist" comment="">
+    <list default="true" id="14d9ffe7-4d28-423a-8ccf-7e400619eb11" name="Default Changelist" comment="增加了三张表，实现了访客记录功能。">
+      <change afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/utils/SpringContextUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/natsublog-api/src/main/resources/ipdb/ip2region.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/acfa40c7-b29a-4ce1-8c33-21433a6ee469.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/acfa40c7-b29a-4ce1-8c33-21433a6ee469.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/natsublog-api/natsublog-api.iml" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/natsublog-api.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/config/WebMVCConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/config/WebMVCConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/utils/ThreadUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/java/com/natsu/blog/utils/ThreadUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/natsublog-api/src/main/resources/application-dev.properties" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/main/resources/application-dev.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/natsublog-api/src/test/java/com/natsu/blog/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/natsublog-api/src/test/java/com/natsu/blog/Test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,8 +28,11 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="FxmlFile" />
         <option value="Tag Library Descriptor" />
+        <option value="HTTP Public Environment File" />
+        <option value="AnnotationType" />
+        <option value="FxmlFile" />
+        <option value="spring-beans.schema" />
         <option value="Interface" />
         <option value="Class" />
       </list>
@@ -27,6 +40,7 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="MIXED" />
   </component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
@@ -72,13 +86,13 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../willingbot_server" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../NBlog/blog-api" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.20344828" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.Java" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="ReactorSettings">
@@ -86,6 +100,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\natsublog-parent\natsublog-api\src\main\resources" />
       <recent name="E:\natsublog-parent\natsublog-api\src\main\java\com\natsu\blog\mapper" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
@@ -163,7 +178,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Test.test4" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="Test.test5" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="natsublog-api" />
       <extension name="coverage">
         <pattern>
@@ -173,7 +188,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="com.natsu.blog" />
       <option name="MAIN_CLASS_NAME" value="com.natsu.blog.Test" />
-      <option name="METHOD_NAME" value="test4" />
+      <option name="METHOD_NAME" value="test5" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -194,18 +209,18 @@
     </configuration>
     <list>
       <item itemvalue="Application.MainTest" />
-      <item itemvalue="JUnit.Test.test4" />
       <item itemvalue="JUnit.Test.test" />
       <item itemvalue="JUnit.Test.test4 (1)" />
+      <item itemvalue="JUnit.Test.test5" />
       <item itemvalue="Spring Boot.BlogApp" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Spring Boot.BlogApp" />
+        <item itemvalue="JUnit.Test.test5" />
         <item itemvalue="Application.MainTest" />
         <item itemvalue="JUnit.Test.test4 (1)" />
         <item itemvalue="JUnit.Test.test" />
-        <item itemvalue="JUnit.Test.test4" />
       </list>
     </recent_temporary>
   </component>
@@ -366,7 +381,35 @@
       <workItem from="1665036205633" duration="4594000" />
       <workItem from="1665041000990" duration="83000" />
       <workItem from="1665041383075" duration="2373000" />
-      <workItem from="1665044484297" duration="355000" />
+      <workItem from="1665044484297" duration="522000" />
+      <workItem from="1665045053319" duration="32000" />
+      <workItem from="1665063988441" duration="101000" />
+      <workItem from="1665328322984" duration="131000" />
+      <workItem from="1665404475351" duration="723000" />
+      <workItem from="1665671462368" duration="112000" />
+      <workItem from="1665677127838" duration="602000" />
+      <workItem from="1665845230210" duration="6190000" />
+      <workItem from="1665891519307" duration="37057000" />
+      <workItem from="1666006277445" duration="11780000" />
+      <workItem from="1666101696867" duration="8061000" />
+      <workItem from="1666180732538" duration="8123000" />
+      <workItem from="1666194064206" duration="100000" />
+      <workItem from="1666194708474" duration="1248000" />
+      <workItem from="1666407777512" duration="23800000" />
+      <workItem from="1666434311502" duration="57000" />
+      <workItem from="1666434468140" duration="1543000" />
+      <workItem from="1666494913784" duration="3642000" />
+      <workItem from="1666501198557" duration="85000" />
+      <workItem from="1668226921703" duration="147000" />
+      <workItem from="1668227085172" duration="1876000" />
+      <workItem from="1669103090185" duration="44000" />
+      <workItem from="1669103351693" duration="2711000" />
+      <workItem from="1669367463381" duration="17000" />
+      <workItem from="1669379436325" duration="21000" />
+      <workItem from="1670855470402" duration="247000" />
+      <workItem from="1673446979268" duration="34000" />
+      <workItem from="1673447026854" duration="158000" />
+      <workItem from="1674468279823" duration="7339000" />
     </task>
     <task id="LOCAL-00001" summary="第一次提交">
       <created>1660786863205</created>
@@ -403,7 +446,56 @@
       <option name="project" value="LOCAL" />
       <updated>1665043504801</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="修复--实体类的ID问题">
+      <created>1665044960810</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1665044960810</updated>
+    </task>
+    <task id="LOCAL-00007" summary="规范代码（小重构），实现评论和动态页面分页">
+      <created>1666017470176</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1666017470176</updated>
+    </task>
+    <task id="LOCAL-00008" summary="规范代码（小重构），实现评论和动态页面分页">
+      <created>1666025133379</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1666025133379</updated>
+    </task>
+    <task id="LOCAL-00009" summary="修改字段名replay_name为reply_name&#10;&#10;This reverts commit 1cfd27f3">
+      <created>1666025205137</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1666025205137</updated>
+    </task>
+    <task id="LOCAL-00010" summary="tag表与category新增加create_time字段。修改错误字段的拼写">
+      <created>1666110371346</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1666110371346</updated>
+    </task>
+    <task id="LOCAL-00011" summary="修改一个小bug，发表评论添加参数判断">
+      <created>1666193307191</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1666193307191</updated>
+    </task>
+    <task id="LOCAL-00012" summary="增加了三张表，实现了访客记录功能。">
+      <created>1666436675807</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1666436675807</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -426,7 +518,13 @@
     <MESSAGE value="代码规范化" />
     <MESSAGE value="添加gitignore文件，并排除target文件" />
     <MESSAGE value="通过qq获取评论人的头像时，直接将头像名存储在数据库，而不需要存储完整的路径，因为Nginx已经配置图片映射。" />
-    <option name="LAST_COMMIT_MESSAGE" value="通过qq获取评论人的头像时，直接将头像名存储在数据库，而不需要存储完整的路径，因为Nginx已经配置图片映射。" />
+    <MESSAGE value="修复--实体类的ID问题" />
+    <MESSAGE value="规范代码（小重构），实现评论和动态页面分页" />
+    <MESSAGE value="修改字段名replay_name为reply_name&#10;&#10;This reverts commit 1cfd27f3" />
+    <MESSAGE value="tag表与category新增加create_time字段。修改错误字段的拼写" />
+    <MESSAGE value="修改一个小bug，发表评论添加参数判断" />
+    <MESSAGE value="增加了三张表，实现了访客记录功能。" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加了三张表，实现了访客记录功能。" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

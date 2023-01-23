@@ -109,6 +109,15 @@
     <orderEntry type="library" name="Maven: commons-collections:commons-collections:3.2.2" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.15" level="project" />
     <orderEntry type="library" name="Maven: cn.hutool:hutool-all:5.8.4" level="project" />
+    <orderEntry type="library" name="Maven: org.lionsoul:ip2region:1.7.2" level="project" />
+    <orderEntry type="library" name="Maven: nl.basjes.parse.useragent:yauaa:5.20" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents.client5:httpclient5:5.1.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents.core5:httpcore5:5.1.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.httpcomponents.core5:httpcore5-h2:5.1.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-text:1.9" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-collections4:4.4" level="project" />
+    <orderEntry type="library" name="Maven: nl.basjes.collections:prefixmap:2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.32" level="project" />
     <orderEntry type="library" name="Maven: com.baomidou:mybatis-plus-boot-starter:3.4.3.1" level="project" />
     <orderEntry type="library" name="Maven: com.baomidou:mybatis-plus:3.4.3.1" level="project" />
     <orderEntry type="library" name="Maven: com.baomidou:mybatis-plus-extension:3.4.3.1" level="project" />
@@ -133,7 +142,6 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.13.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.testng:testng:7.6.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.google.code.findbugs:jsr305:3.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.32" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.beust:jcommander:1.82" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.webjars:jquery:3.6.0" level="project" />
   </component>
