@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.natsu.blog.constant.Constants;
 import com.natsu.blog.mapper.CommentMapper;
 import com.natsu.blog.model.dto.CommentQueryDTO;
 import com.natsu.blog.model.entity.Comment;
@@ -31,7 +32,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper , Comment> imp
         List<Comment> rootComments = pageResult.getDataList();
         List<Comment> childComments = new ArrayList<>();
 
-        /*根据rootComment查找childComment*/
+        //根据rootComment查找childComment
         for (Comment comment : rootComments) {
             LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
             wrapper.eq(Comment::getIsPublished , commentQueryDTO.getIsPublished());
@@ -41,18 +42,18 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper , Comment> imp
             childComments.addAll(commentMapper.selectList(wrapper));
         }
 
-        /*将所rootComment和childComment放在一个集合*/
+        //将所rootComment和childComment放在一个集合
         List<Comment> allComment = new ArrayList<>();
         allComment.addAll(rootComments);
         allComment.addAll(childComments);
 
-        /*开始构建commentTree*/
+        //开始构建commentTree
         List<TreeNode> comments = new ArrayList<>();
         Map<String , Object> result = new HashMap<>();
         List<TreeNode> treeNodes = TreeUtils.buildCommentTreeNode(allComment);
         treeNodes = TreeUtils.buildCommentTree(treeNodes,-1);
 
-        /*遍历评论树，并转为两级评论树*/
+        //遍历评论树，并转为两级评论树
         for (TreeNode treeNode : treeNodes) {
             if (treeNode.getChildren() == null) {
                 comments.add(treeNode);
@@ -61,14 +62,14 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper , Comment> imp
             }
         }
 
-        /*获取当前页面的评论数量和分页总页数*/
+        //获取当前页面的评论数量和分页总页数
         LambdaQueryWrapper<Comment> queryCount = new LambdaQueryWrapper<>();
         queryCount.eq(Comment::getIsPublished , true);
         queryCount.eq(Comment::getPage , commentQueryDTO.getPage());
         Integer commentCount = commentMapper.selectCount(queryCount);
         Integer totalPage = (int) pageResult.getTotalPage();
 
-        /*封装结果集*/
+        //封装结果集
         result.put("count" , commentCount);
         result.put("totalPage" , totalPage);
         result.put("comments" , comments);
@@ -85,7 +86,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper , Comment> imp
 
     public PageResult<Comment> getRootComments(CommentQueryDTO commentQueryDTO) {
         commentQueryDTO.setParentCommentId(-1);
-        commentQueryDTO.setIsPublished(true);
+        commentQueryDTO.setIsPublished(Constants.PUBLISHED);
         IPage<Comment> page = new Page<>(commentQueryDTO.getPageNo() , commentQueryDTO.getPageSize());
         IPage<Comment> rootComments = commentMapper.getCommentsByQueryParams(page , commentQueryDTO);
         return new PageResult<>(rootComments.getPages(),rootComments.getRecords());

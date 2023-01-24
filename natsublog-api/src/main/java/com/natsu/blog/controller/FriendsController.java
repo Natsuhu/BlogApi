@@ -1,6 +1,7 @@
 package com.natsu.blog.controller;
 
 import com.natsu.blog.annotation.VisitorLogger;
+import com.natsu.blog.constant.Constants;
 import com.natsu.blog.enums.VisitorBehavior;
 import com.natsu.blog.model.vo.Result;
 import com.natsu.blog.service.SiteSettingService;
@@ -21,7 +22,7 @@ public class FriendsController {
     @VisitorLogger(VisitorBehavior.FRIEND)
     @GetMapping
     public Result getFriendsPageSetting() {
-        Map<String , String> settings = siteSettingService.getPageSetting(3);
+        Map<String , String> settings = siteSettingService.getPageSetting(Constants.PAGE_SETTING_FRIEND);
         return Result.success(settings);
     }
 

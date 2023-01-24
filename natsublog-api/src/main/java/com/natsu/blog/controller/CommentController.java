@@ -1,6 +1,7 @@
 package com.natsu.blog.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.natsu.blog.constant.Constants;
 import com.natsu.blog.model.dto.CommentQueryDTO;
 import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.entity.Comment;
@@ -37,14 +38,14 @@ public class CommentController {
     @GetMapping("/count")
     public Result getCommentCount() {
         LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Comment::getIsPublished , true);
+        wrapper.eq(Comment::getIsPublished , Constants.PUBLISHED);
         Integer commentCount = commentService.count(wrapper);
         return Result.success(commentCount);
     }
 
     @GetMapping("/articleComments")
     public Result getArticleComments(CommentQueryDTO commentQueryDTO) {
-        commentQueryDTO.setPage(0);
+        commentQueryDTO.setPage(Constants.PAGE_READ_ARTICLE);
         Article article = articleService.getById(commentQueryDTO.getArticleId());
         if (article == null || !article.getIsPublished()) {
             return Result.fail(404,"没有此文章");
@@ -55,7 +56,7 @@ public class CommentController {
 
     @GetMapping("/pageComments")
     public Result getPageComments(CommentQueryDTO commentQueryDTO) {
-        if (commentQueryDTO.getPage() == 0) {
+        if (commentQueryDTO.getPage() == Constants.PAGE_READ_ARTICLE) {
             return Result.fail(500,"页面请求错误");
         }
         commentQueryDTO.setArticleId(null);

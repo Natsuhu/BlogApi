@@ -22,7 +22,7 @@ public class SiteSettingServiceImpl extends ServiceImpl<SiteSettingMapper , Site
         LambdaQueryWrapper<SiteSetting> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(SiteSetting::getPage , page);
         List<SiteSetting> settings = siteSettingMapper.selectList(wrapper);
-        Map<String,String> resultMap = new HashMap<>();
+        Map<String,String> resultMap = new HashMap<>(settings.size());
         for (SiteSetting siteSetting : settings) {
             resultMap.put(siteSetting.getNameEn(),siteSetting.getContent());
         }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.natsu.blog.constant.Constants;
 import com.natsu.blog.mapper.MomentMapper;
 import com.natsu.blog.model.dto.BaseQueryDTO;
 import com.natsu.blog.model.entity.Moment;
@@ -21,7 +22,7 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper , Moment> implem
     public PageResult<Moment> getPublicMoments(BaseQueryDTO baseQueryDTO) {
         IPage<Moment> page = new Page<>(baseQueryDTO.getPageNo() , baseQueryDTO.getPageSize());
         LambdaQueryWrapper<Moment> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Moment::getIsPublished , 1);
+        wrapper.eq(Moment::getIsPublished , Constants.PUBLISHED);
         wrapper.orderByDesc(Moment::getCreateTime);
         IPage<Moment> moments = momentMapper.selectPage(page , wrapper);
         return new PageResult<>(moments.getPages() , moments.getRecords());

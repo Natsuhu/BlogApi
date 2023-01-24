@@ -2,6 +2,7 @@ package com.natsu.blog.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.natsu.blog.annotation.VisitorLogger;
+import com.natsu.blog.constant.Constants;
 import com.natsu.blog.enums.VisitorBehavior;
 import com.natsu.blog.model.dto.ArticleQueryDTO;
 import com.natsu.blog.model.dto.BaseQueryDTO;
@@ -33,7 +34,9 @@ public class ArticleController {
     @Autowired
     private TagService tagService;
 
-    /*首页文章列表*/
+    /**
+     * 首页文章列表
+     * */
     @VisitorLogger(VisitorBehavior.INDEX)
     @GetMapping
     public Result getHomeArticles(BaseQueryDTO baseQueryDTO) {
@@ -42,23 +45,29 @@ public class ArticleController {
         return Result.success(pageResult);
     }
 
-    /*随机文章*/
+    /**
+     * 随机文章
+     * */
     @GetMapping("/random")
     public Result getRandomArticles(@RequestParam(defaultValue = "5") int count) {
         List<RandomArticles> articles = articleService.getRandomArticles(count);
         return Result.success(articles);
     }
 
-    /*文章数量*/
+    /**
+     * 文章数量
+     * */
     @GetMapping("/count")
     public Result getPublicArticleCount(){
         LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Article::getIsPublished , 1);
+        wrapper.eq(Article::getIsPublished , Constants.PUBLISHED);
         Integer articleCount = articleService.count(wrapper);
         return Result.success(articleCount);
     }
 
-    /*阅读文章*/
+    /**
+     * 阅读文章
+     * */
     @VisitorLogger(VisitorBehavior.ARTICLE)
     @GetMapping("/read")
     public Result getReadArticleById(@RequestParam int id){
@@ -67,12 +76,14 @@ public class ArticleController {
         }
         ReadArticle article = articleService.getReadArticleById(id);
         if (article == null) {
-            return Result.fail(404,"没有这篇文章！");
+            return Result.fail(404,"没有这篇文章");
         }
         return Result.success(article);
     }
 
-    /*归档*/
+    /**
+     * 归档
+     * */
     @VisitorLogger(VisitorBehavior.ARCHIVE)
     @GetMapping("/archives")
     public Result getArchives(){
@@ -80,7 +91,9 @@ public class ArticleController {
         return Result.success(map);
     }
 
-    /*根据分类获取文章*/
+    /**
+     * 根据分类获取文章
+     * */
     @VisitorLogger(VisitorBehavior.CATEGORY)
     @GetMapping("/category")
     public Result getArticlesByCategoryId(ArticleQueryDTO articleQueryDTO) {
@@ -94,7 +107,9 @@ public class ArticleController {
         return Result.success(articles);
     }
 
-    /*根据标签获取文章*/
+    /**
+     * 根据标签获取文章
+     * */
     @VisitorLogger(VisitorBehavior.TAG)
     @GetMapping("/tag")
     public Result getArticlesByTagId(ArticleQueryDTO articleQueryDTO) {

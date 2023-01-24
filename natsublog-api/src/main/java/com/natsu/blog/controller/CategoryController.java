@@ -14,7 +14,9 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    /*分类菜单*/
+    /**
+     * 分类菜单
+     * */
     @GetMapping
     public Result getCategories(){
         return Result.success(categoryService.list());

@@ -36,17 +36,17 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
 
     @Override
     public Map<String , Object> getArchives() {
-        /*返回的结果集*/
-        Map<String,Object> map = new HashMap<>();
+        //返回的结果集
+        Map<String,Object> map = new HashMap<>(2);
         Map<String,List<Archives>> archivesMap = new LinkedHashMap<>();
-        /*先查询所有文章的创建日期*/
+        //先查询所有文章的创建日期
         List<String> archivesDate = articleMapper.getArchivesDate();
-        /*根据日期查询对应日期下的所有文章*/
+        //根据日期查询对应日期下的所有文章
         for(String date : archivesDate) {
             List<Archives> archives = articleMapper.getArchives(date);
             archivesMap.put(date,archives);
         }
-        /*获取文章数量*/
+        //获取文章数量
         LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Article::getIsPublished,1);
         int count = articleMapper.selectCount(wrapper);
@@ -57,17 +57,17 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
 
     @Override
     public ReadArticle getReadArticleById(int id) {
-        /*获取文章，并转为readVO*/
+        //获取文章，并转为readVO
         Article article = articleMapper.selectById(id);
         if(article == null || !article.getIsPublished()){
             return null;
         }
         ReadArticle readVO = new ReadArticle();
         BeanUtils.copyProperties(article,readVO);
-        /*补充readVO中缺少的tag和category*/
+        //补充readVO中缺少的tag和category
         readVO.setCategory(categoryService.getById(article.getCategoryId()));
         readVO.setTags(tagService.getTagsByArticleId(article.getId()));
-        /*更新文章阅读数量*/
+        //更新文章阅读数量
         threadUtils.updateArticleViewCount(articleMapper,article);
         return readVO;
     }
@@ -101,11 +101,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
 
     @Override
     public PageResult<HomeArticles> getArticlesByQueryParams(ArticleQueryDTO articleQueryDTO) {
-        /*分页查询*/
+        //分页查询
         IPage<Article> page = new Page<>(articleQueryDTO.getPageNo(),articleQueryDTO.getPageSize());
         IPage<Article> articles = articleMapper.getArticlesByQueryParams(page,articleQueryDTO);
         List<HomeArticles> homeArticles = new ArrayList<>();
-        /*获取结果，遍历转VO对象并补充属性*/
+        //获取结果，遍历转VO对象并补充属性
         for(Article article : articles.getRecords()) {
             HomeArticles homeArticle = new HomeArticles();
             BeanUtils.copyProperties(article,homeArticle);

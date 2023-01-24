@@ -14,7 +14,9 @@ public class TagController {
     @Autowired
     private TagService tagService;
 
-    /*标签云*/
+    /**
+     * 标签云
+     * */
     @GetMapping
     public Result getTags(){
         return Result.success(tagService.list());
