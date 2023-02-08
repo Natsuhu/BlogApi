@@ -8,9 +8,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Description  文章实体类
- * @Author  NatsuKaze
- * @Date 2022-10-06 
+ * @description  文章实体类
+ * @author  NatsuKaze
+ * @date 2022-10-06
  */
 
 @Data

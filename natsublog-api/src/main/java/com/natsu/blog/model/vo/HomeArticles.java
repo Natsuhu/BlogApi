@@ -22,7 +22,7 @@ public class HomeArticles {
 
     private Integer readTime;
 
-    private Integer isTop;
+    private Boolean isTop;
 
     private Category category;
 
