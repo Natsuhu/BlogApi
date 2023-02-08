@@ -17,7 +17,9 @@ public class QQInfoUtils {
 	private final String QQ_NICKNAME_URL = "https://r.qzone.qq.com/fcg-bin/cgi_get_portrait.fcg?uins={1}";
 	private final String QQ_AVATAR_URL = "https://q.qlogo.cn/g?b=qq&nk=%s&s=100";
 
-	/*获取QQ昵称*/
+	/**
+	 * 获取QQ昵称
+	 * */
 	public String getQQNickname(String qq) throws UnsupportedEncodingException {
 		RestTemplate restTemplate = new RestTemplate();
 		String res = restTemplate.getForObject(QQ_NICKNAME_URL, String.class, qq);
@@ -29,17 +31,23 @@ public class QQInfoUtils {
 		return nickname;
 	}
 
-	/*获取头像*/
+	/**
+	 * 获取头像
+	 * */
 	private ImageResource getImageResourceByQQ(String qq) throws Exception {
 		return uploadUtils.getImageByRequest(String.format(QQ_AVATAR_URL, qq));
 	}
 
-	/*上传头像，并获取头像URL*/
+	/**
+	 * 上传头像，并获取头像URL
+	 * */
 	public String getQQAvatarUrl(String qq) throws Exception {
 		return uploadUtils.upload(getImageResourceByQQ(qq));
 	}
 
-	/*判断是否为QQ*/
+	/**
+	 * 判断是否为QQ
+	 * */
 	public boolean isQQNumber(String number) {
 		return number.matches("^[1-9][0-9]{4,10}$");
 	}

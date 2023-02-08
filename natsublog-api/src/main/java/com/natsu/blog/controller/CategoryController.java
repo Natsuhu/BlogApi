@@ -7,15 +7,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 博客前台，分类接口
+ *
+ * @author NatsuKaze
+ * */
 @RestController
 @RequestMapping("categories")
 public class CategoryController {
 
+    /**
+     * CategoryService
+     * */
     @Autowired
     private CategoryService categoryService;
 
     /**
-     * 分类菜单
+     * 获取分类菜单
      * */
     @GetMapping
     public Result getCategories(){

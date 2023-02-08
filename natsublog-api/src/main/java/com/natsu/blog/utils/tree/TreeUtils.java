@@ -7,7 +7,9 @@ import java.util.stream.Collectors;
 
 public class TreeUtils {
 
-    /*批量构建树节点*/
+    /**
+     * 批量构建树节点
+     * */
     public static List<TreeNode> buildCommentTreeNode(List<Comment> comments) {
         List<TreeNode> treeNodes = new ArrayList<>();
         for (Comment comment : comments) {
@@ -28,25 +30,27 @@ public class TreeUtils {
     public static List<TreeNode> buildCommentTree(List<TreeNode> zoneList , int topId) {
         Map<Integer, List<TreeNode>> zoneByParentIdMap = new HashMap<>();
 
-        // 将parentId相同的Zone放在同一个列表中，parentId作为key
+        //将parentId相同的Zone放在同一个列表中，parentId作为key
         for (TreeNode treeNode : zoneList) {
             List<TreeNode> children = zoneByParentIdMap.getOrDefault(treeNode.getPid(), new ArrayList<>());
             children.add(treeNode);
             zoneByParentIdMap.put(treeNode.getPid(), children);
         }
 
-        // 从map中查询当前节点所有的子节点，并放在当前节点的children列表中
+        //从map中查询当前节点所有的子节点，并放在当前节点的children列表中
         for (TreeNode treeNode : zoneList) {
             treeNode.setChildren(zoneByParentIdMap.get(treeNode.getId()));
         }
 
-        // 过滤出顶级菜单列表
+        //过滤出顶级菜单列表
         return zoneList.stream()
                 .filter(treeNode -> treeNode.getPid() == topId)
                 .collect(Collectors.toList());
     }
 
-    /*层序遍历树*/
+    /**
+     * 层序遍历树
+     * */
     public static TreeNode conTwoLevelCommentTree(TreeNode head) {
         List<TreeNode> result = new ArrayList<>();
 

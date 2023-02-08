@@ -20,17 +20,30 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
-//JSON数据交互
+/**
+ * 博客前台，文章接口
+ *
+ * @author NatsuKaze
+ * */
 @RestController
 @RequestMapping("articles")
 public class ArticleController {
 
+    /**
+     * ArticleService
+     * */
     @Autowired
     private ArticleService articleService;
 
+    /**
+     * CategoryService
+     * */
     @Autowired
     private CategoryService categoryService;
 
+    /**
+     * TagService
+     * */
     @Autowired
     private TagService tagService;
 

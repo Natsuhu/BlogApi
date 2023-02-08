@@ -15,9 +15,12 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 登录拦截器，登录功能暂时搁置----
+ * 注意，在WebMVCConfig中配置具体的拦截的路径
+ * */
 @Component
 @Slf4j
-//注意，在WebMVCConfig中配置具体的拦截的路径
 public class LoginInterceptor implements HandlerInterceptor {
 
     @Autowired
@@ -41,7 +44,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         log.info("request uri:{}",requestURI);
         log.info("request method:{}",request.getMethod());
         log.info("token:{}", token);
-        log.info("=================request end===========================");
+        log.info("=================request end=============================");
 
         if(StringUtils.isBlank(token)) {
             Result result = Result.fail(1000,"未登录");

@@ -10,10 +10,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.UUID;
 
-
+/**
+ * 存储图片--本地
+ *
+ * @author NatsuKaze
+ * */
 @Lazy
 @Component
-/*本地存储方式*/
 public class LocalChannel{
 
     @Autowired
@@ -22,7 +25,9 @@ public class LocalChannel{
     @Autowired
     private UploadProperties uploadProperties;
 
-    /*将图片保存到本地，并返回访问本地图片的URL*/
+    /**
+     * 将图片保存到本地，并返回访问本地图片的URL
+     * */
     public String upload(ImageResource image) throws Exception {
         File folder = new File(uploadProperties.getPath());
         if (!folder.exists()) {

@@ -60,6 +60,7 @@ public class VisitorLogAspect {
     @Around("pointcut(visitorLogger)")
     public Object around(ProceedingJoinPoint joinPoint, VisitorLogger visitorLogger) throws Throwable {
         //计算响应时间，毫秒
+        // TODO 计算响应时间后续改为StopWatch工具 (SpringUtil)
         currentTime.set(System.currentTimeMillis());
         Result result = (Result) joinPoint.proceed();
         int times = (int) (System.currentTimeMillis() - currentTime.get());

@@ -36,8 +36,8 @@ public class MybatisPlusConfig implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         Date date = new Date();
-        this.setFieldValByName("createTime", date,metaObject);
-        this.setFieldValByName("updateTime", date,metaObject);
+        this.setFieldValByName("createTime", date, metaObject);
+        this.setFieldValByName("updateTime", date, metaObject);
     }
 
     /**
@@ -45,6 +45,6 @@ public class MybatisPlusConfig implements MetaObjectHandler {
      * */
     @Override
     public void updateFill(MetaObject metaObject) {
-        this.setFieldValByName("updateTime", new Date(),metaObject);
+        this.setFieldValByName("updateTime", new Date(), metaObject);
     }
 }

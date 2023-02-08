@@ -7,6 +7,9 @@ import com.natsu.blog.utils.UserThreadLocal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * 登录功能暂时搁置----
+ * */
 @RestController
 @RequestMapping("user")
 public class UserController {

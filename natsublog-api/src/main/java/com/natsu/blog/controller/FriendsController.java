@@ -12,13 +12,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
+/**
+ * 博客前台，友情链接页面接口
+ *
+ * @author NatsuKaze
+ * */
 @RestController
 @RequestMapping("/friends")
 public class FriendsController {
 
+    /**
+     * SiteSettingService
+     * */
     @Autowired
     private SiteSettingService siteSettingService;
 
+    /**
+     * 获取友情链接页面配置
+     * */
     @VisitorLogger(VisitorBehavior.FRIEND)
     @GetMapping
     public Result getFriendsPageSetting() {

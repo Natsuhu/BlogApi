@@ -7,10 +7,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 博客前台，标签接口
+ *
+ * @author NatsuKaze
+ * */
 @RestController
 @RequestMapping("tags")
 public class TagController {
 
+    /**
+     * TagService
+     * */
     @Autowired
     private TagService tagService;
 

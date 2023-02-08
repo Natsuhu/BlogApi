@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Slf4j
 public class AllExceptionHandler {
 
+    /**
+     * 监控异常
+     * */
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public Result doException(Exception e){

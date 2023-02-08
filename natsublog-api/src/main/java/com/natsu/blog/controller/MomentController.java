@@ -12,13 +12,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 博客前端，动态页面接口
+ *
+ * @author NatsuKaze
+ * */
 @RestController
 @RequestMapping("/moments")
 public class MomentController {
 
+    /**
+     * MomentService
+     * */
     @Autowired
     private MomentService momentService;
 
+    /**
+     * 获取动态
+     * */
     @VisitorLogger(VisitorBehavior.MOMENT)
     @GetMapping
     public Result getPublicMoments(BaseQueryDTO baseQueryDTO) {
