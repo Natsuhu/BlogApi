@@ -18,6 +18,7 @@ import com.natsu.blog.service.ArticleService;
 import com.natsu.blog.service.CategoryService;
 import com.natsu.blog.service.TagService;
 import com.natsu.blog.service.async.AsyncTaskService;
+import com.natsu.blog.utils.markdown.MarkdownUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,8 +75,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
             return null;
         }
         //补充readVO中缺少的tag和category
+        String content = article.getContent();
         ReadArticle readVO = new ReadArticle();
         BeanUtils.copyProperties(article,readVO);
+        readVO.setContent(MarkdownUtils.markdownToHtml(content));
         readVO.setCategory(categoryService.getById(article.getCategoryId()));
         readVO.setTags(tagService.getTagsByArticleId(article.getId()));
         //更新文章阅读数量
