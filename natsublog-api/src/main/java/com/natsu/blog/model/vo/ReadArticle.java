@@ -22,7 +22,7 @@ public class ReadArticle {
 
     private Integer words;
 
-    private Integer readTime;
+    private Long readTime;
 
     private Category category;
 

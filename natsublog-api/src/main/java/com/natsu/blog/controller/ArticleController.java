@@ -55,7 +55,7 @@ public class ArticleController {
     public Result getHomeArticles(BaseQueryDTO baseQueryDTO) {
         baseQueryDTO.setKeyword(null);
         PageResult<HomeArticles> pageResult = articleService.getHomeArticles(baseQueryDTO);
-        return Result.success(pageResult);
+        return Result.success(pageResult.getTotalPage() , pageResult.getDataList());
     }
 
     /**

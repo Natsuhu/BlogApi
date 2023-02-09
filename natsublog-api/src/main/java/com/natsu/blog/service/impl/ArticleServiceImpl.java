@@ -1,7 +1,6 @@
 package com.natsu.blog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -18,10 +17,10 @@ import com.natsu.blog.model.vo.ReadArticle;
 import com.natsu.blog.service.ArticleService;
 import com.natsu.blog.service.CategoryService;
 import com.natsu.blog.service.TagService;
+import com.natsu.blog.service.async.AsyncTaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -42,6 +41,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
 
     @Autowired
     private TagService tagService;
+
+    @Autowired
+    private AsyncTaskService asyncTaskService;
 
     @Override
     public Map<String , Object> getArchives() {
@@ -77,7 +79,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
         readVO.setCategory(categoryService.getById(article.getCategoryId()));
         readVO.setTags(tagService.getTagsByArticleId(article.getId()));
         //更新文章阅读数量
-        updateArticleViewCount(article);
+        asyncTaskService.updateArticleViewCount(articleMapper, article);
         return readVO;
     }
 
@@ -123,23 +125,5 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
             homeArticles.add(homeArticle);
         }
         return new PageResult<>(articles.getPages(), homeArticles);
-    }
-
-    @Async("taskExecutor")
-    public void updateArticleViewCount(Article article){
-        int viewCount = article.getViews();
-        Article articleUpdate = new Article();
-        articleUpdate.setViews(viewCount+1);
-        LambdaUpdateWrapper<Article> updateWrapper = new LambdaUpdateWrapper<>();
-        updateWrapper.eq(Article::getId,article.getId());
-        //多设置一个，保证在多线程环境下，线程安全
-        updateWrapper.eq(Article::getViews,viewCount);
-        articleMapper.update(articleUpdate,updateWrapper);
-        try {
-            Thread.sleep(2000);
-            log.info(System.currentTimeMillis() + "更新文章阅读数完成");
-        }catch (InterruptedException e){
-            log.error("更新文章阅读数量失败：{}" , e.getMessage());
-        }
     }
 }
