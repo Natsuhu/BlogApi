@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface TagService extends IService<Tag> {
 
-    List<Tag> getTagsByArticleId(Integer articleId);
+    List<Tag> getTagsByArticleId(Long articleId);
 
 }

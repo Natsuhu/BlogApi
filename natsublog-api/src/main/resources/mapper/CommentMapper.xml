@@ -5,22 +5,23 @@
 
     <select id="getCommentsByQueryParams" resultType="com.natsu.blog.model.entity.Comment" >
         select * from comment
-        where 1=1
-        <if test="commentQueryDTO.page != null">
-            and page = ${commentQueryDTO.page}
-        </if>
-        <if test="commentQueryDTO.articleId != null">
-            and article_id = ${commentQueryDTO.articleId}
-        </if>
-        <if test="commentQueryDTO.isPublished != null">
-            and is_published = ${commentQueryDTO.isPublished}
-        </if>
-        <if test="commentQueryDTO.parentCommentId != null">
-            and parent_comment_id = ${commentQueryDTO.parentCommentId}
-        </if>
-        <if test="commentQueryDTO.keyword != null">
-            and content like CONCAT('%',#{commentQueryDTO.keyword},'%')
-        </if>
+        <where>
+            <if test="commentQueryDTO.page != null">
+                and page = ${commentQueryDTO.page}
+            </if>
+            <if test="commentQueryDTO.articleId != null">
+                and article_id = ${commentQueryDTO.articleId}
+            </if>
+            <if test="commentQueryDTO.isPublished != null">
+                and is_published = ${commentQueryDTO.isPublished}
+            </if>
+            <if test="commentQueryDTO.parentCommentId != null">
+                and parent_comment_id = ${commentQueryDTO.parentCommentId}
+            </if>
+            <if test="commentQueryDTO.keyword != null">
+                and content like CONCAT('%',#{commentQueryDTO.keyword},'%')
+            </if>
+        </where>
         order by create_time desc
     </select>
 

@@ -10,9 +10,9 @@ import java.util.Map;
 @AllArgsConstructor
 public class TreeNode{
 
-    private int id;
+    private Long id;
 
-    private int pid;
+    private Long pid;
 
     private Map<String,Object> content;
 

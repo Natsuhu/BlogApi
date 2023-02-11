@@ -16,7 +16,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper , Tag> implements TagS
     private TagMapper tagMapper;
 
     @Override
-    public List<Tag> getTagsByArticleId(Integer articleId) {
+    public List<Tag> getTagsByArticleId(Long articleId) {
         return tagMapper.getTagsByArticleId(articleId);
     }
 }

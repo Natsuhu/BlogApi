@@ -10,9 +10,9 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * @Description  
+ * @Description
  * @Author  NatsuKaze
- * @Date 2022-10-06 
+ * @Date 2022-10-06
  */
 
 @Data
@@ -24,7 +24,7 @@ public class SiteSetting implements Serializable {
 	 * ID
 	 */
    	@TableId( value = "id" , type = IdType.AUTO )
-	private Integer id;
+	private Long id;
 
    	@TableField( "name_en" )
 	private String nameEn;

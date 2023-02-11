@@ -34,6 +34,16 @@ public class Constants {
     public static final Boolean NO_PUBLISHED = false;
 
     /**
+     * 允许评论
+     * */
+    public static final Boolean ALLOW_COMMENT = true;
+
+    /**
+     * 禁止评论
+     * */
+    public static final Boolean FORBID_COMMENT = false;
+
+    /**
      * 页面设置，LOGO和资料卡
      * */
     public static final Integer PAGE_SETTING_LOGO = 1;
@@ -67,4 +77,9 @@ public class Constants {
      * 页面类型，关于我
      * */
     public static final Integer PAGE_ABOUT = 2;
+
+    /**
+     * 顶级评论的父ID
+     * */
+    public static final Long TOP_COMMENT_PARENT_ID = -1L;
 }

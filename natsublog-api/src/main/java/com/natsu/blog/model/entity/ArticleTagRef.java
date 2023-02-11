@@ -10,9 +10,9 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * @Description  
+ * @Description
  * @Author  NatsuKaze
- * @Date 2022-10-06 
+ * @Date 2022-10-06
  */
 
 @Data
@@ -24,7 +24,7 @@ public class ArticleTagRef implements Serializable {
 	 * 文章ID
 	 */
    	@TableId( value = "id" , type = IdType.AUTO )
-	private Integer articleId;
+	private Long articleId;
 
 	/**
 	 * 标签ID

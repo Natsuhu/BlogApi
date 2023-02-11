@@ -8,9 +8,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Description  
+ * @Description
  * @Author  NatsuKaze
- * @Date 2022-10-06 
+ * @Date 2022-10-06
  */
 
 @Data
@@ -22,7 +22,7 @@ public class Tag implements Serializable {
 	 * 标签ID
 	 */
    	@TableId( value = "id" , type = IdType.AUTO )
-	private Integer id;
+	private Long id;
 
 	/**
 	 * 标签名称

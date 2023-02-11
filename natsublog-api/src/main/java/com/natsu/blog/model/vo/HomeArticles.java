@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 public class HomeArticles {
 
-    private Integer id;
+    private Long id;
 
     private String title;
 

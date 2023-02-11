@@ -8,9 +8,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Description  
+ * @Description
  * @Author  NatsuKaze
- * @Date 2022-10-06 
+ * @Date 2022-10-06
  */
 
 @Data
@@ -22,7 +22,7 @@ public class Category implements Serializable {
 	 * 分类ID
 	 */
    	@TableId( value = "id" , type = IdType.AUTO )
-	private Integer id;
+	private Long id;
 
 	/**
 	 * 分类名称

@@ -9,10 +9,10 @@ public class CommentQueryDTO extends BaseQueryDTO{
 
     private Integer page;
 
-    private Integer articleId;
+    private Long articleId;
 
     private Boolean isPublished;
 
-    private Integer parentCommentId;
+    private Long parentCommentId;
 }
 

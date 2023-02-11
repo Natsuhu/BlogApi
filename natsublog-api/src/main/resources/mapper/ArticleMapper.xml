@@ -29,23 +29,23 @@
             left join article_tag_ref as b on a.id = b.article_id
             left join tag as c on b.tag_id = c.id
         </if>
-        where
-        1 = 1
-        <if test="articleQueryDTO.tagIds != null">
-            and c.id in
-            <foreach collection="articleQueryDTO.tagIds" item="tagId" open="(" close=")" separator=",">
-                ${tagId}
-            </foreach>
-        </if>
-        <if test="articleQueryDTO.categoryId != null">
-            and a.category_id = ${articleQueryDTO.categoryId}
-        </if>
-        <if test="articleQueryDTO.keyword != null">
-            and a.title like CONCAT('%',#{articleQueryDTO.keyword},'%')
-        </if>
-        <if test="articleQueryDTO.isPublished != null">
-            and a.is_published = ${articleQueryDTO.isPublished}
-        </if>
+        <where>
+            <if test="articleQueryDTO.tagIds != null">
+                and c.id in
+                <foreach collection="articleQueryDTO.tagIds" item="tagId" open="(" close=")" separator=",">
+                    ${tagId}
+                </foreach>
+            </if>
+            <if test="articleQueryDTO.categoryId != null">
+                and a.category_id = ${articleQueryDTO.categoryId}
+            </if>
+            <if test="articleQueryDTO.keyword != null">
+                and a.title like CONCAT('%',#{articleQueryDTO.keyword},'%')
+            </if>
+            <if test="articleQueryDTO.isPublished != null">
+                and a.is_published = ${articleQueryDTO.isPublished}
+            </if>
+        </where>
         group by a.id
         order by a.create_time desc
     </select>

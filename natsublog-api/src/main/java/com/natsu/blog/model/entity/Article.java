@@ -22,7 +22,7 @@ public class Article implements Serializable {
 	 * 文章ID
 	 */
    	@TableId( value = "id" , type = IdType.AUTO )
-	private Integer id;
+	private Long id;
 
 	/**
 	 * 文章标题
@@ -81,7 +81,7 @@ public class Article implements Serializable {
 	/**
 	 * 更新时间
 	 */
-   	@TableField( value = "update_time" , fill = FieldFill.UPDATE)
+   	@TableField( value = "update_time")
 	private Date updateTime;
 
 	/**
@@ -106,7 +106,7 @@ public class Article implements Serializable {
 	 * 分类ID
 	 */
    	@TableField( "category_id" )
-	private Integer categoryId;
+	private Long categoryId;
 
 	/**
 	 * 是否置顶

@@ -9,9 +9,9 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class ArticleQueryDTO extends BaseQueryDTO{
 
-    private Integer categoryId;
+    private Long categoryId;
 
-    private List<Integer> tagIds;
+    private List<Long> tagIds;
 
     private Boolean isPublished;
 

@@ -8,9 +8,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Description  
+ * @Description
  * @Author  NatsuKaze
- * @Date 2022-10-06 
+ * @Date 2022-10-06
  */
 
 @Data
@@ -22,7 +22,7 @@ public class Comment implements Serializable {
 	 * 评论ID
 	 */
    	@TableId( value = "id" , type = IdType.AUTO )
-	private Integer id;
+	private Long id;
 
 	/**
 	 * 昵称
@@ -76,7 +76,7 @@ public class Comment implements Serializable {
 	 * 0文章1友链2关于我
 	 */
    	@TableField( "page" )
-	private Long page;
+	private Integer page;
 
 	/**
 	 * 回复的人昵称
@@ -94,7 +94,7 @@ public class Comment implements Serializable {
 	 * 父论ID
 	 */
    	@TableField( "parent_comment_id" )
-	private Integer parentCommentId;
+	private Long parentCommentId;
 
 	/**
 	 * 个人主页
@@ -112,6 +112,6 @@ public class Comment implements Serializable {
 	 * 归属ID
 	 */
    	@TableField( "origin_id" )
-   	private Integer originId;
+   	private Long originId;
 
 }

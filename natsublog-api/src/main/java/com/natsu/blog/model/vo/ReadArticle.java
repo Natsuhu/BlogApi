@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 public class ReadArticle {
 
-    private Integer id;
+    private Long id;
 
     private String title;
 
@@ -22,7 +22,7 @@ public class ReadArticle {
 
     private Integer words;
 
-    private Long readTime;
+    private Integer readTime;
 
     private Category category;
 

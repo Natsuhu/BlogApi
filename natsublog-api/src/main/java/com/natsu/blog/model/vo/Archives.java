@@ -1,11 +1,11 @@
 package com.natsu.blog.model.vo;
 
-import lombok.*;
+import lombok.Data;
 
 @Data
 public class Archives {
 
-    private Integer id;
+    private Long id;
 
     private String title;
 

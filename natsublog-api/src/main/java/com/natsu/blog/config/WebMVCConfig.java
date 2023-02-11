@@ -5,6 +5,7 @@ import com.natsu.blog.handler.LoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * @since 2023/1/19 新增注释
  * */
 @Configuration
+@EnableWebMvc
 public class WebMVCConfig implements WebMvcConfigurer {
 
     /**
@@ -33,6 +35,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
     /**
      * 跨域配置，因为前后端端口不同，需要允许前端服务器访问后端端口
      * */
+    @Override
     public void addCorsMappings(CorsRegistry registry){
         registry.addMapping("/**").allowedOrigins("*");
     }
@@ -40,6 +43,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
     /**
      * 使拦截器生效
      * */
+    @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns("/user/test");
@@ -49,6 +53,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
      * 静态资源映射
      * */
     //TODO 测试用，生产环境统一使用Nginx代理静态资源
+    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(uploadProperties.getAccessPath()).addResourceLocations(uploadProperties.getResourcesLocations());
     }

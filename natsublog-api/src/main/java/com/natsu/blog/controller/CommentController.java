@@ -11,10 +11,19 @@ import com.natsu.blog.service.ArticleService;
 import com.natsu.blog.service.CommentService;
 import com.natsu.blog.service.SiteSettingService;
 import com.natsu.blog.utils.QQInfoUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -25,6 +34,7 @@ import java.util.UUID;
  * */
 @RestController
 @RequestMapping("comments")
+@Slf4j
 public class CommentController {
 
     /**
@@ -67,11 +77,21 @@ public class CommentController {
      * */
     @GetMapping("/articleComments")
     public Result getArticleComments(CommentQueryDTO commentQueryDTO) {
-        commentQueryDTO.setPage(Constants.PAGE_READ_ARTICLE);
-        Article article = articleService.getById(commentQueryDTO.getArticleId());
-        if (article == null || !article.getIsPublished()) {
-            return Result.fail(404,"没有此文章");
+        //参数校验
+        if (commentQueryDTO.getPage() == null || !commentQueryDTO.getPage().equals(Constants.PAGE_READ_ARTICLE)) {
+            return Result.fail("页面请求错误！");
         }
+        if (commentQueryDTO.getArticleId() == null) {
+            return Result.fail("请求参数错误！");
+        }
+        //检查页面是否可评论
+        if (!checkPageIsComment(commentQueryDTO.getPage() , commentQueryDTO.getArticleId())) {
+            return Result.fail("文章不存在或禁止评论");
+        }
+        //配置参数并构建评论树
+        commentQueryDTO.setKeyword(null);
+        commentQueryDTO.setIsPublished(Constants.PUBLISHED);
+        commentQueryDTO.setParentCommentId(Constants.TOP_COMMENT_PARENT_ID);
         Map<String , Object> commentMap = commentService.buildCommentTree(commentQueryDTO);
         return Result.success(commentMap);
     }
@@ -81,27 +101,20 @@ public class CommentController {
      * */
     @GetMapping("/pageComments")
     public Result getPageComments(CommentQueryDTO commentQueryDTO) {
-        commentQueryDTO.setArticleId(null);
-        //请求页面校验
-        if (commentQueryDTO.getPage().equals(Constants.PAGE_READ_ARTICLE)) {
-            return Result.fail(500,"页面请求错误");
-        }
-        //查询页面是否可评论
         Integer pageType = commentQueryDTO.getPage();
-        LambdaQueryWrapper<SiteSetting> wrapper = new LambdaQueryWrapper<>();
-        if (pageType.equals(Constants.PAGE_FRIEND)) {
-            wrapper.eq(SiteSetting::getPage , Constants.PAGE_SETTING_FRIEND);
-        }else if (pageType.equals(Constants.PAGE_ABOUT)){
-            wrapper.eq(SiteSetting::getPage , Constants.PAGE_SETTING_ABOUT);
-        }else {
-            return Result.fail(500 , "页面请求错误");
+        //参数校验
+        if (pageType == null || !pageType.equals(Constants.PAGE_FRIEND) && !pageType.equals(Constants.PAGE_ABOUT)) {
+            return Result.fail("页面请求错误！");
         }
-        wrapper.eq(SiteSetting::getNameEn , "isComment");
-        SiteSetting siteSetting = siteSettingService.getOne(wrapper);
-        if (siteSetting.getContent().equals("false")) {
-            return Result.fail(500,"此页面暂时不能评论");
+        //检查页面是否可评论
+        if (!checkPageIsComment(commentQueryDTO.getPage() , commentQueryDTO.getArticleId())) {
+            return Result.fail("此页面禁止评论！");
         }
-        //构建评论树
+        //配置参数并构建评论树
+        commentQueryDTO.setKeyword(null);
+        commentQueryDTO.setArticleId(null);
+        commentQueryDTO.setIsPublished(Constants.PUBLISHED);
+        commentQueryDTO.setParentCommentId(Constants.TOP_COMMENT_PARENT_ID);
         Map<String , Object> commentMap = commentService.buildCommentTree(commentQueryDTO);
         return Result.success(commentMap);
     }
@@ -109,51 +122,89 @@ public class CommentController {
     /**
      * 保存评论
      * */
-    // TODO 保存评论需要大改
     @PostMapping("/save")
-    public Result saveComment(@RequestBody Comment comment) throws Exception {
-        String qq = comment.getQq();
-        if (comment.getId() != null) {
-            return Result.fail(500,"评论失败");
+    public Result saveComment(@RequestBody Comment comment) {
+        Integer pageType = comment.getPage();
+        //参数校验
+        if (StringUtils.isEmpty(comment.getContent()) || comment.getContent().length() > 250) {
+            return Result.fail("评论内容超过长度！");
         }
-        if (comment.getPage() < 0 || comment.getPage() > 2){
-            return Result.fail(500,"评论失败");
+        List<Integer> pages = new ArrayList<>(3);
+        pages.add(Constants.PAGE_READ_ARTICLE);
+        pages.add(Constants.PAGE_FRIEND);
+        pages.add(Constants.PAGE_ABOUT);
+        if (pageType == null || !pages.contains(pageType)) {
+            return Result.fail("页面请求错误！");
         }
-        if (comment.getPage() != 0 && comment.getArticleId() != null) {
-            return Result.fail(500,"评论失败");
+        if (pageType.equals(Constants.PAGE_READ_ARTICLE) && comment.getArticleId() == null) {
+            return Result.fail("页面请求错误！");
         }
-        if (comment.getContent().equals("") || comment.getContent() == null) {
-            return Result.fail(500,"评论失败");
+        if (comment.getParentCommentId() == null || comment.getOriginId() == null) {
+            return Result.fail("参数错误!");
         }
-        if (comment.getParentCommentId() == -1 && comment.getReplyNickname() != null) {
-            return Result.fail(500,"评论失败");
-        } else if (comment.getParentCommentId() != -1 && comment.getReplyNickname() == null) {
-            return Result.fail(500,"评论失败");
+        //检查页面是否可评论
+        if (!checkPageIsComment(pageType , comment.getArticleId())) {
+            return Result.fail("请求的页面禁止评论！");
         }
-        if (qq == null || qq.equals("")) {
-            return Result.fail(500,"评论失败");
+        //配置参数
+        comment.setAvatar("");//TODO 设置随机头像，暂时搁置
+        if (comment.getParentCommentId().equals(Constants.TOP_COMMENT_PARENT_ID)) {
+            //TODO 设置数字UUID（伪），后面应该抽象出来改为工具类
+            String uuid = UUID.randomUUID().toString().replace("-", "");
+            String unmUUid = new BigInteger(uuid, 16).toString();
+            int begin = RandomUtils.nextInt(1,9);
+            int end = begin + 8;
+            Long uuidL = Long.parseLong(unmUUid.substring(begin, end));
+            comment.setOriginId(uuidL);
         }
-        if(!qqInfoUtils.isQQNumber(qq)){
-            return Result.fail(500,"QQ号格式错误");
-        }
-        if (comment.getPage() == 0 && comment.getArticleId() != null) {
-            Article article = articleService.getById(comment.getArticleId());
-            if (article == null || !article.getIsPublished()) {
-                return Result.fail(500,"评论失败");
+        String qqNum = comment.getQq();
+        if (!StringUtils.isEmpty(qqNum)) {
+            if(!qqInfoUtils.isQQNumber(qqNum)){
+                return Result.fail("QQ号格式错误!");
             }
+            try {
+                comment.setAvatar(qqInfoUtils.getQQAvatarUrl(qqNum));
+                comment.setNickname(qqInfoUtils.getQQNickname(qqNum));
+            }catch (Exception e) {
+                log.error("获取QQ信息失败！{}" , e.getMessage());
+                return Result.fail("获取QQ号信息失败："+e.getMessage());
+            }
+        }else if (StringUtils.isEmpty(comment.getNickname()) || comment.getNickname().length() > 10) {
+            return Result.fail("昵称格式错误！");
         }
-        if (comment.getParentCommentId() == -1) {
-            String uuid = UUID.randomUUID().toString();
-            Integer id = uuid.replace("-","").substring(0,8).hashCode();
-            comment.setOriginId(id);
-        }
-        comment.setAvatar(qqInfoUtils.getQQAvatarUrl(qq));
-        comment.setNickname(qqInfoUtils.getQQNickname(qq));
-        comment.setCreateTime(new Date());
-        comment.setIsPublished(true);
+        comment.setIsPublished(Constants.PUBLISHED);
         comment.setIsAdminComment(false);
-        commentService.save(comment);
-        return Result.success("ok");
+        if (commentService.save(comment)) {
+            return Result.success("评论成功！");
+        }
+        return Result.fail("评论失败！");
     }
 
+    /**
+     * 验证目标页面能否评论
+     * */
+    private Boolean checkPageIsComment(Integer page , Long articleId) {
+        switch (page) {
+            case 0:
+                Article article = articleService.getById(articleId);
+                if (article == null) {
+                    return false;
+                }
+                return article.getIsPublished().equals(Constants.PUBLISHED) && article.getIsCommentEnabled().equals(Constants.ALLOW_COMMENT);
+            case 1:
+                LambdaQueryWrapper<SiteSetting> friendPageQuery = new LambdaQueryWrapper<>();
+                friendPageQuery.eq(SiteSetting::getNameEn , "isComment");
+                friendPageQuery.eq(SiteSetting::getPage , Constants.PAGE_SETTING_FRIEND);
+                SiteSetting friendPageSetting = siteSettingService.getOne(friendPageQuery);
+                return !friendPageSetting.getContent().equals("false");
+            case 2:
+                LambdaQueryWrapper<SiteSetting> aboutPageQuery = new LambdaQueryWrapper<>();
+                aboutPageQuery.eq(SiteSetting::getNameEn , "isComment");
+                aboutPageQuery.eq(SiteSetting::getPage , Constants.PAGE_SETTING_ABOUT);
+                SiteSetting aboutPageSetting = siteSettingService.getOne(aboutPageQuery);
+                return !aboutPageSetting.getContent().equals("false");
+            default:
+                return false;
+        }
+    }
 }

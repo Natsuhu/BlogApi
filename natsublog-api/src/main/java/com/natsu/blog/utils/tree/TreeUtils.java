@@ -1,34 +1,21 @@
 package com.natsu.blog.utils.tree;
 
-import com.natsu.blog.model.entity.Comment;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class TreeUtils {
 
     /**
-     * 批量构建树节点
+     * List转树结构，并过滤出符合条件的子树
      * */
-    public static List<TreeNode> buildCommentTreeNode(List<Comment> comments) {
-        List<TreeNode> treeNodes = new ArrayList<>();
-        for (Comment comment : comments) {
-            Map<String,Object> map = new HashMap<>();
-            TreeNode treeNode = new TreeNode(comment.getId(),comment.getParentCommentId(),map,null);
-            treeNode.getContent().put("nickname",comment.getNickname());
-            treeNode.getContent().put("originId" , comment.getOriginId());
-            treeNode.getContent().put("content",comment.getContent());
-            treeNode.getContent().put("avatar",comment.getAvatar());
-            treeNode.getContent().put("createTime",comment.getCreateTime());
-            treeNode.getContent().put("replyNickname",comment.getReplyNickname());
-            treeNodes.add(treeNode);
-        }
-        return treeNodes;
-    }
-
-
-    public static List<TreeNode> buildCommentTree(List<TreeNode> zoneList , int topId) {
-        Map<Integer, List<TreeNode>> zoneByParentIdMap = new HashMap<>();
+    public static List<TreeNode> listToTree(List<TreeNode> zoneList , Predicate<? super TreeNode> predicate) {
+        Map<Long, List<TreeNode>> zoneByParentIdMap = new HashMap<>();
 
         //将parentId相同的Zone放在同一个列表中，parentId作为key
         for (TreeNode treeNode : zoneList) {
@@ -44,18 +31,18 @@ public class TreeUtils {
 
         //过滤出顶级菜单列表
         return zoneList.stream()
-                .filter(treeNode -> treeNode.getPid() == topId)
+                .filter(predicate)
                 .collect(Collectors.toList());
     }
 
     /**
      * 层序遍历树
      * */
-    public static TreeNode conTwoLevelCommentTree(TreeNode head) {
+    public static List<TreeNode> getAllChildNodeByRootNode(TreeNode rootNode) {
         List<TreeNode> result = new ArrayList<>();
 
         Queue<TreeNode> queue = new LinkedList<>();
-        queue.add(head);
+        queue.add(rootNode);
 
         while (!queue.isEmpty()) {
             int size = queue.size();
@@ -72,10 +59,7 @@ public class TreeUtils {
             }
         }
         result.remove(0);
-        for (TreeNode treeNode : result) {
-            treeNode.setChildren(null);
-        }
-        head.setChildren(result);
-        return head;
+        result.forEach(treeNode -> treeNode.setChildren(null));
+        return result;
     }
 }

@@ -5,9 +5,9 @@ import lombok.Data;
 @Data
 public class BaseQueryDTO {
 
-    private int pageNo = 1;
+    private Integer pageNo = 1;
 
-    private int pageSize = 10;
+    private Integer pageSize = 10;
 
     private String keyword;
 }

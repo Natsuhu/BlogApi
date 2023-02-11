@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class RandomArticles {
 
-    private Integer id;
+    private Long id;
 
     private String title;
 

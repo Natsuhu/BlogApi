@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface TagMapper extends BaseMapper<Tag> {
 
-    List<Tag> getTagsByArticleId(int articleId);
+    List<Tag> getTagsByArticleId(Long articleId);
 
 }

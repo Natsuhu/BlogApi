@@ -7,6 +7,7 @@ import com.natsu.blog.enums.VisitorBehavior;
 import com.natsu.blog.model.dto.ArticleQueryDTO;
 import com.natsu.blog.model.dto.BaseQueryDTO;
 import com.natsu.blog.model.entity.Article;
+import com.natsu.blog.model.entity.Tag;
 import com.natsu.blog.model.vo.*;
 import com.natsu.blog.service.ArticleService;
 import com.natsu.blog.service.CategoryService;
@@ -53,6 +54,7 @@ public class ArticleController {
     @VisitorLogger(VisitorBehavior.INDEX)
     @GetMapping
     public Result getHomeArticles(BaseQueryDTO baseQueryDTO) {
+        //无需校验参数
         baseQueryDTO.setKeyword(null);
         PageResult<HomeArticles> pageResult = articleService.getHomeArticles(baseQueryDTO);
         return Result.success(pageResult.getTotalPage() , pageResult.getDataList());
@@ -62,7 +64,7 @@ public class ArticleController {
      * 随机文章
      * */
     @GetMapping("/random")
-    public Result getRandomArticles(@RequestParam(defaultValue = "5") int count) {
+    public Result getRandomArticles(@RequestParam(defaultValue = "5") Integer count) {
         List<RandomArticles> articles = articleService.getRandomArticles(count);
         return Result.success(articles);
     }
@@ -83,13 +85,13 @@ public class ArticleController {
      * */
     @VisitorLogger(VisitorBehavior.ARTICLE)
     @GetMapping("/read")
-    public Result getReadArticleById(@RequestParam int id){
-        if (id < 0) {
-            Result.fail(404,"没有这篇文章");
+    public Result getReadArticleById(@RequestParam Integer id){
+        if (id == null) {
+            return Result.fail("参数错误！");
         }
         ReadArticle article = articleService.getReadArticleById(id);
         if (article == null) {
-            return Result.fail(404,"没有这篇文章");
+            return Result.fail("参数错误!");
         }
         return Result.success(article);
     }
@@ -110,12 +112,18 @@ public class ArticleController {
     @VisitorLogger(VisitorBehavior.CATEGORY)
     @GetMapping("/category")
     public Result getArticlesByCategoryId(ArticleQueryDTO articleQueryDTO) {
+        //参数校验
+        if (articleQueryDTO.getCategoryId() == null) {
+            return Result.fail("参数错误！");
+        }
+        //验证分类存在
+        if (categoryService.getById(articleQueryDTO.getCategoryId()) == null) {
+            return Result.fail("无此分类！");
+        }
+        //配置参数
         articleQueryDTO.setTagIds(null);
         articleQueryDTO.setKeyword(null);
-        articleQueryDTO.setIsPublished(true);
-        if (categoryService.getById(articleQueryDTO.getCategoryId()) == null) {
-            return Result.fail(404,"没有这个分类");
-        }
+        articleQueryDTO.setIsPublished(Constants.PUBLISHED);
         PageResult<HomeArticles> articles = articleService.getArticlesByQueryParams(articleQueryDTO);
         return Result.success(articles);
     }
@@ -126,12 +134,21 @@ public class ArticleController {
     @VisitorLogger(VisitorBehavior.TAG)
     @GetMapping("/tag")
     public Result getArticlesByTagId(ArticleQueryDTO articleQueryDTO) {
+        //参数校验
+        if (articleQueryDTO.getTagIds() == null || articleQueryDTO.getTagIds().size() == 0) {
+            return Result.fail("参数错误！");
+        }
+        //验证标签存在
+        LambdaQueryWrapper<Tag> tagQuery = new LambdaQueryWrapper<>();
+        tagQuery.in(Tag::getId , articleQueryDTO.getTagIds());
+        List<Tag> tags = tagService.list(tagQuery);
+        if(articleQueryDTO.getTagIds().size() != tags.size()) {
+            return Result.fail("参数错误！");
+        }
+        //配置参数
         articleQueryDTO.setCategoryId(null);
         articleQueryDTO.setKeyword(null);
-        articleQueryDTO.setIsPublished(true);
-        if(tagService.getById(articleQueryDTO.getTagIds().get(0)) == null) {
-            return Result.fail(404,"没有这个标签");
-        }
+        articleQueryDTO.setIsPublished(Constants.PUBLISHED);
         PageResult<HomeArticles> articles = articleService.getArticlesByQueryParams(articleQueryDTO);
         return Result.success(articles);
     }

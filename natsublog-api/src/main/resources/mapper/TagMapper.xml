@@ -3,7 +3,7 @@
 
 <mapper namespace="com.natsu.blog.mapper.TagMapper">
 
-    <select id="getTagsByArticleId" parameterType="int" resultType="com.natsu.blog.model.entity.Tag" >
+    <select id="getTagsByArticleId" resultType="com.natsu.blog.model.entity.Tag" >
         select * from tag where id in
             ( select tag_id from article_tag_ref where article_id = #{articleId} )
     </select>
