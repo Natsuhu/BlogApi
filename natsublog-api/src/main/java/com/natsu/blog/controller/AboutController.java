@@ -31,7 +31,7 @@ public class AboutController {
      * 获取关于我页面配置
      * */
     @VisitorLogger(VisitorBehavior.ABOUT)
-    @GetMapping
+    @GetMapping("getSetting")
     public Result getAboutPageSetting() {
         Map<String , String> settings = siteSettingService.getPageSetting(Constants.PAGE_SETTING_ABOUT);
         return Result.success(settings);

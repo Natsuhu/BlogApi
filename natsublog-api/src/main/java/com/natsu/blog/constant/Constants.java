@@ -44,6 +44,16 @@ public class Constants {
     public static final Boolean FORBID_COMMENT = false;
 
     /**
+     * 友情链接，审核
+     * */
+    public static final Boolean AUDIT = true;
+
+    /**
+     * 友情链接，未审核
+     * */
+    public static final Boolean NO_AUDIT = false;
+
+    /**
      * 页面设置，LOGO和资料卡
      * */
     public static final Integer PAGE_SETTING_LOGO = 1;
