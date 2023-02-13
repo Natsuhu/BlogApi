@@ -129,4 +129,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
         }
         return new PageResult<>(articles.getPages(), homeArticles);
     }
+
+    @Override
+    public Integer saveArticle(Article article , List<Integer> tagIds) {
+        articleMapper.insert(article);
+        return 1;
+    }
+
 }

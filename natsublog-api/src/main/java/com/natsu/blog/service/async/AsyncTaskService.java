@@ -32,9 +32,9 @@ public class AsyncTaskService {
         articleMapper.update(articleUpdate,updateWrapper);
         try {
             Thread.sleep(2000);
-            log.info("更新文章阅读数完成");
+            log.info("更新文章阅读数完成，文章ID：{}" , article.getId());
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error("更新文章阅读数量失败：{}" , e.getMessage());
         }
     }
 

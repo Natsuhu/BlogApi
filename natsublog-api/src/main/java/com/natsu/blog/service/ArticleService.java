@@ -23,4 +23,6 @@ public interface ArticleService extends IService<Article> {
     PageResult<HomeArticles> getHomeArticles(BaseQueryDTO baseQueryDTO);
 
     PageResult<HomeArticles> getArticlesByQueryParams(ArticleQueryDTO articleQueryDTO);
+
+    Integer saveArticle(Article article , List<Integer> tagIds);
 }
