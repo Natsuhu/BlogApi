@@ -81,7 +81,7 @@ public class Article implements Serializable {
 	/**
 	 * 更新时间
 	 */
-   	@TableField( value = "update_time")
+   	@TableField( value = "update_time" , fill = FieldFill.INSERT)
 	private Date updateTime;
 
 	/**

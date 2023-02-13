@@ -24,6 +24,11 @@ public class Constants {
     public static final String IMAGE = "image";
 
     /**
+     * 博客默认作者
+     * */
+    public static final String DEFAULT_AUTHOR = "NatsuKaze";
+
+    /**
      * 文章公开状态，公开
      * */
     public static final Boolean PUBLISHED = true;

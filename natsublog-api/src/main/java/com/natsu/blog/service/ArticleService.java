@@ -2,6 +2,7 @@ package com.natsu.blog.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.natsu.blog.model.dto.ArticleQueryDTO;
+import com.natsu.blog.model.dto.ArticleSaveDTO;
 import com.natsu.blog.model.dto.BaseQueryDTO;
 import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.vo.HomeArticles;
@@ -24,5 +25,5 @@ public interface ArticleService extends IService<Article> {
 
     PageResult<HomeArticles> getArticlesByQueryParams(ArticleQueryDTO articleQueryDTO);
 
-    Integer saveArticle(Article article , List<Integer> tagIds);
+    Boolean saveArticle(ArticleSaveDTO articleSaveDTO);
 }

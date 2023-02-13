@@ -7,14 +7,17 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.natsu.blog.constant.Constants;
 import com.natsu.blog.mapper.ArticleMapper;
 import com.natsu.blog.model.dto.ArticleQueryDTO;
+import com.natsu.blog.model.dto.ArticleSaveDTO;
 import com.natsu.blog.model.dto.BaseQueryDTO;
 import com.natsu.blog.model.entity.Article;
+import com.natsu.blog.model.entity.ArticleTagRef;
 import com.natsu.blog.model.vo.Archives;
 import com.natsu.blog.model.vo.HomeArticles;
 import com.natsu.blog.model.vo.PageResult;
 import com.natsu.blog.model.vo.RandomArticles;
 import com.natsu.blog.model.vo.ReadArticle;
 import com.natsu.blog.service.ArticleService;
+import com.natsu.blog.service.ArticleTagRefService;
 import com.natsu.blog.service.CategoryService;
 import com.natsu.blog.service.TagService;
 import com.natsu.blog.service.async.AsyncTaskService;
@@ -23,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +40,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
 
     @Autowired
     private ArticleMapper articleMapper;
+
+    @Autowired
+    private ArticleTagRefService articleTagRefService;
 
     @Autowired
     private CategoryService categoryService;
@@ -130,10 +137,28 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
         return new PageResult<>(articles.getPages(), homeArticles);
     }
 
+    @Transactional
     @Override
-    public Integer saveArticle(Article article , List<Integer> tagIds) {
-        articleMapper.insert(article);
-        return 1;
+    public Boolean saveArticle(ArticleSaveDTO articleSaveDTO) {
+        //获取文章实体和标签IDS
+        Article article = new Article();
+        BeanUtils.copyProperties(articleSaveDTO , article);
+        List<Long> tagIds = articleSaveDTO.getTagIds();
+        try {
+            //先保存文章
+            articleMapper.insert(article);
+            //再保存文章标签引用
+            if (tagIds != null && tagIds.size() > 0) {
+                List<ArticleTagRef> tagRefs = new ArrayList<>(tagIds.size());
+                for (Long tagId : tagIds) {
+                    tagRefs.add(new ArticleTagRef(article.getId(), tagId));
+                }
+                articleTagRefService.saveBatch(tagRefs);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return true;
     }
 
 }
