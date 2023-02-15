@@ -6,8 +6,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.natsu.blog.constant.Constants;
 import com.natsu.blog.mapper.ArticleMapper;
+import com.natsu.blog.model.dto.ArticleDTO;
 import com.natsu.blog.model.dto.ArticleQueryDTO;
-import com.natsu.blog.model.dto.ArticleSaveDTO;
 import com.natsu.blog.model.dto.BaseQueryDTO;
 import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.entity.ArticleTagRef;
@@ -23,6 +23,7 @@ import com.natsu.blog.service.TagService;
 import com.natsu.blog.service.async.AsyncTaskService;
 import com.natsu.blog.utils.markdown.MarkdownUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -139,11 +141,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
 
     @Transactional
     @Override
-    public Boolean saveArticle(ArticleSaveDTO articleSaveDTO) {
+    public Boolean saveArticle(ArticleDTO articleDTO) {
         //获取文章实体和标签IDS
         Article article = new Article();
-        BeanUtils.copyProperties(articleSaveDTO , article);
-        List<Long> tagIds = articleSaveDTO.getTagIds();
+        BeanUtils.copyProperties(articleDTO, article);
+        List<Long> tagIds = articleDTO.getTagIds();
         try {
             //先保存文章
             articleMapper.insert(article);
@@ -156,6 +158,33 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
                 articleTagRefService.saveBatch(tagRefs);
             }
         } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return true;
+    }
+
+    @Transactional
+    @Override
+    public Boolean updateArticle(ArticleDTO articleDTO) {
+        //获取文章实体和标签IDS
+        Article article = new Article();
+        BeanUtils.copyProperties(articleDTO, article);
+        List<Long> updateTagIds = articleDTO.getTagIds();
+        try {
+            //先更新文章
+            articleMapper.updateById(article);
+            //查询原有标签
+            LambdaQueryWrapper<ArticleTagRef> articleTagQuery = new LambdaQueryWrapper<>();
+            articleTagQuery.select(ArticleTagRef::getTagId);
+            articleTagQuery.eq(ArticleTagRef::getArticleId , articleDTO.getId());
+            List<Long> dbTagIds =  articleTagRefService.list(articleTagQuery).stream().map(ArticleTagRef::getTagId).collect(Collectors.toList());
+            //比较原有标签和将要更新的标签
+            if (CollectionUtils.isEqualCollection(dbTagIds , updateTagIds)) {
+                return true;
+            }else {
+
+            }
+        }catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
         return true;

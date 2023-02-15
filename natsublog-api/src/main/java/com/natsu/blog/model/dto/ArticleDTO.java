@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ArticleSaveDTO extends Article {
+public class ArticleDTO extends Article {
 
     private List<Long> tagIds;
 
