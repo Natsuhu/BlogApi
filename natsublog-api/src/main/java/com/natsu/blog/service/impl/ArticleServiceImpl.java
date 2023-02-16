@@ -30,6 +30,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -178,16 +180,26 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
             articleTagQuery.select(ArticleTagRef::getTagId);
             articleTagQuery.eq(ArticleTagRef::getArticleId , articleDTO.getId());
             List<Long> dbTagIds =  articleTagRefService.list(articleTagQuery).stream().map(ArticleTagRef::getTagId).collect(Collectors.toList());
-            //比较原有标签和将要更新的标签
-            if (CollectionUtils.isEqualCollection(dbTagIds , updateTagIds)) {
-                return true;
-            }else {
-
+            //取交集和差集
+            Collection<?> intersection = CollectionUtils.intersection(dbTagIds , updateTagIds);
+            Collection<?> removeTags = CollectionUtils.subtract(dbTagIds , intersection);
+            Collection<?> addTags = CollectionUtils.subtract(updateTagIds , intersection);
+            //移除旧标签引用
+            LambdaQueryWrapper<ArticleTagRef> removeTagsRefWrapper = new LambdaQueryWrapper<>();
+            removeTagsRefWrapper.eq(ArticleTagRef::getArticleId , articleDTO.getId());
+            removeTagsRefWrapper.in(ArticleTagRef::getTagId , removeTags);
+            articleTagRefService.remove(removeTagsRefWrapper);
+            //增加新标签引用
+            List<Object> addTagList = Collections.singletonList(addTags);
+            List<ArticleTagRef> articleTagRefs = new ArrayList<>();
+            for (Object tagIds : addTagList) {
+                articleTagRefs.add(new ArticleTagRef(articleDTO.getId(), (Long) tagIds));
             }
+            articleTagRefService.saveBatch(articleTagRefs);
+            return true;
         }catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
-        return true;
     }
 
 }

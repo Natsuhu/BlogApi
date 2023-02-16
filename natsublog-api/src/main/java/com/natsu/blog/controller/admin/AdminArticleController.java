@@ -7,6 +7,7 @@ import com.natsu.blog.service.ArticleService;
 import com.natsu.blog.service.CategoryService;
 import com.natsu.blog.service.TagService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -118,7 +119,7 @@ public class AdminArticleController {
             return Result.fail("所选分类不存在！");
         }
         List<Long> tagIds = articleDTO.getTagIds();
-        if (tagIds != null && tagIds.size() > 0) {
+        if (!CollectionUtils.isEmpty(tagIds)) {
             if (tagService.listByIds(tagIds).size() != tagIds.size()) {
                 return Result.fail("所选标签不存在！");
             }
