@@ -12,6 +12,7 @@ import com.natsu.blog.model.vo.PageResult;
 import com.natsu.blog.service.CommentService;
 import com.natsu.blog.utils.tree.TreeNode;
 import com.natsu.blog.utils.tree.TreeUtils;
+import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,14 +54,17 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper , Comment> imp
 
         //根据rootComment查找childComment。Stream操作。
         Map<Long , Long> queryMap = rootComments.stream().collect(Collectors.toMap(Comment::getId , Comment::getOriginId));
-        LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Comment::getIsPublished , commentQueryDTO.getIsPublished());
-        wrapper.notIn(Comment::getId , queryMap.keySet());
-        wrapper.in(Comment::getOriginId , queryMap.values());
-        List<Comment> childComments = commentMapper.selectList(wrapper);
+        List<Comment> childComments = new ArrayList<>();
+        if (!MapUtils.isEmpty(queryMap)) {
+            LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(Comment::getIsPublished , commentQueryDTO.getIsPublished());
+            wrapper.notIn(Comment::getId, queryMap.keySet());
+            wrapper.in(Comment::getOriginId, queryMap.values());
+            childComments = commentMapper.selectList(wrapper);
+        }
 
         //将所rootComment和childComment放在一个集合
-        List<Comment> allComment = new ArrayList<>(rootComments.size()+childComments.size());
+        List<Comment> allComment = new ArrayList<>(rootComments.size() + childComments.size());
         allComment.addAll(rootComments);
         allComment.addAll(childComments);
 
