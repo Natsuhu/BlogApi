@@ -56,7 +56,7 @@ public class ArticleController {
     public Result getHomeArticles(BaseQueryDTO baseQueryDTO) {
         //无需校验参数
         baseQueryDTO.setKeyword(null);
-        PageResult<HomeArticles> pageResult = articleService.getHomeArticles(baseQueryDTO);
+        PageResult<HomeArticle> pageResult = articleService.getHomeArticles(baseQueryDTO);
         return Result.success(pageResult.getTotalPage() , pageResult.getDataList());
     }
 
@@ -65,7 +65,7 @@ public class ArticleController {
      * */
     @GetMapping("/random")
     public Result getRandomArticles(@RequestParam(defaultValue = "5") Integer count) {
-        List<RandomArticles> articles = articleService.getRandomArticles(count);
+        List<RandomArticle> articles = articleService.getRandomArticles(count);
         return Result.success(articles);
     }
 
@@ -124,7 +124,7 @@ public class ArticleController {
         articleQueryDTO.setTagIds(null);
         articleQueryDTO.setKeyword(null);
         articleQueryDTO.setIsPublished(Constants.PUBLISHED);
-        PageResult<HomeArticles> articles = articleService.getArticlesByQueryParams(articleQueryDTO);
+        PageResult<HomeArticle> articles = articleService.getArticlesByQueryParams(articleQueryDTO);
         return Result.success(articles);
     }
 
@@ -149,7 +149,7 @@ public class ArticleController {
         articleQueryDTO.setCategoryId(null);
         articleQueryDTO.setKeyword(null);
         articleQueryDTO.setIsPublished(Constants.PUBLISHED);
-        PageResult<HomeArticles> articles = articleService.getArticlesByQueryParams(articleQueryDTO);
+        PageResult<HomeArticle> articles = articleService.getArticlesByQueryParams(articleQueryDTO);
         return Result.success(articles);
     }
 

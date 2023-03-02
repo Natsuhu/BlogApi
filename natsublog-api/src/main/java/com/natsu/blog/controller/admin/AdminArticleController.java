@@ -1,8 +1,11 @@
 package com.natsu.blog.controller.admin;
 
 import com.natsu.blog.constant.Constants;
-import com.natsu.blog.model.dto.ArticleDTO;
+import com.natsu.blog.model.dto.admin.AdminArticleQueryDTO;
+import com.natsu.blog.model.dto.admin.ArticleDTO;
+import com.natsu.blog.model.vo.PageResult;
 import com.natsu.blog.model.vo.Result;
+import com.natsu.blog.model.vo.admin.AdminArticleTableItem;
 import com.natsu.blog.service.ArticleService;
 import com.natsu.blog.service.CategoryService;
 import com.natsu.blog.service.TagService;
@@ -30,6 +33,12 @@ public class AdminArticleController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @PostMapping("/getArticleTable")
+    public Result getArticleTable(@RequestBody AdminArticleQueryDTO adminArticleQueryDTO) {
+        PageResult<AdminArticleTableItem> result = articleService.getArticleTable(adminArticleQueryDTO);
+        return Result.success(result.getTotalPage() , result.getDataList());
+    }
 
     @PostMapping("/save")
     public Result saveArticle(@RequestBody ArticleDTO articleDTO) {

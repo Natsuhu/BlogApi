@@ -3,7 +3,7 @@ package com.natsu.blog.model.vo;
 import lombok.Data;
 
 @Data
-public class RandomArticles {
+public class RandomArticle {
 
     private Long id;
 

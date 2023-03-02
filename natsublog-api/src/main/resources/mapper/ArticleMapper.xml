@@ -18,7 +18,7 @@
         order by create_time desc
     </select>
 
-    <select id="getRandomArticles" parameterType="int" resultType="com.natsu.blog.model.vo.RandomArticles" >
+    <select id="getRandomArticles" parameterType="int" resultType="com.natsu.blog.model.vo.RandomArticle" >
         select id , title, thumbnail from article where is_published = true order by rand() limit ${count}
     </select>
 
@@ -47,6 +47,41 @@
             </if>
         </where>
         group by a.id
+        order by a.create_time desc
+    </select>
+
+    <select id="getArticleTable" resultType="com.natsu.blog.model.vo.admin.AdminArticleTableItem">
+        select
+            a.id , a.title , a.is_published , a.is_recommend , a.is_appreciation , a.is_comment_enabled ,
+            a.create_time , a.update_time , a.views , a.words , a.is_top , c.name category_name
+        from
+            article as a left join category as c on a.category_id = c.id
+        <where>
+            <if test="queryParam.categoryId != null">
+                and a.category_id = ${queryParam.categoryId}
+            </if>
+            <if test="queryParam.isTop != null">
+                and a.is_top = ${queryParam.isTop}
+            </if>
+            <if test="queryParam.isPublished != null">
+                and a.is_published = ${queryParam.isPublished}
+            </if>
+            <if test="queryParam.isRecommend != null">
+                and a.is_recommend = ${queryParam.isRecommend}
+            </if>
+            <if test="queryParam.isAppreciation != null">
+                and a.is_appreciation = ${queryParam.isAppreciation}
+            </if>
+            <if test="queryParam.isCommentEnabled != null">
+                and a.is_comment_enabled = ${queryParam.isCommentEnabled}
+            </if>
+            <if test="queryParam.startTime != null and queryParam.endTime != null">
+                and a.create_time between #{queryParam.startTime} and #{queryParam.endTime}
+            </if>
+            <if test="queryParam.keyword != null and queryParam.keyword != ''">
+                and a.title like CONCAT('%',#{queryParam.keyword},'%')
+            </if>
+        </where>
         order by a.create_time desc
     </select>
 

@@ -6,16 +6,18 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.natsu.blog.constant.Constants;
 import com.natsu.blog.mapper.ArticleMapper;
-import com.natsu.blog.model.dto.ArticleDTO;
+import com.natsu.blog.model.dto.admin.AdminArticleQueryDTO;
+import com.natsu.blog.model.dto.admin.ArticleDTO;
 import com.natsu.blog.model.dto.ArticleQueryDTO;
 import com.natsu.blog.model.dto.BaseQueryDTO;
 import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.entity.ArticleTagRef;
 import com.natsu.blog.model.vo.Archives;
-import com.natsu.blog.model.vo.HomeArticles;
+import com.natsu.blog.model.vo.HomeArticle;
 import com.natsu.blog.model.vo.PageResult;
-import com.natsu.blog.model.vo.RandomArticles;
+import com.natsu.blog.model.vo.RandomArticle;
 import com.natsu.blog.model.vo.ReadArticle;
+import com.natsu.blog.model.vo.admin.AdminArticleTableItem;
 import com.natsu.blog.service.ArticleService;
 import com.natsu.blog.service.ArticleTagRefService;
 import com.natsu.blog.service.CategoryService;
@@ -98,24 +100,26 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
     }
 
     @Override
-    public List<RandomArticles> getRandomArticles(int count) {
+    public List<RandomArticle> getRandomArticles(int count) {
         return articleMapper.getRandomArticles(count);
     }
 
     @Override
-    public PageResult<HomeArticles> getHomeArticles(BaseQueryDTO params) {
+    public PageResult<HomeArticle> getHomeArticles(BaseQueryDTO params) {
         //分页查询article表
         IPage<Article> page = new Page<>(params.getPageNo() , params.getPageSize());
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Article::getIsPublished , Constants.PUBLISHED);
-        queryWrapper.orderByDesc(Article::getCreateTime);
+        //排序优先级：置顶--推荐--创建时间
         queryWrapper.orderByDesc(Article::getIsTop);
+        queryWrapper.orderByDesc(Article::getIsRecommend);
+        queryWrapper.orderByDesc(Article::getCreateTime);
         IPage<Article> articlePage = articleMapper.selectPage(page , queryWrapper);
         //获取查询结果，转为VO对象，并补充标签和分类
         List<Article> articleList = articlePage.getRecords();
-        List<HomeArticles> homeArticles = new ArrayList<>();
+        List<HomeArticle> homeArticles = new ArrayList<>();
         for (Article article : articleList) {
-            HomeArticles homeArticle = new HomeArticles();
+            HomeArticle homeArticle = new HomeArticle();
             BeanUtils.copyProperties(article,homeArticle);
             homeArticle.setCategory(categoryService.getById(article.getCategoryId()));
             homeArticle.setTags(tagService.getTagsByArticleId(article.getId()));
@@ -125,20 +129,27 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
     }
 
     @Override
-    public PageResult<HomeArticles> getArticlesByQueryParams(ArticleQueryDTO articleQueryDTO) {
+    public PageResult<HomeArticle> getArticlesByQueryParams(ArticleQueryDTO articleQueryDTO) {
         //分页查询
         IPage<Article> page = new Page<>(articleQueryDTO.getPageNo() , articleQueryDTO.getPageSize());
         IPage<Article> articles = articleMapper.getArticlesByQueryParams(page , articleQueryDTO);
-        List<HomeArticles> homeArticles = new ArrayList<>();
+        List<HomeArticle> homeArticles = new ArrayList<>();
         //获取结果，遍历转VO对象并补充属性
         for(Article article : articles.getRecords()) {
-            HomeArticles homeArticle = new HomeArticles();
+            HomeArticle homeArticle = new HomeArticle();
             BeanUtils.copyProperties(article , homeArticle);
             homeArticle.setCategory(categoryService.getById(article.getCategoryId()));
             homeArticle.setTags(tagService.getTagsByArticleId(article.getId()));
             homeArticles.add(homeArticle);
         }
         return new PageResult<>(articles.getPages(), homeArticles);
+    }
+
+    @Override
+    public PageResult<AdminArticleTableItem> getArticleTable(AdminArticleQueryDTO queryDTO) {
+        IPage<AdminArticleTableItem> page = new Page<>(queryDTO.getPageNo() , queryDTO.getPageSize());
+        IPage<AdminArticleTableItem> tablePage = articleMapper.getArticleTable(page , queryDTO);
+        return new PageResult<>(tablePage.getPages() , tablePage.getRecords());
     }
 
     @Transactional
