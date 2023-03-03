@@ -1,25 +1,27 @@
 package com.natsu.blog.model.vo;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 import java.util.List;
 
+/**
+ * 分页结果
+ * */
+@Data
 @NoArgsConstructor
-@Getter
-@Setter
-@ToString
+@AllArgsConstructor
 public class PageResult<T> {
 
-    //总页数
+    /**
+     * 总页数
+     * */
     private Long totalPage;
-    //数据列表
+
+    /**
+     * List数据
+     * */
     private List<T> dataList;
 
-    public PageResult(long totalPage , List<T> dataList){
-        this.totalPage = totalPage;
-        this.dataList = dataList;
-    }
 }

@@ -29,9 +29,9 @@ public class AsyncTaskService {
         updateWrapper.eq(Article::getId,article.getId());
         //多设置一个，保证在多线程环境下，线程安全
         updateWrapper.eq(Article::getViews,viewCount);
-        articleMapper.update(articleUpdate,updateWrapper);
         try {
             Thread.sleep(2000);
+            articleMapper.update(articleUpdate,updateWrapper);
             log.info("更新文章阅读数完成，文章ID：{}" , article.getId());
         } catch (InterruptedException e) {
             log.error("更新文章阅读数量失败：{}" , e.getMessage());
