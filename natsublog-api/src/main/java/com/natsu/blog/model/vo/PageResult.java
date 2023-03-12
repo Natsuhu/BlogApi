@@ -20,6 +20,11 @@ public class PageResult<T> {
     private Long totalPage;
 
     /**
+     * 数据总量
+     * */
+    private Long total;
+
+    /**
      * List数据
      * */
     private List<T> dataList;

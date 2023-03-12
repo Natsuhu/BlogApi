@@ -58,7 +58,7 @@ public class SpringContextUtils implements ApplicationContextAware {
     /**
      * getType
      * */
-    public static Class<? extends Object> getType(String name) {
+    public static Class<?> getType(String name) {
         return applicationContext.getType(name);
     }
 

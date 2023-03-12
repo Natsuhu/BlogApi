@@ -37,7 +37,7 @@ public class AdminArticleController {
     @PostMapping("/getArticleTable")
     public Result getArticleTable(@RequestBody AdminArticleQueryDTO adminArticleQueryDTO) {
         PageResult<AdminArticleTableItem> result = articleService.getArticleTable(adminArticleQueryDTO);
-        return Result.success(result.getTotalPage() , result.getDataList());
+        return Result.success(result.getTotalPage(), result.getTotal(), result.getDataList());
     }
 
     @PostMapping("/save")

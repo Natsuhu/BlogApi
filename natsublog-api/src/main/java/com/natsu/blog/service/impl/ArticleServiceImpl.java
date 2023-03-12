@@ -125,7 +125,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
             homeArticle.setTags(tagService.getTagsByArticleId(article.getId()));
             homeArticles.add(homeArticle);
         }
-        return new PageResult<>(articlePage.getPages(), homeArticles);
+        return new PageResult<>(articlePage.getPages(), articlePage.getTotal(), homeArticles);
     }
 
     @Override
@@ -142,14 +142,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
             homeArticle.setTags(tagService.getTagsByArticleId(article.getId()));
             homeArticles.add(homeArticle);
         }
-        return new PageResult<>(articles.getPages(), homeArticles);
+        return new PageResult<>(articles.getPages(), articles.getTotal(), homeArticles);
     }
 
     @Override
     public PageResult<AdminArticleTableItem> getArticleTable(AdminArticleQueryDTO queryDTO) {
         IPage<AdminArticleTableItem> page = new Page<>(queryDTO.getPageNo() , queryDTO.getPageSize());
         IPage<AdminArticleTableItem> tablePage = articleMapper.getArticleTable(page , queryDTO);
-        return new PageResult<>(tablePage.getPages() , tablePage.getRecords());
+        return new PageResult<>(tablePage.getPages(), tablePage.getTotal(), tablePage.getRecords());
     }
 
     @Transactional

@@ -57,7 +57,7 @@ public class ArticleController {
         //无需校验参数
         baseQueryDTO.setKeyword(null);
         PageResult<HomeArticle> pageResult = articleService.getHomeArticles(baseQueryDTO);
-        return Result.success(pageResult.getTotalPage() , pageResult.getDataList());
+        return Result.success(pageResult.getTotalPage(), 0, pageResult.getDataList());
     }
 
     /**

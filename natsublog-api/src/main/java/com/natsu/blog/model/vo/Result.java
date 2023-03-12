@@ -13,6 +13,8 @@ public class Result {
 
     private long totalPage;
 
+    private long total;
+
     private boolean success;
 
     private int code;
@@ -21,19 +23,19 @@ public class Result {
 
     private Object data;
 
-    public static Result success(long totalPage , Object data) {
-        return new Result(totalPage , true , 200 , "success" , data);
+    public static Result success(long totalPage, long total, Object data) {
+        return new Result(totalPage, total, true, 200, "success", data);
     }
 
-    public static Result success(Object data){
-        return new Result(0 , true , 200 ,"success" , data);
+    public static Result success(Object data) {
+        return new Result(0, 0, true, 200, "success", data);
     }
 
     public static Result fail(String msg) {
-        return new Result(0 , false , 500 , msg , null);
+        return new Result(0, 0, false, 500, msg, null);
     }
 
-    public static Result fail(int code , String msg){
-        return new Result(0, false , code , msg , null);
+    public static Result fail(int code, String msg) {
+        return new Result(0, 0, false, code, msg, null);
     }
 }

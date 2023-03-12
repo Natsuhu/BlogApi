@@ -25,7 +25,7 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper , Moment> implem
         wrapper.eq(Moment::getIsPublished , Constants.PUBLISHED);
         wrapper.orderByDesc(Moment::getCreateTime);
         IPage<Moment> moments = momentMapper.selectPage(page , wrapper);
-        return new PageResult<>(moments.getPages() , moments.getRecords());
+        return new PageResult<>(moments.getPages(), moments.getTotal(), moments.getRecords());
     }
 
 }

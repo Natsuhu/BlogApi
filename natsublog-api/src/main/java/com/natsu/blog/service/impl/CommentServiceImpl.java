@@ -34,7 +34,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper , Comment> imp
     public PageResult<Comment> getCommentsByQueryParams(CommentQueryDTO commentQueryDTO) {
         IPage<Comment> page = new Page<>(commentQueryDTO.getPageNo(),commentQueryDTO.getPageSize());
         IPage<Comment> comments = commentMapper.getCommentsByQueryParams(page,commentQueryDTO);
-        return new PageResult<>(comments.getPages(), comments.getRecords());
+        return new PageResult<>(comments.getPages(), comments.getTotal(), comments.getRecords());
     }
 
     @Override
