@@ -1,9 +1,9 @@
 package com.natsu.blog.controller.admin;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.natsu.blog.constant.Constants;
 import com.natsu.blog.model.dto.admin.AdminArticleQueryDTO;
 import com.natsu.blog.model.dto.admin.ArticleDTO;
-import com.natsu.blog.model.vo.PageResult;
 import com.natsu.blog.model.vo.Result;
 import com.natsu.blog.model.vo.admin.AdminArticleTableItem;
 import com.natsu.blog.service.ArticleService;
@@ -36,8 +36,8 @@ public class AdminArticleController {
 
     @PostMapping("/getArticleTable")
     public Result getArticleTable(@RequestBody AdminArticleQueryDTO adminArticleQueryDTO) {
-        PageResult<AdminArticleTableItem> result = articleService.getArticleTable(adminArticleQueryDTO);
-        return Result.success(result.getTotalPage(), result.getTotal(), result.getDataList());
+        IPage<AdminArticleTableItem> result = articleService.getArticleTable(adminArticleQueryDTO);
+        return Result.success(result.getPages(), result.getTotal(), result.getRecords());
     }
 
     @PostMapping("/save")

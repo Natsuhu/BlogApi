@@ -8,7 +8,6 @@ import com.natsu.blog.constant.Constants;
 import com.natsu.blog.mapper.CommentMapper;
 import com.natsu.blog.model.dto.CommentQueryDTO;
 import com.natsu.blog.model.entity.Comment;
-import com.natsu.blog.model.vo.PageResult;
 import com.natsu.blog.service.CommentService;
 import com.natsu.blog.utils.tree.TreeNode;
 import com.natsu.blog.utils.tree.TreeUtils;
@@ -31,16 +30,15 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper , Comment> imp
     private CommentMapper commentMapper;
 
     @Override
-    public PageResult<Comment> getCommentsByQueryParams(CommentQueryDTO commentQueryDTO) {
-        IPage<Comment> page = new Page<>(commentQueryDTO.getPageNo(),commentQueryDTO.getPageSize());
-        IPage<Comment> comments = commentMapper.getCommentsByQueryParams(page,commentQueryDTO);
-        return new PageResult<>(comments.getPages(), comments.getTotal(), comments.getRecords());
+    public IPage<Comment> getCommentsByQueryParams(CommentQueryDTO commentQueryDTO) {
+        IPage<Comment> page = new Page<>(commentQueryDTO.getPageNo(), commentQueryDTO.getPageSize());
+        return commentMapper.getCommentsByQueryParams(page,commentQueryDTO);
     }
 
     @Override
     public Map<String , Object> buildCommentTree(CommentQueryDTO commentQueryDTO) {
-        PageResult<Comment> pageResult = this.getCommentsByQueryParams(commentQueryDTO);
-        List<Comment> rootComments = pageResult.getDataList();
+        IPage<Comment> pageResult = this.getCommentsByQueryParams(commentQueryDTO);
+        List<Comment> rootComments = pageResult.getRecords();
 
         /*//根据rootComment查找childComment。forEach操作
         for (Comment comment : rootComments) {
@@ -91,7 +89,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper , Comment> imp
             queryCount.eq(Comment::getArticleId , commentQueryDTO.getArticleId());
         }
         Integer commentCount = commentMapper.selectCount(queryCount);
-        Long totalPage =  pageResult.getTotalPage();
+        Long totalPage =  pageResult.getPages();
 
         //封装结果集
         result.put("count", commentCount);

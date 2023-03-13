@@ -1,13 +1,13 @@
 package com.natsu.blog.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.natsu.blog.model.dto.ArticleQueryDTO;
+import com.natsu.blog.model.dto.BaseQueryDTO;
 import com.natsu.blog.model.dto.admin.AdminArticleQueryDTO;
 import com.natsu.blog.model.dto.admin.ArticleDTO;
-import com.natsu.blog.model.dto.BaseQueryDTO;
 import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.vo.HomeArticle;
-import com.natsu.blog.model.vo.PageResult;
 import com.natsu.blog.model.vo.RandomArticle;
 import com.natsu.blog.model.vo.ReadArticle;
 import com.natsu.blog.model.vo.admin.AdminArticleTableItem;
@@ -23,13 +23,13 @@ public interface ArticleService extends IService<Article> {
 
     List<RandomArticle> getRandomArticles(int count);
 
-    PageResult<HomeArticle> getHomeArticles(BaseQueryDTO baseQueryDTO);
+    IPage<HomeArticle> getHomeArticles(BaseQueryDTO baseQueryDTO);
 
-    PageResult<HomeArticle> getArticlesByQueryParams(ArticleQueryDTO articleQueryDTO);
+    IPage<HomeArticle> getArticlesByQueryParams(ArticleQueryDTO articleQueryDTO);
 
     Boolean saveArticle(ArticleDTO articleDTO);
 
     Boolean updateArticle(ArticleDTO articleDTO);
 
-    PageResult<AdminArticleTableItem> getArticleTable(AdminArticleQueryDTO queryDTO);
+    IPage<AdminArticleTableItem> getArticleTable(AdminArticleQueryDTO queryDTO);
 }

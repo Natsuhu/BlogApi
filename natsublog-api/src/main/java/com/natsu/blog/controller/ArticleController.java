@@ -1,6 +1,7 @@
 package com.natsu.blog.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.natsu.blog.annotation.VisitorLogger;
 import com.natsu.blog.constant.Constants;
 import com.natsu.blog.enums.VisitorBehavior;
@@ -25,44 +26,44 @@ import java.util.Map;
  * 博客前台，文章接口
  *
  * @author NatsuKaze
- * */
+ */
 @RestController
 @RequestMapping("articles")
 public class ArticleController {
 
     /**
      * ArticleService
-     * */
+     */
     @Autowired
     private ArticleService articleService;
 
     /**
      * CategoryService
-     * */
+     */
     @Autowired
     private CategoryService categoryService;
 
     /**
      * TagService
-     * */
+     */
     @Autowired
     private TagService tagService;
 
     /**
      * 首页文章列表
-     * */
+     */
     @VisitorLogger(VisitorBehavior.INDEX)
     @GetMapping
     public Result getHomeArticles(BaseQueryDTO baseQueryDTO) {
         //无需校验参数
         baseQueryDTO.setKeyword(null);
-        PageResult<HomeArticle> pageResult = articleService.getHomeArticles(baseQueryDTO);
-        return Result.success(pageResult.getTotalPage(), 0, pageResult.getDataList());
+        IPage<HomeArticle> pageResult = articleService.getHomeArticles(baseQueryDTO);
+        return Result.success(pageResult.getPages(), 0, pageResult.getRecords());
     }
 
     /**
      * 随机文章
-     * */
+     */
     @GetMapping("/random")
     public Result getRandomArticles(@RequestParam(defaultValue = "5") Integer count) {
         List<RandomArticle> articles = articleService.getRandomArticles(count);
@@ -71,21 +72,21 @@ public class ArticleController {
 
     /**
      * 文章数量
-     * */
+     */
     @GetMapping("/count")
-    public Result getPublicArticleCount(){
+    public Result getPublicArticleCount() {
         LambdaQueryWrapper<Article> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Article::getIsPublished , Constants.PUBLISHED);
+        wrapper.eq(Article::getIsPublished, Constants.PUBLISHED);
         Integer articleCount = articleService.count(wrapper);
         return Result.success(articleCount);
     }
 
     /**
      * 阅读文章
-     * */
+     */
     @VisitorLogger(VisitorBehavior.ARTICLE)
     @GetMapping("/read")
-    public Result getReadArticleById(@RequestParam Integer id){
+    public Result getReadArticleById(@RequestParam Integer id) {
         if (id == null) {
             return Result.fail("参数错误！");
         }
@@ -98,17 +99,17 @@ public class ArticleController {
 
     /**
      * 归档
-     * */
+     */
     @VisitorLogger(VisitorBehavior.ARCHIVE)
     @GetMapping("/archives")
-    public Result getArchives(){
+    public Result getArchives() {
         Map map = articleService.getArchives();
         return Result.success(map);
     }
 
     /**
      * 根据分类获取文章
-     * */
+     */
     @VisitorLogger(VisitorBehavior.CATEGORY)
     @GetMapping("/category")
     public Result getArticlesByCategoryId(ArticleQueryDTO articleQueryDTO) {
@@ -124,13 +125,13 @@ public class ArticleController {
         articleQueryDTO.setTagIds(null);
         articleQueryDTO.setKeyword(null);
         articleQueryDTO.setIsPublished(Constants.PUBLISHED);
-        PageResult<HomeArticle> articles = articleService.getArticlesByQueryParams(articleQueryDTO);
-        return Result.success(articles);
+        IPage<HomeArticle> articles = articleService.getArticlesByQueryParams(articleQueryDTO);
+        return Result.success(articles.getPages(), 0, articles.getRecords());
     }
 
     /**
      * 根据标签获取文章
-     * */
+     */
     @VisitorLogger(VisitorBehavior.TAG)
     @GetMapping("/tag")
     public Result getArticlesByTagId(ArticleQueryDTO articleQueryDTO) {
@@ -140,17 +141,17 @@ public class ArticleController {
         }
         //验证标签存在
         LambdaQueryWrapper<Tag> tagQuery = new LambdaQueryWrapper<>();
-        tagQuery.in(Tag::getId , articleQueryDTO.getTagIds());
+        tagQuery.in(Tag::getId, articleQueryDTO.getTagIds());
         List<Tag> tags = tagService.list(tagQuery);
-        if(articleQueryDTO.getTagIds().size() != tags.size()) {
+        if (articleQueryDTO.getTagIds().size() != tags.size()) {
             return Result.fail("参数错误！");
         }
         //配置参数
         articleQueryDTO.setCategoryId(null);
         articleQueryDTO.setKeyword(null);
         articleQueryDTO.setIsPublished(Constants.PUBLISHED);
-        PageResult<HomeArticle> articles = articleService.getArticlesByQueryParams(articleQueryDTO);
-        return Result.success(articles);
+        IPage<HomeArticle> articles = articleService.getArticlesByQueryParams(articleQueryDTO);
+        return Result.success(articles.getPages(), 0, articles.getRecords());
     }
 
 }

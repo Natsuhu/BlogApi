@@ -14,7 +14,6 @@ import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.entity.ArticleTagRef;
 import com.natsu.blog.model.vo.Archives;
 import com.natsu.blog.model.vo.HomeArticle;
-import com.natsu.blog.model.vo.PageResult;
 import com.natsu.blog.model.vo.RandomArticle;
 import com.natsu.blog.model.vo.ReadArticle;
 import com.natsu.blog.model.vo.admin.AdminArticleTableItem;
@@ -105,7 +104,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
     }
 
     @Override
-    public PageResult<HomeArticle> getHomeArticles(BaseQueryDTO params) {
+    public IPage<HomeArticle> getHomeArticles(BaseQueryDTO params) {
         //分页查询article表
         IPage<Article> page = new Page<>(params.getPageNo() , params.getPageSize());
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
@@ -125,11 +124,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
             homeArticle.setTags(tagService.getTagsByArticleId(article.getId()));
             homeArticles.add(homeArticle);
         }
-        return new PageResult<>(articlePage.getPages(), articlePage.getTotal(), homeArticles);
+        //封装结果
+        IPage<HomeArticle> pageResult = new Page<>(articlePage.getCurrent(), articlePage.getSize(), articlePage.getTotal());
+        pageResult.setRecords(homeArticles);
+        return pageResult;
     }
 
     @Override
-    public PageResult<HomeArticle> getArticlesByQueryParams(ArticleQueryDTO articleQueryDTO) {
+    public IPage<HomeArticle> getArticlesByQueryParams(ArticleQueryDTO articleQueryDTO) {
         //分页查询
         IPage<Article> page = new Page<>(articleQueryDTO.getPageNo() , articleQueryDTO.getPageSize());
         IPage<Article> articles = articleMapper.getArticlesByQueryParams(page , articleQueryDTO);
@@ -142,14 +144,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
             homeArticle.setTags(tagService.getTagsByArticleId(article.getId()));
             homeArticles.add(homeArticle);
         }
-        return new PageResult<>(articles.getPages(), articles.getTotal(), homeArticles);
+        //封装结果
+        IPage<HomeArticle> pageResult = new Page<>(articles.getCurrent(), articles.getSize(), articles.getTotal());
+        pageResult.setRecords(homeArticles);
+        return pageResult;
     }
 
     @Override
-    public PageResult<AdminArticleTableItem> getArticleTable(AdminArticleQueryDTO queryDTO) {
+    public IPage<AdminArticleTableItem> getArticleTable(AdminArticleQueryDTO queryDTO) {
         IPage<AdminArticleTableItem> page = new Page<>(queryDTO.getPageNo() , queryDTO.getPageSize());
-        IPage<AdminArticleTableItem> tablePage = articleMapper.getArticleTable(page , queryDTO);
-        return new PageResult<>(tablePage.getPages(), tablePage.getTotal(), tablePage.getRecords());
+        return articleMapper.getArticleTable(page , queryDTO);
     }
 
     @Transactional

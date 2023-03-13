@@ -8,7 +8,6 @@ import com.natsu.blog.constant.Constants;
 import com.natsu.blog.mapper.MomentMapper;
 import com.natsu.blog.model.dto.BaseQueryDTO;
 import com.natsu.blog.model.entity.Moment;
-import com.natsu.blog.model.vo.PageResult;
 import com.natsu.blog.service.MomentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,13 +18,12 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper , Moment> implem
     @Autowired
     private MomentMapper momentMapper;
 
-    public PageResult<Moment> getPublicMoments(BaseQueryDTO baseQueryDTO) {
-        IPage<Moment> page = new Page<>(baseQueryDTO.getPageNo() , baseQueryDTO.getPageSize());
+    public IPage<Moment> getPublicMoments(BaseQueryDTO baseQueryDTO) {
+        IPage<Moment> page = new Page<>(baseQueryDTO.getPageNo(), baseQueryDTO.getPageSize());
         LambdaQueryWrapper<Moment> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Moment::getIsPublished , Constants.PUBLISHED);
+        wrapper.eq(Moment::getIsPublished, Constants.PUBLISHED);
         wrapper.orderByDesc(Moment::getCreateTime);
-        IPage<Moment> moments = momentMapper.selectPage(page , wrapper);
-        return new PageResult<>(moments.getPages(), moments.getTotal(), moments.getRecords());
+        return momentMapper.selectPage(page, wrapper);
     }
 
 }

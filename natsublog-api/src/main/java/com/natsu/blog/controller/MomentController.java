@@ -1,10 +1,10 @@
 package com.natsu.blog.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.natsu.blog.annotation.VisitorLogger;
 import com.natsu.blog.enums.VisitorBehavior;
 import com.natsu.blog.model.dto.BaseQueryDTO;
 import com.natsu.blog.model.entity.Moment;
-import com.natsu.blog.model.vo.PageResult;
 import com.natsu.blog.model.vo.Result;
 import com.natsu.blog.service.MomentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +33,8 @@ public class MomentController {
     @VisitorLogger(VisitorBehavior.MOMENT)
     @GetMapping
     public Result getPublicMoments(BaseQueryDTO baseQueryDTO) {
-        PageResult<Moment> moments = momentService.getPublicMoments(baseQueryDTO);
-        return Result.success(moments);
+        IPage<Moment> moments = momentService.getPublicMoments(baseQueryDTO);
+        return Result.success(moments.getPages(), 0, moments.getRecords());
     }
 
 }
