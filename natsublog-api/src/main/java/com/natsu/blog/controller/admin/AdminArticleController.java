@@ -78,24 +78,15 @@ public class AdminArticleController {
         if (articleDTO.getId() == null) {
             return Result.fail("参数错误！必须填写文章ID");
         }
-        Result checkParam = checkParam(articleDTO);
-        if (checkParam != null) {
-            return checkParam;
-        }
-        //验证文章、标签、分类存在
+        //验证文章和标签存在
         if (articleService.getById(articleDTO.getId()) == null) {
             return Result.fail("要修改的文章不存在！");
         }
-        Result checkExist = checkExist(articleDTO);
-        if (checkExist != null) {
-            return checkExist;
-        }
-        //配置参数
-        if (articleDTO.getViews() == null) {
-            articleDTO.setViews(0);
-        }
-        if (StringUtils.isEmpty(articleDTO.getAuthorName())) {
-            articleDTO.setAuthorName(Constants.DEFAULT_AUTHOR);
+        List<Long> tagIds = articleDTO.getTagIds();
+        if (!CollectionUtils.isEmpty(tagIds)) {
+            if (tagService.listByIds(tagIds).size() != tagIds.size()) {
+                return Result.fail("所选标签不存在！");
+            }
         }
         //开始更新
         try {

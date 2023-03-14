@@ -6,10 +6,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.natsu.blog.constant.Constants;
 import com.natsu.blog.mapper.ArticleMapper;
-import com.natsu.blog.model.dto.admin.AdminArticleQueryDTO;
-import com.natsu.blog.model.dto.admin.ArticleDTO;
 import com.natsu.blog.model.dto.ArticleQueryDTO;
 import com.natsu.blog.model.dto.BaseQueryDTO;
+import com.natsu.blog.model.dto.admin.AdminArticleQueryDTO;
+import com.natsu.blog.model.dto.admin.ArticleDTO;
 import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.entity.ArticleTagRef;
 import com.natsu.blog.model.vo.Archives;
@@ -32,7 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -189,28 +189,35 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper , Article> imp
         List<Long> updateTagIds = articleDTO.getTagIds();
         try {
             //先更新文章
+            article.setUpdateTime(new Date());
             articleMapper.updateById(article);
+            //标签对象为null不更新标签
+            if (updateTagIds == null) {
+                return true;
+            }
             //查询原有标签
             LambdaQueryWrapper<ArticleTagRef> articleTagQuery = new LambdaQueryWrapper<>();
-            articleTagQuery.select(ArticleTagRef::getTagId);
-            articleTagQuery.eq(ArticleTagRef::getArticleId , articleDTO.getId());
-            List<Long> dbTagIds =  articleTagRefService.list(articleTagQuery).stream().map(ArticleTagRef::getTagId).collect(Collectors.toList());
+            articleTagQuery.eq(ArticleTagRef::getArticleId, articleDTO.getId());
+            List<Long> dbTagIds = articleTagRefService.list(articleTagQuery).stream().map(ArticleTagRef::getTagId).collect(Collectors.toList());
             //取交集和差集
-            Collection<?> intersection = CollectionUtils.intersection(dbTagIds , updateTagIds);
-            Collection<?> removeTags = CollectionUtils.subtract(dbTagIds , intersection);
-            Collection<?> addTags = CollectionUtils.subtract(updateTagIds , intersection);
+            Collection<?> intersection = CollectionUtils.intersection(dbTagIds, updateTagIds);
+            Collection<?> removeTags = CollectionUtils.subtract(dbTagIds, intersection);
+            Collection<?> addTags = CollectionUtils.subtract(updateTagIds, intersection);
             //移除旧标签引用
-            LambdaQueryWrapper<ArticleTagRef> removeTagsRefWrapper = new LambdaQueryWrapper<>();
-            removeTagsRefWrapper.eq(ArticleTagRef::getArticleId , articleDTO.getId());
-            removeTagsRefWrapper.in(ArticleTagRef::getTagId , removeTags);
-            articleTagRefService.remove(removeTagsRefWrapper);
-            //增加新标签引用
-            List<Object> addTagList = Collections.singletonList(addTags);
-            List<ArticleTagRef> articleTagRefs = new ArrayList<>();
-            for (Object tagIds : addTagList) {
-                articleTagRefs.add(new ArticleTagRef(articleDTO.getId(), (Long) tagIds));
+            if (!CollectionUtils.isEmpty(removeTags)) {
+                LambdaQueryWrapper<ArticleTagRef> removeTagsRefWrapper = new LambdaQueryWrapper<>();
+                removeTagsRefWrapper.eq(ArticleTagRef::getArticleId, articleDTO.getId());
+                removeTagsRefWrapper.in(ArticleTagRef::getTagId, removeTags);
+                articleTagRefService.remove(removeTagsRefWrapper);
             }
-            articleTagRefService.saveBatch(articleTagRefs);
+            //增加新标签引用
+            if (!CollectionUtils.isEmpty(addTags)) {
+                List<ArticleTagRef> articleTagRefs = new ArrayList<>();
+                for (Object tagIds : addTags) {
+                    articleTagRefs.add(new ArticleTagRef(articleDTO.getId(), (Long) tagIds));
+                }
+                articleTagRefService.saveBatch(articleTagRefs);
+            }
             return true;
         }catch (Exception e) {
             throw new RuntimeException(e.getMessage());
