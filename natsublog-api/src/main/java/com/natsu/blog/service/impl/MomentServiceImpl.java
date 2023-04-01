@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MomentServiceImpl extends ServiceImpl<MomentMapper , Moment> implements MomentService {
+public class MomentServiceImpl extends ServiceImpl<MomentMapper, Moment> implements MomentService {
 
     @Autowired
     private MomentMapper momentMapper;

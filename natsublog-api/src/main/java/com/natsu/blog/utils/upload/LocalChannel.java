@@ -14,10 +14,10 @@ import java.util.UUID;
  * 存储图片--本地
  *
  * @author NatsuKaze
- * */
+ */
 @Lazy
 @Component
-public class LocalChannel{
+public class LocalChannel {
 
     @Autowired
     private BlogProperties blogProperties;
@@ -27,7 +27,7 @@ public class LocalChannel{
 
     /**
      * 将图片保存到本地，并返回访问本地图片的URL
-     * */
+     */
     public String upload(ImageResource image) throws Exception {
         File folder = new File(uploadProperties.getPath());
         if (!folder.exists()) {

@@ -19,35 +19,35 @@ import org.commonmark.renderer.text.TextContentRenderer;
  * @Date: 2020-05-13
  */
 public class CoverExtension implements Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension, TextContentRenderer.TextContentRendererExtension {
-	private CoverExtension() {
-	}
+    private CoverExtension() {
+    }
 
-	public static Extension create() {
-		return new CoverExtension();
-	}
+    public static Extension create() {
+        return new CoverExtension();
+    }
 
-	@Override
-	public void extend(Parser.Builder parserBuilder) {
-		parserBuilder.customDelimiterProcessor(new CoverDelimiterProcessor());
-	}
+    @Override
+    public void extend(Parser.Builder parserBuilder) {
+        parserBuilder.customDelimiterProcessor(new CoverDelimiterProcessor());
+    }
 
-	@Override
-	public void extend(HtmlRenderer.Builder rendererBuilder) {
-		rendererBuilder.nodeRendererFactory(new HtmlNodeRendererFactory() {
-			@Override
-			public NodeRenderer create(HtmlNodeRendererContext context) {
-				return new CoverHtmlNodeRenderer(context);
-			}
-		});
-	}
+    @Override
+    public void extend(HtmlRenderer.Builder rendererBuilder) {
+        rendererBuilder.nodeRendererFactory(new HtmlNodeRendererFactory() {
+            @Override
+            public NodeRenderer create(HtmlNodeRendererContext context) {
+                return new CoverHtmlNodeRenderer(context);
+            }
+        });
+    }
 
-	@Override
-	public void extend(TextContentRenderer.Builder rendererBuilder) {
-		rendererBuilder.nodeRendererFactory(new TextContentNodeRendererFactory() {
-			@Override
-			public NodeRenderer create(TextContentNodeRendererContext context) {
-				return new CoverTextContentNodeRenderer(context);
-			}
-		});
-	}
+    @Override
+    public void extend(TextContentRenderer.Builder rendererBuilder) {
+        rendererBuilder.nodeRendererFactory(new TextContentNodeRendererFactory() {
+            @Override
+            public NodeRenderer create(TextContentNodeRendererContext context) {
+                return new CoverTextContentNodeRenderer(context);
+            }
+        });
+    }
 }

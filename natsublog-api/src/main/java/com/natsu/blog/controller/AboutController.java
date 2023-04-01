@@ -16,24 +16,24 @@ import java.util.Map;
  * 博客前台，关于我页面前端接口
  *
  * @author NatsuKaze
- * */
+ */
 @RestController
 @RequestMapping("/about")
 public class AboutController {
 
     /**
      * SiteSettingService
-     * */
+     */
     @Autowired
     private SiteSettingService siteSettingService;
 
     /**
      * 获取关于我页面配置
-     * */
+     */
     @VisitorLogger(VisitorBehavior.ABOUT)
     @GetMapping("getSetting")
     public Result getAboutPageSetting() {
-        Map<String , String> settings = siteSettingService.getPageSetting(Constants.PAGE_SETTING_ABOUT);
+        Map<String, String> settings = siteSettingService.getPageSetting(Constants.PAGE_SETTING_ABOUT);
         return Result.success(settings);
     }
 

@@ -10,35 +10,34 @@ import lombok.experimental.Accessors;
 import java.io.Serializable;
 
 /**
- * @Description  
- * @Author  NatsuKaze
- * @Date 2022-10-22 
+ * @Description
+ * @Author NatsuKaze
+ * @Date 2022-10-22
  */
-
 @Data
 @Accessors(chain = true)
-@TableName( "visit_record" )
+@TableName("visit_record")
 public class VisitRecord implements Serializable {
 
-   	@TableId(value = "id" , type = IdType.AUTO)
-	private Long id;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
-	/**
-	 * 访问量
-	 */
-   	@TableField( "pv" )
-	private Long pv;
+    /**
+     * 访问量
+     */
+    @TableField("pv")
+    private Long pv;
 
-	/**
-	 * 独立用户
-	 */
-   	@TableField( "uv" )
-	private Long uv;
+    /**
+     * 独立用户
+     */
+    @TableField("uv")
+    private Long uv;
 
-	/**
-	 * 日期"02-23"
-	 */
-   	@TableField( "date" )
-	private String date;
+    /**
+     * 日期"02-23"
+     */
+    @TableField("date")
+    private String date;
 
 }

@@ -17,7 +17,7 @@ import java.util.Map;
 
 public interface ArticleService extends IService<Article> {
 
-    Map<? , ?> getArchives();
+    Map<?, ?> getArchives();
 
     ReadArticle getReadArticleById(int id);
 
@@ -27,9 +27,9 @@ public interface ArticleService extends IService<Article> {
 
     IPage<HomeArticle> getArticlesByQueryParams(ArticleQueryDTO articleQueryDTO);
 
-    Boolean saveArticle(ArticleDTO articleDTO);
+    void saveArticle(ArticleDTO articleDTO);
 
-    Boolean updateArticle(ArticleDTO articleDTO);
+    void updateArticle(ArticleDTO articleDTO);
 
     IPage<AdminArticleTableItem> getArticleTable(AdminArticleQueryDTO queryDTO);
 }

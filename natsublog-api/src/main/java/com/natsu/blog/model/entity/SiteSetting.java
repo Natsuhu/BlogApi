@@ -11,34 +11,33 @@ import java.io.Serializable;
 
 /**
  * @Description
- * @Author  NatsuKaze
+ * @Author NatsuKaze
  * @Date 2022-10-06
  */
-
 @Data
 @Accessors(chain = true)
-@TableName( "site_setting" )
+@TableName("site_setting")
 public class SiteSetting implements Serializable {
 
-	/**
-	 * ID
-	 */
-   	@TableId( value = "id" , type = IdType.AUTO )
-	private Long id;
+    /**
+     * ID
+     */
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
-   	@TableField( "name_en" )
-	private String nameEn;
+    @TableField("name_en")
+    private String nameEn;
 
-   	@TableField( "name_zh" )
-	private String nameZh;
+    @TableField("name_zh")
+    private String nameZh;
 
-   	@TableField( "content" )
-	private String content;
+    @TableField("content")
+    private String content;
 
-	/**
-	 * 1资料卡和logo，2页脚，3友链，4关于我
-	 */
-   	@TableField( "page" )
-	private Long page;
+    /**
+     * 1资料卡和logo，2页脚，3友链，4关于我
+     */
+    @TableField("page")
+    private Long page;
 
 }

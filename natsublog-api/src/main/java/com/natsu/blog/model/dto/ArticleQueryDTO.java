@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * 文章查询DTO，前台
- * */
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ArticleQueryDTO extends BaseQueryDTO {

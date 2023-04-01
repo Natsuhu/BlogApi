@@ -10,26 +10,25 @@ import java.io.Serializable;
 
 /**
  * @Description
- * @Author  NatsuKaze
+ * @Author NatsuKaze
  * @Date 2022-10-06
  */
-
 @Data
 @AllArgsConstructor
 @Accessors(chain = true)
-@TableName( "article_tag_ref" )
+@TableName("article_tag_ref")
 public class ArticleTagRef implements Serializable {
 
-	/**
-	 * 文章ID
-	 */
-	@TableField( "article_id" )
-	private Long articleId;
+    /**
+     * 文章ID
+     */
+    @TableField("article_id")
+    private Long articleId;
 
-	/**
-	 * 标签ID
-	 */
-   	@TableField( "tag_id" )
-	private Long tagId;
+    /**
+     * 标签ID
+     */
+    @TableField("tag_id")
+    private Long tagId;
 
 }

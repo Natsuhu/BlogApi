@@ -19,35 +19,35 @@ import org.commonmark.renderer.text.TextContentRenderer;
  * @Date: 2020-05-13
  */
 public class HeimuExtension implements Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension, TextContentRenderer.TextContentRendererExtension {
-	private HeimuExtension() {
-	}
+    private HeimuExtension() {
+    }
 
-	public static Extension create() {
-		return new HeimuExtension();
-	}
+    public static Extension create() {
+        return new HeimuExtension();
+    }
 
-	@Override
-	public void extend(Parser.Builder parserBuilder) {
-		parserBuilder.customDelimiterProcessor(new HeimuDelimiterProcessor());
-	}
+    @Override
+    public void extend(Parser.Builder parserBuilder) {
+        parserBuilder.customDelimiterProcessor(new HeimuDelimiterProcessor());
+    }
 
-	@Override
-	public void extend(HtmlRenderer.Builder rendererBuilder) {
-		rendererBuilder.nodeRendererFactory(new HtmlNodeRendererFactory() {
-			@Override
-			public NodeRenderer create(HtmlNodeRendererContext context) {
-				return new HeimuHtmlNodeRenderer(context);
-			}
-		});
-	}
+    @Override
+    public void extend(HtmlRenderer.Builder rendererBuilder) {
+        rendererBuilder.nodeRendererFactory(new HtmlNodeRendererFactory() {
+            @Override
+            public NodeRenderer create(HtmlNodeRendererContext context) {
+                return new HeimuHtmlNodeRenderer(context);
+            }
+        });
+    }
 
-	@Override
-	public void extend(TextContentRenderer.Builder rendererBuilder) {
-		rendererBuilder.nodeRendererFactory(new TextContentNodeRendererFactory() {
-			@Override
-			public NodeRenderer create(TextContentNodeRendererContext context) {
-				return new HeimuTextContentNodeRenderer(context);
-			}
-		});
-	}
+    @Override
+    public void extend(TextContentRenderer.Builder rendererBuilder) {
+        rendererBuilder.nodeRendererFactory(new TextContentNodeRendererFactory() {
+            @Override
+            public NodeRenderer create(TextContentNodeRendererContext context) {
+                return new HeimuTextContentNodeRenderer(context);
+            }
+        });
+    }
 }

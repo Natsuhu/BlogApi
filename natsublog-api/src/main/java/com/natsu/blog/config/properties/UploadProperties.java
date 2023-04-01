@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  *
  * @author NatsuKaze
  * @since 2023/1/19 新增注释
- * */
+ */
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "upload.file")
@@ -17,16 +17,16 @@ public class UploadProperties {
 
     /**
      * 本地文件路径
-     * */
+     */
     private String path;
 
     /**
      * 请求地址映射
-     * */
+     */
     private String accessPath;
 
     /**
      * 本地文件路径映射
-     * */
+     */
     private String resourcesLocations;
 }

@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class CommentQueryDTO extends BaseQueryDTO{
+public class CommentQueryDTO extends BaseQueryDTO {
 
     private Integer page;
 

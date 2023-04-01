@@ -19,26 +19,26 @@ import java.util.Map;
  * 博客前台，友情链接页面接口
  *
  * @author NatsuKaze
- * */
+ */
 @RestController
 @RequestMapping("/friends")
 public class FriendsController {
 
     /**
      * SiteSettingService
-     * */
+     */
     @Autowired
     private SiteSettingService siteSettingService;
 
     /**
      * FriendService
-     * */
+     */
     @Autowired
     private FriendService friendService;
 
     /**
      * 获取friend列表
-     * */
+     */
     @VisitorLogger(VisitorBehavior.FRIEND)
     @GetMapping
     public Result getFriends() {
@@ -48,10 +48,10 @@ public class FriendsController {
 
     /**
      * 获取友情链接页面配置
-     * */
+     */
     @GetMapping("/getSetting")
     public Result getFriendsPageSetting() {
-        Map<String , String> settings = siteSettingService.getPageSetting(Constants.PAGE_SETTING_FRIEND);
+        Map<String, String> settings = siteSettingService.getPageSetting(Constants.PAGE_SETTING_FRIEND);
         return Result.success(settings);
     }
 }

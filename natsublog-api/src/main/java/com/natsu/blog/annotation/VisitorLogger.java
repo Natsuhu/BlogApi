@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  *
  * @author NatsuKaze
  * @since 2023/1/19 加入注释
- * */
+ */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface VisitorLogger {
@@ -21,7 +21,7 @@ public @interface VisitorLogger {
      * 默认行为：unknown
      *
      * @return {@link VisitorBehavior}
-     * */
+     */
     VisitorBehavior value() default VisitorBehavior.UNKNOWN;
 
 }

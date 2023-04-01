@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  *
  * @author NatsuKaze
  * @since 2023/1/19新增注释
- * */
+ */
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "blog")
@@ -17,17 +17,17 @@ public class BlogProperties {
 
     /**
      * 博客名
-     * */
+     */
     private String name;
 
     /**
      * 博客后端URL
-     * */
+     */
     private String api;
 
     /**
      * 博客前端前台URL
-     * */
+     */
     private String front;
 
 }

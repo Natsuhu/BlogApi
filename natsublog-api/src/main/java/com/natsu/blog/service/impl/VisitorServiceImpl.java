@@ -7,5 +7,5 @@ import com.natsu.blog.service.VisitorService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class VisitorServiceImpl extends ServiceImpl<VisitorMapper , Visitor> implements VisitorService {
+public class VisitorServiceImpl extends ServiceImpl<VisitorMapper, Visitor> implements VisitorService {
 }

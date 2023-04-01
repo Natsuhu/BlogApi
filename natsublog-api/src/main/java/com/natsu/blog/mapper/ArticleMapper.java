@@ -18,26 +18,26 @@ public interface ArticleMapper extends BaseMapper<Article> {
 
     /**
      * 获取归档日期
-     * */
+     */
     List<String> getArchivesDate();
 
     /**
      * 根据归档日期归档
-     * */
+     */
     List<Archives> getArchives(String date);
 
     /**
      * 获取随机文章
-     * */
+     */
     List<RandomArticle> getRandomArticles(int count);
 
     /**
      * 根据查询参数分页查询
-     * */
+     */
     IPage<Article> getArticlesByQueryParams(IPage<Article> page, @Param("articleQueryDTO") ArticleQueryDTO articleQueryDTO);
 
     /**
      * 后台管理系统--文章Table
-     * */
-    IPage<AdminArticleTableItem> getArticleTable(IPage<AdminArticleTableItem> page , @Param("queryParam") AdminArticleQueryDTO queryParam);
+     */
+    IPage<AdminArticleTableItem> getArticleTable(IPage<AdminArticleTableItem> page, @Param("queryParam") AdminArticleQueryDTO queryParam);
 }

@@ -14,63 +14,63 @@ import java.util.Date;
  *
  * @author NatsuKaze
  * @since 2023/2/12
- * */
+ */
 @Data
 @Accessors(chain = true)
-@TableName( "friend" )
+@TableName("friend")
 public class Friend {
 
     /**
      * id
-     * */
-    @TableId( value = "id" , type = IdType.AUTO )
+     */
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
      * 昵称
-     * */
-    @TableField( value = "nickname")
+     */
+    @TableField(value = "nickname")
     private String nickname;
 
     /**
      * 签名
-     * */
-    @TableField( value = "description")
+     */
+    @TableField(value = "description")
     private String description;
 
     /**
      * 网站
-     * */
-    @TableField( value = "website")
+     */
+    @TableField(value = "website")
     private String website;
 
     /**
      * 头像
-     * */
-    @TableField( value = "avatar")
+     */
+    @TableField(value = "avatar")
     private String avatar;
 
     /**
      * 公开
-     * */
-    @TableField( value = "is_published")
+     */
+    @TableField(value = "is_published")
     private Boolean isPublished;
 
     /**
      * 审核
-     * */
-    @TableField( value = "audit")
+     */
+    @TableField(value = "audit")
     private Boolean audit;
 
     /**
      * 点击次数
-     * */
-    @TableField( value = "click")
+     */
+    @TableField(value = "click")
     private Integer click;
 
     /**
      * 创建时间
-     * */
-    @TableField( value = "create_time")
+     */
+    @TableField(value = "create_time")
     private Date createTime;
 }

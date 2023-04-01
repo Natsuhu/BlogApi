@@ -8,19 +8,19 @@ import java.util.Date;
 
 /**
  * 文章查询DTO，后台
- * */
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class AdminArticleQueryDTO extends BaseQueryDTO {
 
     /**
      * 分类ID
-     * */
+     */
     private Long categoryId;
 
     /**
      * 置顶
-     * */
+     */
     private Boolean isTop;
 
     /**
@@ -45,12 +45,12 @@ public class AdminArticleQueryDTO extends BaseQueryDTO {
 
     /**
      * 时间范围，开始时间
-     * */
+     */
     private Date startTime;
 
     /**
      * 时间范围，结束时间
-     * */
+     */
     private Date endTime;
 
 }

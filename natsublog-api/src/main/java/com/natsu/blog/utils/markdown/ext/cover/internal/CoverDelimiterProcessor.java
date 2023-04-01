@@ -29,29 +29,29 @@ public class CoverDelimiterProcessor implements DelimiterProcessor {
         return 2;
     }
 
-	@Override
-	public int process(DelimiterRun openingRun, DelimiterRun closingRun) {
-		if (openingRun.length() >= 2 && closingRun.length() >= 2) {
-			// Use exactly two delimiters even if we have more, and don't care about internal openers/closers.
-			Text opener = openingRun.getOpener();
+    @Override
+    public int process(DelimiterRun openingRun, DelimiterRun closingRun) {
+        if (openingRun.length() >= 2 && closingRun.length() >= 2) {
+            // Use exactly two delimiters even if we have more, and don't care about internal openers/closers.
+            Text opener = openingRun.getOpener();
 
-			// Wrap nodes between delimiters in cover.
-			Node cover = new Cover();
+            // Wrap nodes between delimiters in cover.
+            Node cover = new Cover();
 
-			SourceSpans sourceSpans = new SourceSpans();
-			sourceSpans.addAllFrom(openingRun.getOpeners(2));
+            SourceSpans sourceSpans = new SourceSpans();
+            sourceSpans.addAllFrom(openingRun.getOpeners(2));
 
-			for (Node node : Nodes.between(opener, closingRun.getCloser())) {
-				cover.appendChild(node);
-				sourceSpans.addAll(node.getSourceSpans());
-			}
+            for (Node node : Nodes.between(opener, closingRun.getCloser())) {
+                cover.appendChild(node);
+                sourceSpans.addAll(node.getSourceSpans());
+            }
 
-			sourceSpans.addAllFrom(closingRun.getClosers(2));
-			cover.setSourceSpans(sourceSpans.getSourceSpans());
+            sourceSpans.addAllFrom(closingRun.getClosers(2));
+            cover.setSourceSpans(sourceSpans.getSourceSpans());
 
-			opener.insertAfter(cover);
-			return 2;
-		}
-		return 0;
-	}
+            opener.insertAfter(cover);
+            return 2;
+        }
+        return 0;
+    }
 }

@@ -9,109 +9,109 @@ import java.util.Date;
 
 /**
  * @Description
- * @Author  NatsuKaze
+ * @Author NatsuKaze
  * @Date 2022-10-06
  */
 
 @Data
 @Accessors(chain = true)
-@TableName( "comment" )
+@TableName("comment")
 public class Comment implements Serializable {
 
-	/**
-	 * 评论ID
-	 */
-   	@TableId( value = "id" , type = IdType.AUTO )
-	private Long id;
+    /**
+     * 评论ID
+     */
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
-	/**
-	 * 昵称
-	 */
-   	@TableField( "nickname" )
-	private String nickname;
+    /**
+     * 昵称
+     */
+    @TableField("nickname")
+    private String nickname;
 
-	/**
-	 * 邮箱
-	 */
-   	@TableField( "email" )
-	private String email;
+    /**
+     * 邮箱
+     */
+    @TableField("email")
+    private String email;
 
-	/**
-	 * 内容
-	 */
-   	@TableField( "content" )
-	private String content;
+    /**
+     * 内容
+     */
+    @TableField("content")
+    private String content;
 
-	/**
-	 * 头像地址
-	 */
-   	@TableField( "avatar" )
-	private String avatar;
+    /**
+     * 头像地址
+     */
+    @TableField("avatar")
+    private String avatar;
 
-	/**
-	 * 评论时间
-	 */
-   	@TableField( value = "create_time" , fill = FieldFill.INSERT)
-	private Date createTime;
+    /**
+     * 评论时间
+     */
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
+    private Date createTime;
 
-	/**
-	 * IP地址
-	 */
-   	@TableField( "ip" )
-	private String ip;
+    /**
+     * IP地址
+     */
+    @TableField("ip")
+    private String ip;
 
-	/**
-	 * 公开或隐藏
-	 */
-   	@TableField( "is_published" )
-	private Boolean isPublished;
+    /**
+     * 公开或隐藏
+     */
+    @TableField("is_published")
+    private Boolean isPublished;
 
-	/**
-	 * 是否管理员评论
-	 */
-   	@TableField( "is_admin_comment" )
-	private Boolean isAdminComment;
+    /**
+     * 是否管理员评论
+     */
+    @TableField("is_admin_comment")
+    private Boolean isAdminComment;
 
-	/**
-	 * 0文章1友链2关于我
-	 */
-   	@TableField( "page" )
-	private Integer page;
+    /**
+     * 0文章1友链2关于我
+     */
+    @TableField("page")
+    private Integer page;
 
-	/**
-	 * 回复的人昵称
-	 */
-   	@TableField( "reply_nickname" )
-	private String replyNickname;
+    /**
+     * 回复的人昵称
+     */
+    @TableField("reply_nickname")
+    private String replyNickname;
 
-	/**
-	 * 评论的文章ID
-	 */
-   	@TableField( "article_id" )
-	private Long articleId;
+    /**
+     * 评论的文章ID
+     */
+    @TableField("article_id")
+    private Long articleId;
 
-	/**
-	 * 父论ID
-	 */
-   	@TableField( "parent_comment_id" )
-	private Long parentCommentId;
+    /**
+     * 父论ID
+     */
+    @TableField("parent_comment_id")
+    private Long parentCommentId;
 
-	/**
-	 * 个人主页
-	 */
-   	@TableField( "website" )
-	private String website;
+    /**
+     * 个人主页
+     */
+    @TableField("website")
+    private String website;
 
-	/**
-	 * QQ
-	 */
-   	@TableField( "qq" )
-	private String qq;
+    /**
+     * QQ
+     */
+    @TableField("qq")
+    private String qq;
 
-   	/**
-	 * 归属ID
-	 */
-   	@TableField( "origin_id" )
-   	private Long originId;
+    /**
+     * 归属ID
+     */
+    @TableField("origin_id")
+    private Long originId;
 
 }

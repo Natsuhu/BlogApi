@@ -11,22 +11,22 @@ import org.springframework.web.bind.annotation.RestController;
  * 博客前台，标签接口
  *
  * @author NatsuKaze
- * */
+ */
 @RestController
 @RequestMapping("tags")
 public class TagController {
 
     /**
      * TagService
-     * */
+     */
     @Autowired
     private TagService tagService;
 
     /**
      * 标签云
-     * */
+     */
     @GetMapping
-    public Result getTags(){
+    public Result getTags() {
         return Result.success(tagService.list());
     }
 }

@@ -15,14 +15,14 @@ public class UploadUtils {
 
     /**
      * 通过指定方式存储图片
-     * */
+     */
     public String upload(ImageResource image) throws Exception {
         return localChannel.upload(image);
     }
 
     /**
      * 从网络获取图片数据
-     * */
+     */
     public ImageResource getImageByRequest(String url) throws Exception {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<byte[]> responseEntity = restTemplate.getForEntity(url, byte[].class);

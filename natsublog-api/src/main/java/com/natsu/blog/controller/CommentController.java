@@ -31,7 +31,7 @@ import java.util.UUID;
  * 博客前台，评论接口
  *
  * @author NatsuKaze
- * */
+ */
 @RestController
 @RequestMapping("comments")
 @Slf4j
@@ -39,42 +39,42 @@ public class CommentController {
 
     /**
      * CommentService
-     * */
+     */
     @Autowired
     private CommentService commentService;
 
     /**
      * ArticleService
-     * */
+     */
     @Autowired
     private ArticleService articleService;
 
     /**
      * SiteSettingService
-     * */
+     */
     @Autowired
     private SiteSettingService siteSettingService;
 
     /**
      * QQInfoUtils
-     * */
+     */
     @Autowired
     private QQInfoUtils qqInfoUtils;
 
     /**
      * 获取评论数量
-     * */
+     */
     @GetMapping("/count")
     public Result getCommentCount() {
         LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Comment::getIsPublished , Constants.PUBLISHED);
+        wrapper.eq(Comment::getIsPublished, Constants.PUBLISHED);
         Integer commentCount = commentService.count(wrapper);
         return Result.success(commentCount);
     }
 
     /**
      * 获取文章评论
-     * */
+     */
     @GetMapping("/articleComments")
     public Result getArticleComments(CommentQueryDTO commentQueryDTO) {
         //参数校验
@@ -85,20 +85,20 @@ public class CommentController {
             return Result.fail("请求参数错误！");
         }
         //检查页面是否可评论
-        if (!checkPageIsComment(commentQueryDTO.getPage() , commentQueryDTO.getArticleId())) {
+        if (!checkPageIsComment(commentQueryDTO.getPage(), commentQueryDTO.getArticleId())) {
             return Result.fail("文章不存在或禁止评论");
         }
         //配置参数并构建评论树
         commentQueryDTO.setKeyword(null);
         commentQueryDTO.setIsPublished(Constants.PUBLISHED);
         commentQueryDTO.setParentCommentId(Constants.TOP_COMMENT_PARENT_ID);
-        Map<String , Object> commentMap = commentService.buildCommentTree(commentQueryDTO);
+        Map<String, Object> commentMap = commentService.buildCommentTree(commentQueryDTO);
         return Result.success(commentMap);
     }
 
     /**
      * 获取页面评论，友情链接页面或关于我页面
-     * */
+     */
     @GetMapping("/pageComments")
     public Result getPageComments(CommentQueryDTO commentQueryDTO) {
         Integer pageType = commentQueryDTO.getPage();
@@ -107,7 +107,7 @@ public class CommentController {
             return Result.fail("页面请求错误！");
         }
         //检查页面是否可评论
-        if (!checkPageIsComment(commentQueryDTO.getPage() , commentQueryDTO.getArticleId())) {
+        if (!checkPageIsComment(commentQueryDTO.getPage(), commentQueryDTO.getArticleId())) {
             return Result.fail("此页面禁止评论！");
         }
         //配置参数并构建评论树
@@ -115,13 +115,13 @@ public class CommentController {
         commentQueryDTO.setArticleId(null);
         commentQueryDTO.setIsPublished(Constants.PUBLISHED);
         commentQueryDTO.setParentCommentId(Constants.TOP_COMMENT_PARENT_ID);
-        Map<String , Object> commentMap = commentService.buildCommentTree(commentQueryDTO);
+        Map<String, Object> commentMap = commentService.buildCommentTree(commentQueryDTO);
         return Result.success(commentMap);
     }
 
     /**
      * 保存评论
-     * */
+     */
     @PostMapping("/save")
     public Result saveComment(@RequestBody Comment comment) {
         Integer pageType = comment.getPage();
@@ -143,7 +143,7 @@ public class CommentController {
             return Result.fail("参数错误!");
         }
         //检查页面是否可评论
-        if (!checkPageIsComment(pageType , comment.getArticleId())) {
+        if (!checkPageIsComment(pageType, comment.getArticleId())) {
             return Result.fail("请求的页面禁止评论！");
         }
         //配置参数
@@ -152,24 +152,24 @@ public class CommentController {
             //TODO 设置数字UUID（伪），后面应该抽象出来改为工具类
             String uuid = UUID.randomUUID().toString().replace("-", "");
             String unmUUid = new BigInteger(uuid, 16).toString();
-            int begin = RandomUtils.nextInt(1,9);
+            int begin = RandomUtils.nextInt(1, 9);
             int end = begin + 8;
             Long uuidL = Long.parseLong(unmUUid.substring(begin, end));
             comment.setOriginId(uuidL);
         }
         String qqNum = comment.getQq();
         if (!StringUtils.isEmpty(qqNum)) {
-            if(!qqInfoUtils.isQQNumber(qqNum)){
+            if (!qqInfoUtils.isQQNumber(qqNum)) {
                 return Result.fail("QQ号格式错误!");
             }
             try {
                 comment.setAvatar(qqInfoUtils.getQQAvatarUrl(qqNum));
                 comment.setNickname(qqInfoUtils.getQQNickname(qqNum));
-            }catch (Exception e) {
-                log.error("获取QQ信息失败！{}" , e.getMessage());
-                return Result.fail("获取QQ号信息失败："+e.getMessage());
+            } catch (Exception e) {
+                log.error("获取QQ信息失败！{}", e.getMessage());
+                return Result.fail("获取QQ号信息失败：" + e.getMessage());
             }
-        }else if (StringUtils.isEmpty(comment.getNickname()) || comment.getNickname().length() > 10) {
+        } else if (StringUtils.isEmpty(comment.getNickname()) || comment.getNickname().length() > 10) {
             return Result.fail("昵称格式错误！");
         }
         comment.setIsPublished(Constants.PUBLISHED);
@@ -182,8 +182,8 @@ public class CommentController {
 
     /**
      * 验证目标页面能否评论
-     * */
-    private Boolean checkPageIsComment(Integer page , Long articleId) {
+     */
+    private Boolean checkPageIsComment(Integer page, Long articleId) {
         switch (page) {
             case 0:
                 Article article = articleService.getById(articleId);
@@ -193,14 +193,14 @@ public class CommentController {
                 return article.getIsPublished().equals(Constants.PUBLISHED) && article.getIsCommentEnabled().equals(Constants.ALLOW_COMMENT);
             case 1:
                 LambdaQueryWrapper<SiteSetting> friendPageQuery = new LambdaQueryWrapper<>();
-                friendPageQuery.eq(SiteSetting::getNameEn , "isComment");
-                friendPageQuery.eq(SiteSetting::getPage , Constants.PAGE_SETTING_FRIEND);
+                friendPageQuery.eq(SiteSetting::getNameEn, "isComment");
+                friendPageQuery.eq(SiteSetting::getPage, Constants.PAGE_SETTING_FRIEND);
                 SiteSetting friendPageSetting = siteSettingService.getOne(friendPageQuery);
                 return !friendPageSetting.getContent().equals("false");
             case 2:
                 LambdaQueryWrapper<SiteSetting> aboutPageQuery = new LambdaQueryWrapper<>();
-                aboutPageQuery.eq(SiteSetting::getNameEn , "isComment");
-                aboutPageQuery.eq(SiteSetting::getPage , Constants.PAGE_SETTING_ABOUT);
+                aboutPageQuery.eq(SiteSetting::getNameEn, "isComment");
+                aboutPageQuery.eq(SiteSetting::getPage, Constants.PAGE_SETTING_ABOUT);
                 SiteSetting aboutPageSetting = siteSettingService.getOne(aboutPageQuery);
                 return !aboutPageSetting.getContent().equals("false");
             default:

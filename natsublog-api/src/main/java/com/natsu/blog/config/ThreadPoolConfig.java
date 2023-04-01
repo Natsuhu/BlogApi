@@ -12,14 +12,14 @@ import java.util.concurrent.Executor;
  *
  * @author NatsuKaze
  * @since 2023/1/19 新增注释
- * */
+ */
 @Configuration
 @EnableAsync
 public class ThreadPoolConfig {
 
     /**
      * 多线程配置
-     * */
+     */
     @Bean("taskExecutor")
     public Executor asyncServiceExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();

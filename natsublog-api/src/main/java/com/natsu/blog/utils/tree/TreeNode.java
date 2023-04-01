@@ -8,13 +8,13 @@ import java.util.Map;
 
 @Data
 @AllArgsConstructor
-public class TreeNode{
+public class TreeNode {
 
     private Long id;
 
     private Long pid;
 
-    private Map<String,Object> content;
+    private Map<String, Object> content;
 
     private List<TreeNode> children;
 }

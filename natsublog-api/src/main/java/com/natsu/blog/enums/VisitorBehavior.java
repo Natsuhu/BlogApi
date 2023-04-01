@@ -31,7 +31,7 @@ public enum VisitorBehavior {
 
     /**
      * 构造方法
-     * */
+     */
     VisitorBehavior(String behavior, String content) {
         this.behavior = behavior;
         this.content = content;
@@ -39,14 +39,14 @@ public enum VisitorBehavior {
 
     /**
      * 获取行为
-     * */
+     */
     public String getBehavior() {
         return behavior;
     }
 
     /**
      * 获取内容
-     * */
+     */
     public String getContent() {
         return content;
     }

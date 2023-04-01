@@ -25,20 +25,20 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author NatsuKaze
  * @since 2023/1/19 新增注解
- * */
+ */
 @Component
 @Aspect
 public class VisitorLogAspect {
 
     /**
      * 注入VisitLogService
-     * */
+     */
     @Autowired
     private VisitLogService visitLogService;
 
     /**
      * 记录每次请求的响应时间
-     * */
+     */
     private final ThreadLocal<Long> currentTime = new ThreadLocal<>();
 
     /**
@@ -56,7 +56,7 @@ public class VisitorLogAspect {
      * @param visitorLogger
      * @param joinPoint
      * @return Object
-     * */
+     */
     @Around("pointcut(visitorLogger)")
     public Object around(ProceedingJoinPoint joinPoint, VisitorLogger visitorLogger) throws Throwable {
         //计算响应时间，毫秒
@@ -75,7 +75,7 @@ public class VisitorLogAspect {
 
     /**
      * 处理日志，组装参数
-     * */
+     */
     private VisitLog handleLog(ProceedingJoinPoint joinPoint, VisitorLogger visitorLogger, HttpServletRequest request, Result result, int times) {
         //获取并处理需要的属性
         String uri = request.getRequestURI();
@@ -104,7 +104,7 @@ public class VisitorLogAspect {
 
     /**
      * 处理参数
-     * */
+     */
     private Object handleParams(ProceedingJoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         if (args == null || args.length == 0) {
@@ -115,7 +115,7 @@ public class VisitorLogAspect {
 
     /**
      * 翻译访客行为
-     * */
+     */
     private String handleBehavior(VisitorBehavior behavior, Object requestParams, Result result) {
         String content = null;
         BaseQueryDTO baseQueryDTO;

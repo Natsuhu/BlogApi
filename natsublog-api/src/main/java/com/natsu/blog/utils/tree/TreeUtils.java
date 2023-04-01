@@ -13,8 +13,8 @@ public class TreeUtils {
 
     /**
      * List转树结构，并过滤出符合条件的子树
-     * */
-    public static List<TreeNode> listToTree(List<TreeNode> zoneList , Predicate<? super TreeNode> predicate) {
+     */
+    public static List<TreeNode> listToTree(List<TreeNode> zoneList, Predicate<? super TreeNode> predicate) {
         Map<Long, List<TreeNode>> zoneByParentIdMap = new HashMap<>();
 
         //将parentId相同的Zone放在同一个列表中，parentId作为key
@@ -37,7 +37,7 @@ public class TreeUtils {
 
     /**
      * 层序遍历树
-     * */
+     */
     public static List<TreeNode> getAllChildNodeByRootNode(TreeNode rootNode) {
         List<TreeNode> result = new ArrayList<>();
 

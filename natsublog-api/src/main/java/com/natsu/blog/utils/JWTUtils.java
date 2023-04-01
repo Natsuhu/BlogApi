@@ -12,9 +12,9 @@ import java.util.Map;
 public class JWTUtils {
     private static final String jwtToken = "NatsuKaze@root";
 
-    public static String createToken(int userId){
-        Map<String,Object> claims = new HashMap<>();
-        claims.put("userId",userId);
+    public static String createToken(int userId) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("userId", userId);
         JwtBuilder jwtBuilder = Jwts.builder()
                 .signWith(SignatureAlgorithm.HS256, jwtToken) // 签发算法，秘钥为jwtToken
                 .setClaims(claims) // body数据，要唯一，自行设置
@@ -24,11 +24,11 @@ public class JWTUtils {
         return token;
     }
 
-    public static Map<String, Object> checkToken(String token){
+    public static Map<String, Object> checkToken(String token) {
         try {
             Jwt parse = Jwts.parser().setSigningKey(jwtToken).parse(token);
             return (Map<String, Object>) parse.getBody();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

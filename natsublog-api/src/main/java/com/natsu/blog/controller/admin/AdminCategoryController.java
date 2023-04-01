@@ -40,11 +40,12 @@ public class AdminCategoryController {
         }
         //开始保存
         categoryDTO.setUpdateTime(new Date());
-        boolean result = categoryService.save(categoryDTO);
-        if (result) {
-            return Result.success("新增成功");
-        }else {
-            return Result.fail("新增失败");
+        try {
+            categoryService.save(categoryDTO);
+            return Result.success("新增分类成功");
+        } catch (Exception e) {
+            log.error("新增分类失败：{}", e.getMessage());
+            return Result.fail("新增分类失败，" + e.getMessage());
         }
     }
 
@@ -74,11 +75,13 @@ public class AdminCategoryController {
             return Result.fail("删除分类失败，请先删除该分类下的文章");
         }
         //开始删除分类
-        boolean result = categoryService.removeById(categoryDTO.getId());
-        if (result) {
+        try {
+            categoryService.removeById(categoryDTO.getId());
             return Result.success("删除分类成功");
+        } catch (Exception e) {
+            log.error("删除分类失败：{}", e.getMessage());
+            return Result.fail("删除分类失败，" + e.getMessage());
         }
-        return Result.fail("删除分类失败");
     }
 
     @PostMapping("/update")
@@ -95,11 +98,13 @@ public class AdminCategoryController {
         //开始更新
         category.setUpdateTime(new Date());
         category.setName(categoryDTO.getName());
-        boolean result = categoryService.updateById(category);
-        if (result) {
+        try {
+            categoryService.updateById(category);
             return Result.success("更新分类成功");
+        } catch (Exception e) {
+            log.error("更新分类失败：{}", e.getMessage());
+            return Result.fail("更新分类失败，" + e.getMessage());
         }
-        return Result.fail("更新分类失败");
     }
 
 }

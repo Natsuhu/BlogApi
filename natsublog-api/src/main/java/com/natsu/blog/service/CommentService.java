@@ -11,6 +11,6 @@ public interface CommentService extends IService<Comment> {
 
     IPage<Comment> getCommentsByQueryParams(CommentQueryDTO commentQueryDTO);
 
-    Map<String , Object> buildCommentTree(CommentQueryDTO commentQueryDTO);
+    Map<String, Object> buildCommentTree(CommentQueryDTO commentQueryDTO);
 
 }

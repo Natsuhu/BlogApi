@@ -7,6 +7,6 @@ import com.natsu.blog.service.VisitRecordService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class VisitRecordServiceImpl extends ServiceImpl<VisitRecordMapper , VisitRecord> implements VisitRecordService {
+public class VisitRecordServiceImpl extends ServiceImpl<VisitRecordMapper, VisitRecord> implements VisitRecordService {
 
 }

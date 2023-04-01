@@ -9,43 +9,43 @@ import java.util.Date;
 
 /**
  * @Description
- * @Author  NatsuKaze
+ * @Author NatsuKaze
  * @Date 2022-10-06
  */
 
 @Data
 @Accessors(chain = true)
-@TableName( "moment" )
+@TableName("moment")
 public class Moment implements Serializable {
 
-	/**
-	 * ID
-	 */
-   	@TableId( value = "id" , type = IdType.AUTO )
-	private Long id;
+    /**
+     * ID
+     */
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
-	/**
-	 * 内容
-	 */
-   	@TableField( "content" )
-	private String content;
+    /**
+     * 内容
+     */
+    @TableField("content")
+    private String content;
 
-	/**
-	 * 发表时间
-	 */
-   	@TableField( value = "create_time" , fill = FieldFill.INSERT)
-	private Date createTime;
+    /**
+     * 发表时间
+     */
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
+    private Date createTime;
 
-	/**
-	 * 点赞数
-	 */
-   	@TableField( "`like`" )
-	private Long like;
+    /**
+     * 点赞数
+     */
+    @TableField("`like`")
+    private Long like;
 
-	/**
-	 * 是否公开
-	 */
-   	@TableField( "is_published" )
-	private Boolean isPublished;
+    /**
+     * 是否公开
+     */
+    @TableField("is_published")
+    private Boolean isPublished;
 
 }

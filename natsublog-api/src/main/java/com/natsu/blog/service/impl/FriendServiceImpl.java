@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class FriendServiceImpl extends ServiceImpl<FriendMapper , Friend> implements FriendService {
+public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend> implements FriendService {
 
     @Autowired
     private FriendMapper friendMapper;
@@ -24,14 +24,14 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper , Friend> implem
     public List<FriendVO> getFriends() {
         //查询
         LambdaQueryWrapper<Friend> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Friend::getIsPublished , Constants.PUBLISHED);
-        queryWrapper.eq(Friend::getAudit , Constants.AUDIT);
+        queryWrapper.eq(Friend::getIsPublished, Constants.PUBLISHED);
+        queryWrapper.eq(Friend::getAudit, Constants.AUDIT);
         List<Friend> friends = friendMapper.selectList(queryWrapper);
         //封装
         List<FriendVO> friendVOS = new ArrayList<>(friends.size());
         for (Friend friend : friends) {
             FriendVO friendVO = new FriendVO();
-            BeanUtils.copyProperties(friend , friendVO);
+            BeanUtils.copyProperties(friend, friendVO);
             friendVOS.add(friendVO);
         }
         return friendVOS;

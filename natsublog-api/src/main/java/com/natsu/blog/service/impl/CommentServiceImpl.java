@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class CommentServiceImpl extends ServiceImpl<CommentMapper , Comment> implements CommentService {
+public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements CommentService {
 
     @Autowired
     private CommentMapper commentMapper;
@@ -32,11 +32,11 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper , Comment> imp
     @Override
     public IPage<Comment> getCommentsByQueryParams(CommentQueryDTO commentQueryDTO) {
         IPage<Comment> page = new Page<>(commentQueryDTO.getPageNo(), commentQueryDTO.getPageSize());
-        return commentMapper.getCommentsByQueryParams(page,commentQueryDTO);
+        return commentMapper.getCommentsByQueryParams(page, commentQueryDTO);
     }
 
     @Override
-    public Map<String , Object> buildCommentTree(CommentQueryDTO commentQueryDTO) {
+    public Map<String, Object> buildCommentTree(CommentQueryDTO commentQueryDTO) {
         IPage<Comment> pageResult = this.getCommentsByQueryParams(commentQueryDTO);
         List<Comment> rootComments = pageResult.getRecords();
 
@@ -51,11 +51,11 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper , Comment> imp
         }*/
 
         //根据rootComment查找childComment。Stream操作。
-        Map<Long , Long> queryMap = rootComments.stream().collect(Collectors.toMap(Comment::getId , Comment::getOriginId));
+        Map<Long, Long> queryMap = rootComments.stream().collect(Collectors.toMap(Comment::getId, Comment::getOriginId));
         List<Comment> childComments = new ArrayList<>();
         if (!MapUtils.isEmpty(queryMap)) {
             LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
-            wrapper.eq(Comment::getIsPublished , commentQueryDTO.getIsPublished());
+            wrapper.eq(Comment::getIsPublished, commentQueryDTO.getIsPublished());
             wrapper.notIn(Comment::getId, queryMap.keySet());
             wrapper.in(Comment::getOriginId, queryMap.values());
             childComments = commentMapper.selectList(wrapper);
@@ -68,7 +68,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper , Comment> imp
 
         //开始构建commentTree
         List<TreeNode> comments = new ArrayList<>();
-        Map<String , Object> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
         List<TreeNode> treeNodes = buildCommentTreeNode(allComment);
         treeNodes = TreeUtils.listToTree(treeNodes, node -> node.getPid().equals(commentQueryDTO.getParentCommentId()));
 
@@ -76,20 +76,20 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper , Comment> imp
         for (TreeNode treeNode : treeNodes) {
             if (treeNode.getChildren() == null) {
                 comments.add(treeNode);
-            }else {
+            } else {
                 comments.add(conTwoLevelCommentTree(treeNode));
             }
         }
 
         //获取当前页面(或文章)的评论数量和分页总页数
         LambdaQueryWrapper<Comment> queryCount = new LambdaQueryWrapper<>();
-        queryCount.eq(Comment::getIsPublished , commentQueryDTO.getIsPublished());
-        queryCount.eq(Comment::getPage , commentQueryDTO.getPage());
+        queryCount.eq(Comment::getIsPublished, commentQueryDTO.getIsPublished());
+        queryCount.eq(Comment::getPage, commentQueryDTO.getPage());
         if (commentQueryDTO.getPage().equals(Constants.PAGE_READ_ARTICLE)) {
-            queryCount.eq(Comment::getArticleId , commentQueryDTO.getArticleId());
+            queryCount.eq(Comment::getArticleId, commentQueryDTO.getArticleId());
         }
         Integer commentCount = commentMapper.selectCount(queryCount);
-        Long totalPage =  pageResult.getPages();
+        Long totalPage = pageResult.getPages();
 
         //封装结果集
         result.put("count", commentCount);
@@ -101,7 +101,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper , Comment> imp
 
     /**
      * 构建评论树Node
-     * */
+     */
     private List<TreeNode> buildCommentTreeNode(List<Comment> comments) {
         List<TreeNode> treeNodes = new ArrayList<>(comments.size());
         for (Comment comment : comments) {
@@ -120,7 +120,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper , Comment> imp
 
     /**
      * 转两级评论树
-     * */
+     */
     private TreeNode conTwoLevelCommentTree(TreeNode treeNode) {
         List<TreeNode> childNodes = TreeUtils.getAllChildNodeByRootNode(treeNode);
 

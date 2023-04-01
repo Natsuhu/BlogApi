@@ -66,8 +66,8 @@ public class AdminArticleController {
         try {
             articleService.saveArticle(articleDTO);
             return Result.success("保存成功！");
-        }catch (Exception e) {
-            log.error("保存文章失败，{}" , e.getMessage());
+        } catch (Exception e) {
+            log.error("保存文章失败，{}", e.getMessage());
             return Result.fail("保存失败，" + e);
         }
     }
@@ -92,8 +92,8 @@ public class AdminArticleController {
         try {
             articleService.updateArticle(articleDTO);
             return Result.success("更新成功");
-        }catch (Exception e) {
-            log.error("文章更新失败！{}",e.getMessage());
+        } catch (Exception e) {
+            log.error("文章更新失败！{}", e.getMessage());
             return Result.fail("文章更新失败！" + e);
         }
     }

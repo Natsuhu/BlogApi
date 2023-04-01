@@ -27,7 +27,9 @@ public class IPUtils {
 
     private static Method method;
 
-    /** 获取Nginx代理后的真实地址 */
+    /**
+     * 获取Nginx代理后的真实地址
+     */
     public static String getIpAddress(HttpServletRequest request) {
         String ip = request.getHeader("X-Real-IP");
         if (StringUtils.isBlank(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
@@ -63,6 +65,7 @@ public class IPUtils {
 
     /**
      * 启动服务时加载 ip2region.db
+     *
      * @throws Exception 出现异常应该直接抛出终止程序启动，避免后续invoke时出现更多错误
      */
     @PostConstruct

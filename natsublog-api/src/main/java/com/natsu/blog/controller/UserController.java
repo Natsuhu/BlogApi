@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * 登录功能暂时搁置----
- * */
+ */
 @RestController
 @RequestMapping("user")
 public class UserController {
@@ -25,7 +25,7 @@ public class UserController {
     }
 
     @GetMapping("login")
-    public Result login(@RequestBody LoginParams loginParams){
+    public Result login(@RequestBody LoginParams loginParams) {
         return userService.login(loginParams);
     }
 
@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping("logout")
-    public Result logout(@RequestHeader("Authorization") String token){
+    public Result logout(@RequestHeader("Authorization") String token) {
         return userService.logout(token);
     }
 

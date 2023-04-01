@@ -10,18 +10,18 @@ import org.springframework.stereotype.Component;
  *
  * @author NatsuKaze
  * @since 2023/1/23
- * */
+ */
 @Component
 public class SpringContextUtils implements ApplicationContextAware {
 
     /**
      * spring应用上下文
-     * */
+     */
     private static ApplicationContext applicationContext;
 
     /**
      * setApplicationContext
-     * */
+     */
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         SpringContextUtils.applicationContext = applicationContext;
@@ -29,35 +29,35 @@ public class SpringContextUtils implements ApplicationContextAware {
 
     /**
      * getBean
-     * */
+     */
     public static Object getBean(String name) {
         return applicationContext.getBean(name);
     }
 
     /**
      * getBean
-     * */
+     */
     public static <T> T getBean(String name, Class<T> requiredType) {
         return applicationContext.getBean(name, requiredType);
     }
 
     /**
      * containsBean
-     * */
+     */
     public static boolean containsBean(String name) {
         return applicationContext.containsBean(name);
     }
 
     /**
      * isSingleton
-     * */
+     */
     public static boolean isSingleton(String name) {
         return applicationContext.isSingleton(name);
     }
 
     /**
      * getType
-     * */
+     */
     public static Class<?> getType(String name) {
         return applicationContext.getType(name);
     }
