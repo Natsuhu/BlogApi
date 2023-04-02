@@ -2,12 +2,9 @@ package com.natsu.blog.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.natsu.blog.model.dto.ArticleDTO;
 import com.natsu.blog.model.dto.ArticleQueryDTO;
-import com.natsu.blog.model.dto.admin.AdminArticleQueryDTO;
 import com.natsu.blog.model.entity.Article;
-import com.natsu.blog.model.vo.Archives;
-import com.natsu.blog.model.vo.RandomArticle;
-import com.natsu.blog.model.vo.admin.AdminArticleTableItem;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -24,20 +21,20 @@ public interface ArticleMapper extends BaseMapper<Article> {
     /**
      * 根据归档日期归档
      */
-    List<Archives> getArchives(String date);
+    List<ArticleDTO> getArchives(String date);
 
     /**
      * 获取随机文章
      */
-    List<RandomArticle> getRandomArticles(int count);
+    List<ArticleDTO> getRandomArticles(Integer count);
 
     /**
-     * 根据查询参数分页查询
+     * 博客前台--条件查询
      */
-    IPage<Article> getArticlesByQueryParams(IPage<Article> page, @Param("articleQueryDTO") ArticleQueryDTO articleQueryDTO);
+    IPage<ArticleDTO> getArticles(IPage<Article> page, @Param("queryCond") ArticleQueryDTO queryCond);
 
     /**
      * 后台管理系统--文章Table
      */
-    IPage<AdminArticleTableItem> getArticleTable(IPage<AdminArticleTableItem> page, @Param("queryParam") AdminArticleQueryDTO queryParam);
+    IPage<ArticleDTO> getArticleTable(IPage<ArticleDTO> page, @Param("queryCond") ArticleQueryDTO queryCond);
 }

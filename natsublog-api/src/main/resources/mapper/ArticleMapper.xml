@@ -4,82 +4,81 @@
 <mapper namespace="com.natsu.blog.mapper.ArticleMapper">
 
     <select id="getArchivesDate" resultType="java.lang.String">
-        select date_format(create_time,'%Y-%m') as create_time
-        from article
-        where is_published = 1
-        group by date_format(create_time,'%Y-%m')
+        select
+            date_format(create_time, '%Y-%m') as create_time
+        from
+            article
+        where
+            is_published = 1
+        group by date_format(create_time, '%Y-%m')
         order by create_time desc
     </select>
 
-    <select id="getArchives" resultType="com.natsu.blog.model.vo.Archives" >
-        select id , title , date_format(create_time,'%Y-%m-%d') as create_time
-        from article
-        where date_format(create_time,'%Y-%m') = #{date} and is_published = 1
+    <select id="getArchives" resultType="com.natsu.blog.model.dto.ArticleDTO">
+        select
+            id, title, thumbnail, date_format(create_time, '%Y-%m-%d') as create_time
+        from
+            article
+        where
+            date_format(create_time, '%Y-%m') = #{date} and is_published = 1
         order by create_time desc
     </select>
 
-    <select id="getRandomArticles" parameterType="int" resultType="com.natsu.blog.model.vo.RandomArticle" >
-        select id , title, thumbnail from article where is_published = true order by rand() limit ${count}
+    <select id="getRandomArticles" parameterType="int" resultType="com.natsu.blog.model.dto.ArticleDTO">
+        select
+            id, title, thumbnail
+        from
+            article
+        where
+            is_published = 1
+        order by rand() limit ${count}
     </select>
 
-    <select id="getArticlesByQueryParams" resultType="com.natsu.blog.model.entity.Article" >
-        select a.*
-        from article as a
-        <if test="articleQueryDTO.tagIds != null">
-            left join article_tag_ref as b on a.id = b.article_id
-            left join tag as c on b.tag_id = c.id
-        </if>
+    <select id="getArticles" resultType="com.natsu.blog.model.dto.ArticleDTO">
+        select
+            a.id, a.title, a.thumbnail, a.description, a.create_time, a.update_time, a.category_id,
+            a.views, a.words, a.read_time, a.is_top, d.name category_name
+        from
+            article as a
+                left join category as d on a.category_id = d.id
+            <if test="queryCond.tagIds != null">
+                left join article_tag_ref as b on a.id = b.article_id
+                left join tag as c on b.tag_id = c.id
+            </if>
         <where>
-            <if test="articleQueryDTO.tagIds != null">
+            <if test="queryCond.tagIds != null">
                 and c.id in
-                <foreach collection="articleQueryDTO.tagIds" item="tagId" open="(" close=")" separator=",">
+                <foreach collection="queryCond.tagIds" item="tagId" open="(" close=")" separator=",">
                     ${tagId}
                 </foreach>
             </if>
-            <if test="articleQueryDTO.categoryId != null">
-                and a.category_id = ${articleQueryDTO.categoryId}
+            <if test="queryCond.categoryId != null">
+                and a.category_id = ${queryCond.categoryId}
             </if>
-            <if test="articleQueryDTO.keyword != null">
-                and a.title like CONCAT('%',#{articleQueryDTO.keyword},'%')
+            <if test="queryCond.keyword != null">
+                and a.title like CONCAT('%',#{queryCond.keyword},'%')
             </if>
-            <if test="articleQueryDTO.isPublished != null">
-                and a.is_published = ${articleQueryDTO.isPublished}
-            </if>
+            and a.is_published = 1
         </where>
         group by a.id
-        order by a.create_time desc
+        order by is_top desc , is_recommend desc , create_time desc
     </select>
 
-    <select id="getArticleTable" resultType="com.natsu.blog.model.vo.admin.AdminArticleTableItem">
+    <select id="getArticleTable" resultType="com.natsu.blog.model.dto.ArticleDTO">
         select
-            a.id , a.title , a.is_published , a.is_recommend , a.is_appreciation , a.is_comment_enabled ,
-            a.create_time , a.update_time , a.views , a.words , a.is_top , c.name category_name
+            a.id, a.title, a.is_published, a.is_recommend, a.is_appreciation, a.is_comment_enabled,
+            a.create_time, a.update_time, a.views, a.words, a.is_top, c.name category_name
         from
             article as a left join category as c on a.category_id = c.id
         <where>
-            <if test="queryParam.categoryId != null">
-                and a.category_id = ${queryParam.categoryId}
+            <if test="queryCond.categoryId != null">
+                and a.category_id = ${queryCond.categoryId}
             </if>
-            <if test="queryParam.isTop != null">
-                and a.is_top = ${queryParam.isTop}
+            <if test="queryCond.startTime != null and queryCond.endTime != null">
+                and a.create_time between #{queryCond.startTime} and #{queryCond.endTime}
             </if>
-            <if test="queryParam.isPublished != null">
-                and a.is_published = ${queryParam.isPublished}
-            </if>
-            <if test="queryParam.isRecommend != null">
-                and a.is_recommend = ${queryParam.isRecommend}
-            </if>
-            <if test="queryParam.isAppreciation != null">
-                and a.is_appreciation = ${queryParam.isAppreciation}
-            </if>
-            <if test="queryParam.isCommentEnabled != null">
-                and a.is_comment_enabled = ${queryParam.isCommentEnabled}
-            </if>
-            <if test="queryParam.startTime != null and queryParam.endTime != null">
-                and a.create_time between #{queryParam.startTime} and #{queryParam.endTime}
-            </if>
-            <if test="queryParam.keyword != null and queryParam.keyword != ''">
-                and a.title like CONCAT('%',#{queryParam.keyword},'%')
+            <if test="queryCond.keyword != null and queryCond.keyword != ''">
+                and a.title like CONCAT('%',#{queryCond.keyword},'%')
             </if>
         </where>
         order by a.create_time desc

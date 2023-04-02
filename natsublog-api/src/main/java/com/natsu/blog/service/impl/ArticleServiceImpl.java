@@ -6,17 +6,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.natsu.blog.constant.Constants;
 import com.natsu.blog.mapper.ArticleMapper;
+import com.natsu.blog.model.dto.ArticleDTO;
 import com.natsu.blog.model.dto.ArticleQueryDTO;
-import com.natsu.blog.model.dto.BaseQueryDTO;
-import com.natsu.blog.model.dto.admin.AdminArticleQueryDTO;
-import com.natsu.blog.model.dto.admin.ArticleDTO;
 import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.entity.ArticleTagRef;
-import com.natsu.blog.model.vo.Archives;
-import com.natsu.blog.model.vo.HomeArticle;
-import com.natsu.blog.model.vo.RandomArticle;
-import com.natsu.blog.model.vo.ReadArticle;
-import com.natsu.blog.model.vo.admin.AdminArticleTableItem;
+import com.natsu.blog.model.entity.Tag;
 import com.natsu.blog.service.ArticleService;
 import com.natsu.blog.service.ArticleTagRefService;
 import com.natsu.blog.service.CategoryService;
@@ -62,12 +56,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public Map<String, Object> getArchives() {
         //返回的结果集
         Map<String, Object> map = new HashMap<>(2);
-        Map<String, List<Archives>> archivesMap = new LinkedHashMap<>();
+        Map<String, List<ArticleDTO>> archivesMap = new LinkedHashMap<>();
         //先查询所有文章的创建日期
         List<String> archivesDate = articleMapper.getArchivesDate();
         //根据日期查询对应日期下的所有文章
         for (String date : archivesDate) {
-            List<Archives> archives = articleMapper.getArchives(date);
+            List<ArticleDTO> archives = articleMapper.getArchives(date);
             archivesMap.put(date, archives);
         }
         //获取文章数量
@@ -80,80 +74,66 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     }
 
     @Override
-    public ReadArticle getReadArticleById(int id) {
+    public ArticleDTO getReadArticle(Long articleId) {
         //获取文章
-        Article article = articleMapper.selectById(id);
-        if (article == null || !article.getIsPublished()) {
-            return null;
+        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Article::getIsPublished, Constants.PUBLISHED);
+        queryWrapper.eq(Article::getId, articleId);
+        Article article = articleMapper.selectOne(queryWrapper);
+        if (article != null) {
+            //转DTO
+            ArticleDTO articleDTO = new ArticleDTO();
+            BeanUtils.copyProperties(article, articleDTO);
+            //补充分类和标签
+            String content = article.getContent();
+            articleDTO.setContent(MarkdownUtils.markdownToHtml(content));
+            articleDTO.setCategoryName(categoryService.getById(article.getCategoryId()).getName());
+            articleDTO.setTags(tagService.getTagsByArticleId(article.getId()));
+            //更新文章阅读数量
+            asyncTaskService.updateArticleViewCount(articleMapper, article);
+            return articleDTO;
         }
-        //补充readVO中缺少的tag和category
-        String content = article.getContent();
-        ReadArticle readVO = new ReadArticle();
-        BeanUtils.copyProperties(article, readVO);
-        readVO.setContent(MarkdownUtils.markdownToHtml(content));
-        readVO.setCategory(categoryService.getById(article.getCategoryId()));
-        readVO.setTags(tagService.getTagsByArticleId(article.getId()));
-        //更新文章阅读数量
-        asyncTaskService.updateArticleViewCount(articleMapper, article);
-        return readVO;
+        return null;
     }
 
     @Override
-    public List<RandomArticle> getRandomArticles(int count) {
+    public List<ArticleDTO> getRandomArticles(Integer count) {
         return articleMapper.getRandomArticles(count);
     }
 
     @Override
-    public IPage<HomeArticle> getHomeArticles(BaseQueryDTO params) {
-        //分页查询article表
-        IPage<Article> page = new Page<>(params.getPageNo(), params.getPageSize());
-        LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Article::getIsPublished, Constants.PUBLISHED);
-        //排序优先级：置顶--推荐--创建时间
-        queryWrapper.orderByDesc(Article::getIsTop);
-        queryWrapper.orderByDesc(Article::getIsRecommend);
-        queryWrapper.orderByDesc(Article::getCreateTime);
-        IPage<Article> articlePage = articleMapper.selectPage(page, queryWrapper);
-        //获取查询结果，转为VO对象，并补充标签和分类
-        List<Article> articleList = articlePage.getRecords();
-        List<HomeArticle> homeArticles = new ArrayList<>();
-        for (Article article : articleList) {
-            HomeArticle homeArticle = new HomeArticle();
-            BeanUtils.copyProperties(article, homeArticle);
-            homeArticle.setCategory(categoryService.getById(article.getCategoryId()));
-            homeArticle.setTags(tagService.getTagsByArticleId(article.getId()));
-            homeArticles.add(homeArticle);
-        }
-        //封装结果
-        IPage<HomeArticle> pageResult = new Page<>(articlePage.getCurrent(), articlePage.getSize(), articlePage.getTotal());
-        pageResult.setRecords(homeArticles);
-        return pageResult;
-    }
-
-    @Override
-    public IPage<HomeArticle> getArticlesByQueryParams(ArticleQueryDTO articleQueryDTO) {
+    public IPage<ArticleDTO> getArticles(ArticleQueryDTO queryCond) {
         //分页查询
-        IPage<Article> page = new Page<>(articleQueryDTO.getPageNo(), articleQueryDTO.getPageSize());
-        IPage<Article> articles = articleMapper.getArticlesByQueryParams(page, articleQueryDTO);
-        List<HomeArticle> homeArticles = new ArrayList<>();
-        //获取结果，遍历转VO对象并补充属性
-        for (Article article : articles.getRecords()) {
-            HomeArticle homeArticle = new HomeArticle();
-            BeanUtils.copyProperties(article, homeArticle);
-            homeArticle.setCategory(categoryService.getById(article.getCategoryId()));
-            homeArticle.setTags(tagService.getTagsByArticleId(article.getId()));
-            homeArticles.add(homeArticle);
+        IPage<Article> page = new Page<>(queryCond.getPageNo(), queryCond.getPageSize());
+        IPage<ArticleDTO> articles = articleMapper.getArticles(page, queryCond);
+        List<ArticleDTO> records = articles.getRecords();
+        //补充标签
+        for (ArticleDTO article : records) {
+            article.setTags(tagService.getTagsByArticleId(article.getId()));
         }
         //封装结果
-        IPage<HomeArticle> pageResult = new Page<>(articles.getCurrent(), articles.getSize(), articles.getTotal());
-        pageResult.setRecords(homeArticles);
+        IPage<ArticleDTO> pageResult = new Page<>(articles.getCurrent(), articles.getSize(), articles.getTotal());
+        pageResult.setRecords(records);
         return pageResult;
     }
 
     @Override
-    public IPage<AdminArticleTableItem> getArticleTable(AdminArticleQueryDTO queryDTO) {
-        IPage<AdminArticleTableItem> page = new Page<>(queryDTO.getPageNo(), queryDTO.getPageSize());
-        return articleMapper.getArticleTable(page, queryDTO);
+    public ArticleDTO getUpdateArticle(Long articleId) {
+        //获取文章转DTO
+        Article article = articleMapper.selectById(articleId);
+        ArticleDTO articleDTO = new ArticleDTO();
+        BeanUtils.copyProperties(article, articleDTO);
+        //补充标签
+        List<Tag> tags = tagService.getTagsByArticleId(articleId);
+        List<Long> tagIds = tags.stream().map(Tag::getId).collect(Collectors.toList());
+        articleDTO.setTagIds(tagIds);
+        return articleDTO;
+    }
+
+    @Override
+    public IPage<ArticleDTO> getArticleTable(ArticleQueryDTO queryCond) {
+        IPage<ArticleDTO> page = new Page<>(queryCond.getPageNo(), queryCond.getPageSize());
+        return articleMapper.getArticleTable(page, queryCond);
     }
 
     @Transactional
@@ -175,6 +155,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 articleTagRefService.saveBatch(tagRefs);
             }
         } catch (Exception e) {
+            log.error("保存文章失败，{}", e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
     }
@@ -218,6 +199,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 articleTagRefService.saveBatch(articleTagRefs);
             }
         } catch (Exception e) {
+            log.error("更新文章失败，{}", e.getMessage());
             throw new RuntimeException(e.getMessage());
         }
     }

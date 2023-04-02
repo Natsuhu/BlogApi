@@ -2,10 +2,9 @@ package com.natsu.blog.controller.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.natsu.blog.constant.Constants;
-import com.natsu.blog.model.dto.admin.AdminArticleQueryDTO;
-import com.natsu.blog.model.dto.admin.ArticleDTO;
-import com.natsu.blog.model.vo.Result;
-import com.natsu.blog.model.vo.admin.AdminArticleTableItem;
+import com.natsu.blog.model.dto.ArticleDTO;
+import com.natsu.blog.model.dto.ArticleQueryDTO;
+import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.service.ArticleService;
 import com.natsu.blog.service.CategoryService;
 import com.natsu.blog.service.TagService;
@@ -16,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -34,13 +34,32 @@ public class AdminArticleController {
     @Autowired
     private CategoryService categoryService;
 
+    /**
+     * 获取将要被更新的文章
+     *
+     * @description 用于从文章管理页面的编辑按钮跳转到写文章页面时，通过ID获取文章填充表单
+     */
+    @PostMapping("/getUpdateArticle")
+    public Result getUpdateArticle(@RequestParam("id") Long articleId) {
+        ArticleDTO articleDTO = articleService.getUpdateArticle(articleId);
+        return Result.success(articleDTO);
+    }
+
+    /**
+     * 获取文章表格
+     *
+     * @description 用于文章管理页面获取文章表格
+     */
     @PostMapping("/getArticleTable")
-    public Result getArticleTable(@RequestBody AdminArticleQueryDTO adminArticleQueryDTO) {
-        IPage<AdminArticleTableItem> result = articleService.getArticleTable(adminArticleQueryDTO);
+    public Result getArticleTable(@RequestBody ArticleQueryDTO queryDTO) {
+        IPage<ArticleDTO> result = articleService.getArticleTable(queryDTO);
         return Result.success(result.getPages(), result.getTotal(), result.getRecords());
     }
 
-    @PostMapping("/save")
+    /**
+     * 保存文章
+     */
+    @PostMapping("/saveArticle")
     public Result saveArticle(@RequestBody ArticleDTO articleDTO) {
         //参数校验
         Result checkParam = checkParam(articleDTO);
@@ -72,7 +91,10 @@ public class AdminArticleController {
         }
     }
 
-    @PostMapping("/update")
+    /**
+     * 更新文章
+     */
+    @PostMapping("/updateArticle")
     public Result updateArticle(@RequestBody ArticleDTO articleDTO) {
         //参数校验
         if (articleDTO.getId() == null) {

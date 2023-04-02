@@ -1,7 +1,7 @@
 package com.natsu.blog.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.natsu.blog.model.vo.Result;
+import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.model.entity.User;
 import com.natsu.blog.utils.UserThreadLocal;
 import lombok.extern.slf4j.Slf4j;

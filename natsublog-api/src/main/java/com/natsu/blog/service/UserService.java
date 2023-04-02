@@ -1,7 +1,7 @@
 package com.natsu.blog.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.natsu.blog.model.vo.Result;
+import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.model.dto.LoginParams;
 import com.natsu.blog.model.entity.User;
 

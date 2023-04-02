@@ -1,4 +1,4 @@
-package com.natsu.blog.model.vo;
+package com.natsu.blog.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

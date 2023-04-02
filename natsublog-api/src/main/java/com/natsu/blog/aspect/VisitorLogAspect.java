@@ -2,11 +2,11 @@ package com.natsu.blog.aspect;
 
 import com.natsu.blog.annotation.VisitorLogger;
 import com.natsu.blog.enums.VisitorBehavior;
+import com.natsu.blog.model.dto.ArticleDTO;
 import com.natsu.blog.model.dto.ArticleQueryDTO;
 import com.natsu.blog.model.dto.BaseQueryDTO;
 import com.natsu.blog.model.entity.VisitLog;
-import com.natsu.blog.model.vo.ReadArticle;
-import com.natsu.blog.model.vo.Result;
+import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.service.VisitLogService;
 import com.natsu.blog.utils.IPUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -131,7 +131,7 @@ public class VisitorLogAspect {
                 break;
             case ARTICLE:
                 if (result.getCode() == 200) {
-                    ReadArticle article = (ReadArticle) result.getData();
+                    ArticleDTO article = (ArticleDTO) result.getData();
                     String title = article.getTitle();
                     content = "文章标题：" + title;
                 }

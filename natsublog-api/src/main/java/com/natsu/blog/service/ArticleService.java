@@ -2,15 +2,9 @@ package com.natsu.blog.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.natsu.blog.model.dto.ArticleDTO;
 import com.natsu.blog.model.dto.ArticleQueryDTO;
-import com.natsu.blog.model.dto.BaseQueryDTO;
-import com.natsu.blog.model.dto.admin.AdminArticleQueryDTO;
-import com.natsu.blog.model.dto.admin.ArticleDTO;
 import com.natsu.blog.model.entity.Article;
-import com.natsu.blog.model.vo.HomeArticle;
-import com.natsu.blog.model.vo.RandomArticle;
-import com.natsu.blog.model.vo.ReadArticle;
-import com.natsu.blog.model.vo.admin.AdminArticleTableItem;
 
 import java.util.List;
 import java.util.Map;
@@ -19,17 +13,17 @@ public interface ArticleService extends IService<Article> {
 
     Map<?, ?> getArchives();
 
-    ReadArticle getReadArticleById(int id);
+    List<ArticleDTO> getRandomArticles(Integer count);
 
-    List<RandomArticle> getRandomArticles(int count);
+    IPage<ArticleDTO> getArticles(ArticleQueryDTO queryCond);
 
-    IPage<HomeArticle> getHomeArticles(BaseQueryDTO baseQueryDTO);
+    ArticleDTO getReadArticle(Long articleId);
 
-    IPage<HomeArticle> getArticlesByQueryParams(ArticleQueryDTO articleQueryDTO);
+    ArticleDTO getUpdateArticle(Long articleId);
 
     void saveArticle(ArticleDTO articleDTO);
 
     void updateArticle(ArticleDTO articleDTO);
 
-    IPage<AdminArticleTableItem> getArticleTable(AdminArticleQueryDTO queryDTO);
+    IPage<ArticleDTO> getArticleTable(ArticleQueryDTO queryCond);
 }

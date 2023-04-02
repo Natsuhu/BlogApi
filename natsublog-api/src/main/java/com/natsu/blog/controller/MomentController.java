@@ -5,7 +5,7 @@ import com.natsu.blog.annotation.VisitorLogger;
 import com.natsu.blog.enums.VisitorBehavior;
 import com.natsu.blog.model.dto.BaseQueryDTO;
 import com.natsu.blog.model.entity.Moment;
-import com.natsu.blog.model.vo.Result;
+import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.service.MomentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

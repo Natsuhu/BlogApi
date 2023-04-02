@@ -1,6 +1,7 @@
-package com.natsu.blog.model.dto.admin;
+package com.natsu.blog.model.dto;
 
 import com.natsu.blog.model.entity.Article;
+import com.natsu.blog.model.entity.Tag;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,6 +14,10 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class ArticleDTO extends Article {
 
+    private String categoryName;
+
     private List<Long> tagIds;
+
+    private List<Tag> tags;
 
 }

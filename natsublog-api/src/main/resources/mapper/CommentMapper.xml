@@ -3,23 +3,27 @@
 
 <mapper namespace="com.natsu.blog.mapper.CommentMapper">
 
-    <select id="getCommentsByQueryParams" resultType="com.natsu.blog.model.entity.Comment" >
-        select * from comment
+    <select id="getComments" resultType="com.natsu.blog.model.entity.Comment" >
+        select
+            id, nickname, email, content, avatar, create_time, ip, is_published, website, qq,
+            is_admin_comment, page, reply_nickname, article_id, origin_id, parent_comment_id
+        from
+            comment
         <where>
-            <if test="commentQueryDTO.page != null">
-                and page = ${commentQueryDTO.page}
+            <if test="queryCond.page != null">
+                and page = ${queryCond.page}
             </if>
-            <if test="commentQueryDTO.articleId != null">
-                and article_id = ${commentQueryDTO.articleId}
+            <if test="queryCond.articleId != null">
+                and article_id = ${queryCond.articleId}
             </if>
-            <if test="commentQueryDTO.isPublished != null">
-                and is_published = ${commentQueryDTO.isPublished}
+            <if test="queryCond.isPublished != null">
+                and is_published = ${queryCond.isPublished}
             </if>
-            <if test="commentQueryDTO.parentCommentId != null">
-                and parent_comment_id = ${commentQueryDTO.parentCommentId}
+            <if test="queryCond.parentCommentId != null">
+                and parent_comment_id = ${queryCond.parentCommentId}
             </if>
-            <if test="commentQueryDTO.keyword != null">
-                and content like CONCAT('%',#{commentQueryDTO.keyword},'%')
+            <if test="queryCond.keyword != null">
+                and content like CONCAT('%',#{queryCond.keyword},'%')
             </if>
         </where>
         order by create_time desc

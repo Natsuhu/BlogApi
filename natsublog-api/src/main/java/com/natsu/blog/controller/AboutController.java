@@ -3,7 +3,7 @@ package com.natsu.blog.controller;
 import com.natsu.blog.annotation.VisitorLogger;
 import com.natsu.blog.constant.Constants;
 import com.natsu.blog.enums.VisitorBehavior;
-import com.natsu.blog.model.vo.Result;
+import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.service.SiteSettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

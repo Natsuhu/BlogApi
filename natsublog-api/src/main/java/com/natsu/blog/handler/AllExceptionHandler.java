@@ -1,6 +1,6 @@
 package com.natsu.blog.handler;
 
-import com.natsu.blog.model.vo.Result;
+import com.natsu.blog.model.dto.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,7 +23,7 @@ public class AllExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public Result doException(Exception e) {
-        log.error("系统异常：{}", e.getMessage());
-        return Result.fail(500, e.getMessage());
+        log.error("拦截器捕获到异常：{}", e.getMessage());
+        return Result.fail(e.getMessage());
     }
 }

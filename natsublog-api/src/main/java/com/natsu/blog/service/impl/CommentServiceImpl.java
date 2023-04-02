@@ -32,7 +32,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public IPage<Comment> getCommentsByQueryParams(CommentQueryDTO commentQueryDTO) {
         IPage<Comment> page = new Page<>(commentQueryDTO.getPageNo(), commentQueryDTO.getPageSize());
-        return commentMapper.getCommentsByQueryParams(page, commentQueryDTO);
+        return commentMapper.getComments(page, commentQueryDTO);
     }
 
     @Override

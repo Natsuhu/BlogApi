@@ -6,7 +6,7 @@ import com.natsu.blog.model.dto.CommentQueryDTO;
 import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.entity.Comment;
 import com.natsu.blog.model.entity.SiteSetting;
-import com.natsu.blog.model.vo.Result;
+import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.service.ArticleService;
 import com.natsu.blog.service.CommentService;
 import com.natsu.blog.service.SiteSettingService;
