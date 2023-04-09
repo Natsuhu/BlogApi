@@ -3,4 +3,16 @@
 
 <mapper namespace="com.natsu.blog.mapper.MomentMapper">
 
+    <select id="getMoments" resultType="com.natsu.blog.model.dto.MomentDTO">
+        select
+            id, content, likes, avatar, create_time, update_time, is_published,
+            is_comment_enabled, author
+        from
+            moment
+        <where>
+            and is_published = true
+        </where>
+        order by create_time desc
+    </select>
+
 </mapper>

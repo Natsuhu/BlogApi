@@ -31,7 +31,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
     /**
      * 博客前台--条件查询
      */
-    IPage<ArticleDTO> getArticles(IPage<Article> page, @Param("queryCond") ArticleQueryDTO queryCond);
+    IPage<ArticleDTO> getArticles(IPage<ArticleDTO> page, @Param("queryCond") ArticleQueryDTO queryCond);
 
     /**
      * 后台管理系统--文章Table

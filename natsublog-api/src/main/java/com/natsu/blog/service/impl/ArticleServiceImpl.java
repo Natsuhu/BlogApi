@@ -104,7 +104,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public IPage<ArticleDTO> getArticles(ArticleQueryDTO queryCond) {
         //分页查询
-        IPage<Article> page = new Page<>(queryCond.getPageNo(), queryCond.getPageSize());
+        IPage<ArticleDTO> page = new Page<>(queryCond.getPageNo(), queryCond.getPageSize());
         IPage<ArticleDTO> articles = articleMapper.getArticles(page, queryCond);
         List<ArticleDTO> records = articles.getRecords();
         //补充标签
