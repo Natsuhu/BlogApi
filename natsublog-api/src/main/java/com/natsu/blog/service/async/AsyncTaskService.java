@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 /**
  * 异步任务Service
- *
+ * <p>
  * 异步任务的调用者和被调用者不能在同一个类中，否则会导致@Async注解失效
  *
  * @author NatsuKaze
@@ -52,7 +52,7 @@ public class AsyncTaskService {
 
     /**
      * 保存访问记录
-     * */
+     */
     public void saveVisitLog(VisitLogMapper visitLogMapper, VisitLog visitLog) {
         String city = IPUtils.getCityInfo(visitLog.getIp());
         HashMap<String, String> userAgent = userAgentUtils.parseOsAndBrowser(visitLog.getUserAgent());
@@ -61,7 +61,7 @@ public class AsyncTaskService {
         visitLog.setOs(userAgent.get("os"));
         try {
             visitLogMapper.insert(visitLog);
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error("保存访客记录失败：{}", e.getMessage());
             throw new RuntimeException(e.getMessage());
         }

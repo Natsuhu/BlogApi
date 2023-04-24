@@ -19,6 +19,7 @@ import com.natsu.blog.service.async.AsyncTaskService;
 import com.natsu.blog.utils.markdown.MarkdownUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -139,18 +140,24 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Transactional
     @Override
     public void saveArticle(ArticleDTO articleDTO) {
-        //获取文章实体和标签IDS
-        Article article = new Article();
-        BeanUtils.copyProperties(articleDTO, article);
-        List<Long> tagIds = articleDTO.getTagIds();
+        //组装实体
+        articleDTO.setId(null);
+        if (articleDTO.getViews() == null) {
+            articleDTO.setViews(0);
+        }
+        if (StringUtils.isEmpty(articleDTO.getAuthorName())) {
+            articleDTO.setAuthorName(Constants.DEFAULT_AUTHOR);
+        }
+        //开始保存
         try {
             //先保存文章
-            articleMapper.insert(article);
+            articleMapper.insert(articleDTO);
             //再保存文章标签引用
+            List<Long> tagIds = articleDTO.getTagIds();
             if (tagIds != null && tagIds.size() > 0) {
                 List<ArticleTagRef> tagRefs = new ArrayList<>(tagIds.size());
                 for (Long tagId : tagIds) {
-                    tagRefs.add(new ArticleTagRef(article.getId(), tagId));
+                    tagRefs.add(new ArticleTagRef(articleDTO.getId(), tagId));
                 }
                 articleTagRefService.saveBatch(tagRefs);
             }
@@ -163,15 +170,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Transactional
     @Override
     public void updateArticle(ArticleDTO articleDTO) {
-        //获取文章实体和标签IDS
-        Article article = new Article();
-        BeanUtils.copyProperties(articleDTO, article);
-        List<Long> updateTagIds = articleDTO.getTagIds();
         try {
             //先更新文章
-            article.setUpdateTime(new Date());
-            articleMapper.updateById(article);
+            articleDTO.setUpdateTime(new Date());
+            articleMapper.updateById(articleDTO);
             //标签对象为null不更新标签
+            List<Long> updateTagIds = articleDTO.getTagIds();
             if (updateTagIds == null) {
                 return;
             }

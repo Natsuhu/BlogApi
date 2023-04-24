@@ -3,4 +3,18 @@
 
 <mapper namespace="com.natsu.blog.mapper.CategoryMapper">
 
+    <select id="getCategoryTable" resultType="com.natsu.blog.model.dto.CategoryDTO">
+        select
+            id, name, create_time, update_time,
+            (select count(1) from article where category_id = c.id) article_count
+        from
+            category c
+        <where>
+            <if test="queryCond.name != null and queryCond.name != ''">
+                and name like concat('%',#{queryCond.name},'%')
+            </if>
+        </where>
+        order by article_count desc
+    </select>
+
 </mapper>

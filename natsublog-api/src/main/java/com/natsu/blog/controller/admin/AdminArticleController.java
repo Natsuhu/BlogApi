@@ -1,7 +1,6 @@
 package com.natsu.blog.controller.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.natsu.blog.constant.Constants;
 import com.natsu.blog.model.dto.ArticleDTO;
 import com.natsu.blog.model.dto.ArticleQueryDTO;
 import com.natsu.blog.model.dto.Result;
@@ -71,16 +70,6 @@ public class AdminArticleController {
         if (checkExist != null) {
             return checkExist;
         }
-        //配置参数
-        if (articleDTO.getId() != null) {
-            articleDTO.setId(null);
-        }
-        if (articleDTO.getViews() == null) {
-            articleDTO.setViews(0);
-        }
-        if (StringUtils.isEmpty(articleDTO.getAuthorName())) {
-            articleDTO.setAuthorName(Constants.DEFAULT_AUTHOR);
-        }
         //开始保存
         try {
             articleService.saveArticle(articleDTO);
@@ -100,15 +89,10 @@ public class AdminArticleController {
         if (articleDTO.getId() == null) {
             return Result.fail("参数错误！必须填写文章ID");
         }
-        //验证文章和标签存在
-        if (articleService.getById(articleDTO.getId()) == null) {
-            return Result.fail("要修改的文章不存在！");
-        }
-        List<Long> tagIds = articleDTO.getTagIds();
-        if (!CollectionUtils.isEmpty(tagIds)) {
-            if (tagService.listByIds(tagIds).size() != tagIds.size()) {
-                return Result.fail("所选标签不存在！");
-            }
+        //验证分类和标签存在
+        Result checkExist = checkExist(articleDTO);
+        if (checkExist != null) {
+            return checkExist;
         }
         //开始更新
         try {
@@ -121,17 +105,29 @@ public class AdminArticleController {
     }
 
     private Result checkParam(ArticleDTO articleDTO) {
-        if (StringUtils.isEmpty(articleDTO.getTitle()) || StringUtils.isEmpty(articleDTO.getContent())) {
+        if (StringUtils.isEmpty(articleDTO.getTitle())) {
             return Result.fail("参数错误！文章必须包含标题和正文内容");
         }
-        if (articleDTO.getIsPublished() == null || articleDTO.getIsRecommend() == null) {
-            return Result.fail("参数错误！文章必须选择是否公开和是否推荐");
+        if (StringUtils.isEmpty(articleDTO.getContent())) {
+            return Result.fail("参数错误！文章必须包含正文内容");
         }
-        if (articleDTO.getIsAppreciation() == null || articleDTO.getIsCommentEnabled() == null) {
+        if (articleDTO.getIsPublished() == null) {
+            return Result.fail("参数错误！文章必须选择是否公开");
+        }
+        if (articleDTO.getIsRecommend() == null) {
+            return Result.fail("参数错误！文章必须选择是否推荐");
+        }
+        if (articleDTO.getIsAppreciation() == null) {
             return Result.fail("参数错误！文章必须选择是否开启赞赏和是否开启评论");
         }
-        if (articleDTO.getCategoryId() == null || articleDTO.getIsTop() == null) {
-            return Result.fail("参数错误！文章必须属于一个分类且必须选择是否置顶");
+        if (articleDTO.getIsCommentEnabled() == null) {
+            return Result.fail("参数错误！文章必须选择是否开启评论");
+        }
+        if (articleDTO.getIsTop() == null) {
+            return Result.fail("参数错误！文章必须选择是否置顶");
+        }
+        if (articleDTO.getCategoryId() == null) {
+            return Result.fail("参数错误！文章必须属于一个分类");
         }
         return null;
     }

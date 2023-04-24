@@ -2,17 +2,16 @@ package com.natsu.blog.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.natsu.blog.constant.Constants;
+import com.natsu.blog.model.dto.CommentDTO;
 import com.natsu.blog.model.dto.CommentQueryDTO;
+import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.entity.Comment;
 import com.natsu.blog.model.entity.SiteSetting;
-import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.service.ArticleService;
 import com.natsu.blog.service.CommentService;
 import com.natsu.blog.service.SiteSettingService;
-import com.natsu.blog.utils.QQInfoUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,11 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * 博客前台，评论接口
@@ -54,12 +51,6 @@ public class CommentController {
      */
     @Autowired
     private SiteSettingService siteSettingService;
-
-    /**
-     * QQInfoUtils
-     */
-    @Autowired
-    private QQInfoUtils qqInfoUtils;
 
     /**
      * 获取评论数量
@@ -123,61 +114,37 @@ public class CommentController {
      * 保存评论
      */
     @PostMapping("/save")
-    public Result saveComment(@RequestBody Comment comment) {
-        Integer pageType = comment.getPage();
+    public Result saveComment(@RequestBody CommentDTO commentDTO) {
         //参数校验
-        if (StringUtils.isEmpty(comment.getContent()) || comment.getContent().length() > 250) {
+        if (StringUtils.isEmpty(commentDTO.getContent()) || commentDTO.getContent().length() > 250) {
             return Result.fail("评论内容超过长度！");
         }
         List<Integer> pages = new ArrayList<>(3);
         pages.add(Constants.PAGE_READ_ARTICLE);
         pages.add(Constants.PAGE_FRIEND);
         pages.add(Constants.PAGE_ABOUT);
+        Integer pageType = commentDTO.getPage();
         if (pageType == null || !pages.contains(pageType)) {
             return Result.fail("页面请求错误！");
         }
-        if (pageType.equals(Constants.PAGE_READ_ARTICLE) && comment.getArticleId() == null) {
+        if (pageType.equals(Constants.PAGE_READ_ARTICLE) && commentDTO.getArticleId() == null) {
             return Result.fail("页面请求错误！");
         }
-        if (comment.getParentCommentId() == null || comment.getOriginId() == null) {
+        if (commentDTO.getParentCommentId() == null || commentDTO.getOriginId() == null) {
             return Result.fail("参数错误!");
         }
         //检查页面是否可评论
-        if (!checkPageIsComment(pageType, comment.getArticleId())) {
+        if (!checkPageIsComment(pageType, commentDTO.getArticleId())) {
             return Result.fail("请求的页面禁止评论！");
         }
-        //配置参数
-        comment.setAvatar("");//TODO 设置随机头像，暂时搁置
-        if (comment.getParentCommentId().equals(Constants.TOP_COMMENT_PARENT_ID)) {
-            //TODO 设置数字UUID（伪），后面应该抽象出来改为工具类
-            String uuid = UUID.randomUUID().toString().replace("-", "");
-            String unmUUid = new BigInteger(uuid, 16).toString();
-            int begin = RandomUtils.nextInt(1, 9);
-            int end = begin + 8;
-            Long uuidL = Long.parseLong(unmUUid.substring(begin, end));
-            comment.setOriginId(uuidL);
+        //开始保存
+        try {
+            commentService.saveComment(commentDTO);
+            return Result.success("评论成功");
+        } catch (Exception e) {
+            log.error("保存评论失败，{}", e.getMessage());
+            return Result.fail("评论失败！" + e.getMessage());
         }
-        String qqNum = comment.getQq();
-        if (!StringUtils.isEmpty(qqNum)) {
-            if (!qqInfoUtils.isQQNumber(qqNum)) {
-                return Result.fail("QQ号格式错误!");
-            }
-            try {
-                comment.setAvatar(qqInfoUtils.getQQAvatarUrl(qqNum));
-                comment.setNickname(qqInfoUtils.getQQNickname(qqNum));
-            } catch (Exception e) {
-                log.error("获取QQ信息失败！{}", e.getMessage());
-                return Result.fail("获取QQ号信息失败：" + e.getMessage());
-            }
-        } else if (StringUtils.isEmpty(comment.getNickname()) || comment.getNickname().length() > 10) {
-            return Result.fail("昵称格式错误！");
-        }
-        comment.setIsPublished(Constants.PUBLISHED);
-        comment.setIsAdminComment(false);
-        if (commentService.save(comment)) {
-            return Result.success("评论成功！");
-        }
-        return Result.fail("评论失败！");
     }
 
     /**
