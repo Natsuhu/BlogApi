@@ -21,7 +21,7 @@ public class AdminCategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @PostMapping("/save")
+    @PostMapping("/saveCategory")
     public Result saveCategory(@RequestBody CategoryDTO categoryDTO) {
         //参数校验
         if (categoryDTO.getId() != null) {
@@ -40,7 +40,7 @@ public class AdminCategoryController {
         }
     }
 
-    @PostMapping("/delete")
+    @PostMapping("/deleteCategory")
     public Result deleteCategory(@RequestBody CategoryDTO categoryDTO) {
         //参数校验
         if (categoryDTO.getId() == null) {
@@ -56,7 +56,7 @@ public class AdminCategoryController {
         }
     }
 
-    @PostMapping("/update")
+    @PostMapping("/updateCategory")
     public Result updateCategory(@RequestBody CategoryDTO categoryDTO) {
         //参数校验
         if (categoryDTO.getId() == null) {
@@ -74,8 +74,13 @@ public class AdminCategoryController {
 
     @PostMapping("/getCategoryTable")
     public Result getCategoryTable(@RequestBody CategoryQueryDTO queryDTO) {
-        IPage<CategoryDTO> pageResult = categoryService.getCategoryTable(queryDTO);
-        return Result.success(pageResult.getPages(), pageResult.getTotal(), pageResult.getRecords());
+        try {
+            IPage<CategoryDTO> pageResult = categoryService.getCategoryTable(queryDTO);
+            return Result.success(pageResult.getPages(), pageResult.getTotal(), pageResult.getRecords());
+        } catch (Exception e) {
+            log.error("获取分类表格失败，{}", e.getMessage());
+            return Result.fail("获取分类表格G了" + e.getMessage());
+        }
     }
 
 }

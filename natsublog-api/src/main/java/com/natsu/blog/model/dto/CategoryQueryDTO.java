@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class CategoryQueryDTO extends BaseQueryDTO{
+public class CategoryQueryDTO extends BaseQueryDTO {
 
 
 }

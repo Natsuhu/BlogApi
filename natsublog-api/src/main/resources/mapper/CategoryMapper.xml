@@ -10,8 +10,8 @@
         from
             category c
         <where>
-            <if test="queryCond.name != null and queryCond.name != ''">
-                and name like concat('%',#{queryCond.name},'%')
+            <if test="queryCond.keyword != null and queryCond.keyword != ''">
+                and name like concat('%',#{queryCond.keyword},'%')
             </if>
         </where>
         order by article_count desc

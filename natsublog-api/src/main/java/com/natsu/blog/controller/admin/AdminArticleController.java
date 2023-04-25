@@ -40,8 +40,13 @@ public class AdminArticleController {
      */
     @PostMapping("/getUpdateArticle")
     public Result getUpdateArticle(@RequestParam("id") Long articleId) {
-        ArticleDTO articleDTO = articleService.getUpdateArticle(articleId);
-        return Result.success(articleDTO);
+        try {
+            ArticleDTO articleDTO = articleService.getUpdateArticle(articleId);
+            return Result.success(articleDTO);
+        } catch (Exception e) {
+            log.error("获取更新文章失败，{}", e.getMessage());
+            return Result.fail("获取更新文章G了：" + e.getMessage());
+        }
     }
 
     /**
@@ -51,8 +56,13 @@ public class AdminArticleController {
      */
     @PostMapping("/getArticleTable")
     public Result getArticleTable(@RequestBody ArticleQueryDTO queryDTO) {
-        IPage<ArticleDTO> result = articleService.getArticleTable(queryDTO);
-        return Result.success(result.getPages(), result.getTotal(), result.getRecords());
+        try {
+            IPage<ArticleDTO> result = articleService.getArticleTable(queryDTO);
+            return Result.success(result.getPages(), result.getTotal(), result.getRecords());
+        } catch (Exception e) {
+            log.error("获取文章表格失败，{}", e.getMessage());
+            return Result.fail("获取文章表格G了：" + e.getMessage());
+        }
     }
 
     /**
