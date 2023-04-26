@@ -97,4 +97,9 @@ public class Constants {
      * 顶级评论的父ID
      */
     public static final Long TOP_COMMENT_PARENT_ID = -1L;
+
+    /**
+     * 标签默认颜色
+     */
+    public static final String TAG_DEFAULT_COLOR = "#000000";
 }
