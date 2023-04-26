@@ -14,7 +14,7 @@
                 and name like concat('%',#{queryCond.keyword},'%')
             </if>
         </where>
-        order by article_count desc
+        order by article_count desc, create_time asc
     </select>
 
 </mapper>

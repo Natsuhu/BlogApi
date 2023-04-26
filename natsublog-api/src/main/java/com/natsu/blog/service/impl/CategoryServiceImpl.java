@@ -60,7 +60,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         ArticleService articleService = SpringContextUtils.getBean(ArticleService.class);
         LambdaQueryWrapper<Article> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Article::getCategoryId, categoryDTO.getId());
-        if (!ObjectUtils.isEmpty(articleService.getOne(queryWrapper))) {
+        if (articleService.count(queryWrapper) > 0) {
             throw new RuntimeException("该分类下存在文章");
         }
         //删除分类
