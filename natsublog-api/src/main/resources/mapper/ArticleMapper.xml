@@ -67,7 +67,7 @@
     <select id="getArticleTable" resultType="com.natsu.blog.model.dto.ArticleDTO">
         select
             a.id, a.title, a.is_published, a.is_recommend, a.is_appreciation, a.is_comment_enabled,
-            a.create_time, a.update_time, a.views, a.words, a.is_top, c.name category_name
+            a.create_time, a.update_time, a.views, a.words, a.is_top, a.category_id, c.name category_name
         from
             article as a left join category as c on a.category_id = c.id
         <where>
