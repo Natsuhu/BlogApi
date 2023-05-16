@@ -8,6 +8,8 @@ package com.natsu.blog.constant;
  */
 public class Constants {
 
+    public static final Integer COM_NUM_ZERO = 0;
+
     /**
      * 评论中QQ头像存储方式-本地
      */

@@ -15,4 +15,24 @@
         order by create_time desc
     </select>
 
+    <select id="getMomentTable" resultType="com.natsu.blog.model.dto.MomentDTO">
+        select
+            id, content, likes, avatar, create_time, update_time, is_published,
+            is_comment_enabled, author
+        from
+            moment
+        <where>
+            <if test="queryCond.keyword != null and queryCond.keyword != ''">
+                and content like concat('%', #{queryCond.keyword}, '%')
+            </if>
+            <if test="queryCond.startTime != null and queryCond.endTime != null">
+                and a.create_time between #{queryCond.startTime} and #{queryCond.endTime}
+            </if>
+            <if test="queryCond.isPublished != null">
+                and is_published = #{queryCond.isPublished}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
 </mapper>

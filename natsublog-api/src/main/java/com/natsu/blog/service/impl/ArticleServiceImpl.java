@@ -143,68 +143,57 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         //组装实体
         articleDTO.setId(null);
         if (articleDTO.getViews() == null) {
-            articleDTO.setViews(0);
+            articleDTO.setViews(Constants.COM_NUM_ZERO);
         }
-        if (StringUtils.isEmpty(articleDTO.getAuthorName())) {
+        if (StringUtils.isBlank(articleDTO.getAuthorName())) {
             articleDTO.setAuthorName(Constants.DEFAULT_AUTHOR);
         }
-        //开始保存
-        try {
-            //先保存文章
-            articleMapper.insert(articleDTO);
-            //再保存文章标签引用
-            List<Long> tagIds = articleDTO.getTagIds();
-            if (tagIds != null && tagIds.size() > 0) {
-                List<ArticleTagRef> tagRefs = new ArrayList<>(tagIds.size());
-                for (Long tagId : tagIds) {
-                    tagRefs.add(new ArticleTagRef(articleDTO.getId(), tagId));
-                }
-                articleTagRefService.saveBatch(tagRefs);
+        //先保存文章
+        articleMapper.insert(articleDTO);
+        //再保存文章标签引用
+        List<Long> tagIds = articleDTO.getTagIds();
+        if (CollectionUtils.isNotEmpty(tagIds)) {
+            List<ArticleTagRef> tagRefs = new ArrayList<>(tagIds.size());
+            for (Long tagId : tagIds) {
+                tagRefs.add(new ArticleTagRef(articleDTO.getId(), tagId));
             }
-        } catch (Exception e) {
-            log.error("保存文章失败，{}", e.getMessage());
-            throw new RuntimeException(e.getMessage());
+            articleTagRefService.saveBatch(tagRefs);
         }
     }
 
     @Transactional
     @Override
     public void updateArticle(ArticleDTO articleDTO) {
-        try {
-            //先更新文章
-            articleDTO.setUpdateTime(new Date());
-            articleMapper.updateById(articleDTO);
-            //标签对象为null不更新标签
-            List<Long> updateTagIds = articleDTO.getTagIds();
-            if (updateTagIds == null) {
-                return;
+        //先更新文章
+        articleDTO.setUpdateTime(new Date());
+        articleMapper.updateById(articleDTO);
+        //标签对象为null不更新标签
+        List<Long> updateTagIds = articleDTO.getTagIds();
+        if (updateTagIds == null) {
+            return;
+        }
+        //查询原有标签
+        LambdaQueryWrapper<ArticleTagRef> articleTagQuery = new LambdaQueryWrapper<>();
+        articleTagQuery.eq(ArticleTagRef::getArticleId, articleDTO.getId());
+        List<Long> dbTagIds = articleTagRefService.list(articleTagQuery).stream().map(ArticleTagRef::getTagId).collect(Collectors.toList());
+        //取交集和差集
+        Collection<?> intersection = CollectionUtils.intersection(dbTagIds, updateTagIds);
+        Collection<?> removeTags = CollectionUtils.subtract(dbTagIds, intersection);
+        Collection<?> addTags = CollectionUtils.subtract(updateTagIds, intersection);
+        //移除旧标签引用
+        if (!CollectionUtils.isEmpty(removeTags)) {
+            LambdaQueryWrapper<ArticleTagRef> removeTagsRefWrapper = new LambdaQueryWrapper<>();
+            removeTagsRefWrapper.eq(ArticleTagRef::getArticleId, articleDTO.getId());
+            removeTagsRefWrapper.in(ArticleTagRef::getTagId, removeTags);
+            articleTagRefService.remove(removeTagsRefWrapper);
+        }
+        //增加新标签引用
+        if (!CollectionUtils.isEmpty(addTags)) {
+            List<ArticleTagRef> articleTagRefs = new ArrayList<>();
+            for (Object tagIds : addTags) {
+                articleTagRefs.add(new ArticleTagRef(articleDTO.getId(), (Long) tagIds));
             }
-            //查询原有标签
-            LambdaQueryWrapper<ArticleTagRef> articleTagQuery = new LambdaQueryWrapper<>();
-            articleTagQuery.eq(ArticleTagRef::getArticleId, articleDTO.getId());
-            List<Long> dbTagIds = articleTagRefService.list(articleTagQuery).stream().map(ArticleTagRef::getTagId).collect(Collectors.toList());
-            //取交集和差集
-            Collection<?> intersection = CollectionUtils.intersection(dbTagIds, updateTagIds);
-            Collection<?> removeTags = CollectionUtils.subtract(dbTagIds, intersection);
-            Collection<?> addTags = CollectionUtils.subtract(updateTagIds, intersection);
-            //移除旧标签引用
-            if (!CollectionUtils.isEmpty(removeTags)) {
-                LambdaQueryWrapper<ArticleTagRef> removeTagsRefWrapper = new LambdaQueryWrapper<>();
-                removeTagsRefWrapper.eq(ArticleTagRef::getArticleId, articleDTO.getId());
-                removeTagsRefWrapper.in(ArticleTagRef::getTagId, removeTags);
-                articleTagRefService.remove(removeTagsRefWrapper);
-            }
-            //增加新标签引用
-            if (!CollectionUtils.isEmpty(addTags)) {
-                List<ArticleTagRef> articleTagRefs = new ArrayList<>();
-                for (Object tagIds : addTags) {
-                    articleTagRefs.add(new ArticleTagRef(articleDTO.getId(), (Long) tagIds));
-                }
-                articleTagRefService.saveBatch(articleTagRefs);
-            }
-        } catch (Exception e) {
-            log.error("更新文章失败，{}", e.getMessage());
-            throw new RuntimeException(e.getMessage());
+            articleTagRefService.saveBatch(articleTagRefs);
         }
     }
 

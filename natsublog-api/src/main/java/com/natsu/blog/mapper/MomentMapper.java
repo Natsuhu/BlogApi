@@ -13,4 +13,6 @@ public interface MomentMapper extends BaseMapper<Moment> {
 
     IPage<MomentDTO> getMoments(IPage<MomentDTO> page, @Param("queryCond") MomentQueryDTO queryCond);
 
+    IPage<MomentDTO> getMomentTable(IPage<MomentDTO> page, @Param("queryCond") MomentQueryDTO queryCond);
+
 }

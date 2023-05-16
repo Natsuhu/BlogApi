@@ -56,7 +56,7 @@
                 and a.category_id = ${queryCond.categoryId}
             </if>
             <if test="queryCond.keyword != null">
-                and a.title like CONCAT('%',#{queryCond.keyword},'%')
+                and a.title like concat('%',#{queryCond.keyword},'%')
             </if>
             and a.is_published = 1
         </where>
@@ -78,7 +78,7 @@
                 and a.create_time between #{queryCond.startTime} and #{queryCond.endTime}
             </if>
             <if test="queryCond.keyword != null and queryCond.keyword != ''">
-                and a.title like CONCAT('%',#{queryCond.keyword},'%')
+                and a.title like concat('%',#{queryCond.keyword},'%')
             </if>
         </where>
         order by a.create_time desc
