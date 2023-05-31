@@ -1,12 +1,12 @@
 package com.natsu.blog.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.natsu.blog.mapper.ArticleTagRefMapper;
-import com.natsu.blog.model.entity.ArticleTagRef;
-import com.natsu.blog.service.ArticleTagRefService;
+import com.natsu.blog.mapper.ArticleTagMapper;
+import com.natsu.blog.model.entity.ArticleTag;
+import com.natsu.blog.service.ArticleTagService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ArticleTagRefServiceImpl extends ServiceImpl<ArticleTagRefMapper, ArticleTagRef> implements ArticleTagRefService {
+public class ArticleTagRefServiceImpl extends ServiceImpl<ArticleTagMapper, ArticleTag> implements ArticleTagService {
 
 }

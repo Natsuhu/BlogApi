@@ -57,6 +57,13 @@ public class Comment implements Serializable {
     private Date createTime;
 
     /**
+     * 更新时间
+     */
+    @TableField(value = "update_time", fill = FieldFill.INSERT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date updateTime;
+
+    /**
      * IP地址
      */
     @TableField("ip")
@@ -75,7 +82,7 @@ public class Comment implements Serializable {
     private Boolean isAdminComment;
 
     /**
-     * 0文章1友链2关于我
+     * 1文章2友链3关于我
      */
     @TableField("page")
     private Integer page;

@@ -61,41 +61,6 @@ public class Constants {
     public static final Boolean NO_AUDIT = false;
 
     /**
-     * 页面设置，LOGO和资料卡
-     */
-    public static final Integer PAGE_SETTING_LOGO = 1;
-
-    /**
-     * 页面设置，页脚
-     */
-    public static final Integer PAGE_SETTING_FOOTER = 2;
-
-    /**
-     * 页面设置，友链
-     */
-    public static final Integer PAGE_SETTING_FRIEND = 3;
-
-    /**
-     * 页面设置，关于我
-     */
-    public static final Integer PAGE_SETTING_ABOUT = 4;
-
-    /**
-     * 页面类型，阅读文章
-     */
-    public static final Integer PAGE_READ_ARTICLE = 0;
-
-    /**
-     * 页面类型，友链
-     */
-    public static final Integer PAGE_FRIEND = 1;
-
-    /**
-     * 页面类型，关于我
-     */
-    public static final Integer PAGE_ABOUT = 2;
-
-    /**
      * 顶级评论的父ID
      */
     public static final Long TOP_COMMENT_PARENT_ID = -1L;

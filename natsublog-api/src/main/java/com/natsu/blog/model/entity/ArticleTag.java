@@ -16,8 +16,8 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @Accessors(chain = true)
-@TableName("article_tag_ref")
-public class ArticleTagRef implements Serializable {
+@TableName("article_tag")
+public class ArticleTag implements Serializable {
 
     /**
      * 文章ID

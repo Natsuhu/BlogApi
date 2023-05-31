@@ -44,7 +44,7 @@ public class Moment implements Serializable {
     private String avatar;
 
     /**
-     * 发表时间
+     * 创建时间
      */
     @TableField(value = "create_time", fill = FieldFill.INSERT)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -56,6 +56,20 @@ public class Moment implements Serializable {
     @TableField(value = "update_time", fill = FieldFill.INSERT)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
+
+    /**
+     * 发表时间
+     */
+    @TableField(value = "publish_time", fill = FieldFill.INSERT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date publishTime;
+
+    /**
+     * 最后编辑时间时间
+     */
+    @TableField(value = "edit_time", fill = FieldFill.INSERT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date editTime;
 
     /**
      * 是否公开

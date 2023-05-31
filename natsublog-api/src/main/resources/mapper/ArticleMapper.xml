@@ -42,7 +42,7 @@
             article as a
                 left join category as d on a.category_id = d.id
             <if test="queryCond.tagIds != null">
-                left join article_tag_ref as b on a.id = b.article_id
+                left join article_tag as b on a.id = b.article_id
                 left join tag as c on b.tag_id = c.id
             </if>
         <where>

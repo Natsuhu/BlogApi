@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.natsu.blog.constant.Constants;
+import com.natsu.blog.enums.PageEnum;
 import com.natsu.blog.mapper.CommentMapper;
 import com.natsu.blog.model.dto.CommentDTO;
 import com.natsu.blog.model.dto.CommentQueryDTO;
@@ -130,7 +131,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         LambdaQueryWrapper<Comment> queryCount = new LambdaQueryWrapper<>();
         queryCount.eq(Comment::getIsPublished, commentQueryDTO.getIsPublished());
         queryCount.eq(Comment::getPage, commentQueryDTO.getPage());
-        if (commentQueryDTO.getPage().equals(Constants.PAGE_READ_ARTICLE)) {
+        if (commentQueryDTO.getPage().equals(PageEnum.ARTICLE.getPageCode())) {
             queryCount.eq(Comment::getArticleId, commentQueryDTO.getArticleId());
         }
         Integer commentCount = commentMapper.selectCount(queryCount);

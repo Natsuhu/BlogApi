@@ -1,7 +1,7 @@
 package com.natsu.blog.controller;
 
 import com.natsu.blog.annotation.VisitorLogger;
-import com.natsu.blog.constant.Constants;
+import com.natsu.blog.enums.PageEnum;
 import com.natsu.blog.enums.VisitorBehavior;
 import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.service.SiteSettingService;
@@ -33,7 +33,7 @@ public class AboutController {
     @VisitorLogger(VisitorBehavior.ABOUT)
     @GetMapping("getSetting")
     public Result getAboutPageSetting() {
-        Map<String, String> settings = siteSettingService.getPageSetting(Constants.PAGE_SETTING_ABOUT);
+        Map<String, String> settings = siteSettingService.getPageSetting(PageEnum.ABOUT.getPageCode());
         return Result.success(settings);
     }
 

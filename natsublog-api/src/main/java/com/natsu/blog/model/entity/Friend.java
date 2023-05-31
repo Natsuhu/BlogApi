@@ -60,8 +60,8 @@ public class Friend {
     /**
      * 审核
      */
-    @TableField(value = "audit")
-    private Boolean audit;
+    @TableField(value = "is_audit")
+    private Boolean is_audit;
 
     /**
      * 点击次数

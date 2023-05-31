@@ -8,9 +8,9 @@ import com.natsu.blog.constant.Constants;
 import com.natsu.blog.mapper.TagMapper;
 import com.natsu.blog.model.dto.TagDTO;
 import com.natsu.blog.model.dto.TagQueryDTO;
-import com.natsu.blog.model.entity.ArticleTagRef;
+import com.natsu.blog.model.entity.ArticleTag;
 import com.natsu.blog.model.entity.Tag;
-import com.natsu.blog.service.ArticleTagRefService;
+import com.natsu.blog.service.ArticleTagService;
 import com.natsu.blog.service.TagService;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -27,7 +27,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     private TagMapper tagMapper;
 
     @Autowired
-    private ArticleTagRefService articleTagRefService;
+    private ArticleTagService articleTagService;
 
     @Override
     public List<Tag> getTagsByArticleId(Long articleId) {
@@ -72,9 +72,9 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     @Override
     public void deleteTag(TagDTO tagDTO) {
         //验证该标签下有文章
-        LambdaQueryWrapper<ArticleTagRef> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(ArticleTagRef::getTagId, tagDTO.getId());
-        if (articleTagRefService.count(queryWrapper) > 0) {
+        LambdaQueryWrapper<ArticleTag> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ArticleTag::getTagId, tagDTO.getId());
+        if (articleTagService.count(queryWrapper) > 0) {
             throw new RuntimeException("该标签下存在文章");
         }
         //删除标签

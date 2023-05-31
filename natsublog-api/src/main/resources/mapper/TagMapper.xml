@@ -9,13 +9,13 @@
         from
             tag
         where
-            id in ( select tag_id from article_tag_ref where article_id = #{articleId} )
+            id in ( select tag_id from article_tag where article_id = #{articleId} )
     </select>
 
     <select id="getTagTable" resultType="com.natsu.blog.model.dto.TagDTO">
         select
             id, name, color, create_time, update_time,
-            (select count(*) from article_tag_ref where tag_id = t.id) article_count
+            (select count(*) from article_tag where tag_id = t.id) article_count
         from
             tag t
         <where>

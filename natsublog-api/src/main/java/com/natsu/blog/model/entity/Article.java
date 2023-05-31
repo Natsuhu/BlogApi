@@ -87,6 +87,13 @@ public class Article implements Serializable {
     private Date updateTime;
 
     /**
+     * 最后编辑时间
+     */
+    @TableField(value = "edit_time", fill = FieldFill.INSERT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date editTime;
+
+    /**
      * 查看数
      */
     @TableField("views")

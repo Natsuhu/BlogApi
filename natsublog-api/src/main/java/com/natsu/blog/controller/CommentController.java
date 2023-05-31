@@ -2,12 +2,13 @@ package com.natsu.blog.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.natsu.blog.constant.Constants;
+import com.natsu.blog.enums.PageEnum;
 import com.natsu.blog.model.dto.CommentDTO;
 import com.natsu.blog.model.dto.CommentQueryDTO;
 import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.entity.Comment;
-import com.natsu.blog.model.entity.SiteSetting;
+import com.natsu.blog.model.entity.Setting;
 import com.natsu.blog.service.ArticleService;
 import com.natsu.blog.service.CommentService;
 import com.natsu.blog.service.SiteSettingService;
@@ -69,7 +70,7 @@ public class CommentController {
     @GetMapping("/articleComments")
     public Result getArticleComments(CommentQueryDTO commentQueryDTO) {
         //参数校验
-        if (commentQueryDTO.getPage() == null || !commentQueryDTO.getPage().equals(Constants.PAGE_READ_ARTICLE)) {
+        if (commentQueryDTO.getPage() == null || !commentQueryDTO.getPage().equals(PageEnum.ARTICLE.getPageCode())) {
             return Result.fail("页面请求错误！");
         }
         if (commentQueryDTO.getArticleId() == null) {
@@ -94,7 +95,7 @@ public class CommentController {
     public Result getPageComments(CommentQueryDTO commentQueryDTO) {
         Integer pageType = commentQueryDTO.getPage();
         //参数校验
-        if (pageType == null || !pageType.equals(Constants.PAGE_FRIEND) && !pageType.equals(Constants.PAGE_ABOUT)) {
+        if (pageType == null || !pageType.equals(PageEnum.FRIEND.getPageCode()) && !pageType.equals(PageEnum.ABOUT.getPageCode())) {
             return Result.fail("页面请求错误！");
         }
         //检查页面是否可评论
@@ -120,14 +121,14 @@ public class CommentController {
             return Result.fail("评论内容超过长度！");
         }
         List<Integer> pages = new ArrayList<>(3);
-        pages.add(Constants.PAGE_READ_ARTICLE);
-        pages.add(Constants.PAGE_FRIEND);
-        pages.add(Constants.PAGE_ABOUT);
+        pages.add(PageEnum.ARTICLE.getPageCode());
+        pages.add(PageEnum.FRIEND.getPageCode());
+        pages.add(PageEnum.ABOUT.getPageCode());
         Integer pageType = commentDTO.getPage();
         if (pageType == null || !pages.contains(pageType)) {
             return Result.fail("页面请求错误！");
         }
-        if (pageType.equals(Constants.PAGE_READ_ARTICLE) && commentDTO.getArticleId() == null) {
+        if (pageType.equals(PageEnum.ARTICLE.getPageCode()) && commentDTO.getArticleId() == null) {
             return Result.fail("页面请求错误！");
         }
         if (commentDTO.getParentCommentId() == null || commentDTO.getOriginId() == null) {
@@ -152,24 +153,24 @@ public class CommentController {
      */
     private Boolean checkPageIsComment(Integer page, Long articleId) {
         switch (page) {
-            case 0:
+            case 1:
                 Article article = articleService.getById(articleId);
                 if (article == null) {
                     return false;
                 }
                 return article.getIsPublished().equals(Constants.PUBLISHED) && article.getIsCommentEnabled().equals(Constants.ALLOW_COMMENT);
-            case 1:
-                LambdaQueryWrapper<SiteSetting> friendPageQuery = new LambdaQueryWrapper<>();
-                friendPageQuery.eq(SiteSetting::getNameEn, "isComment");
-                friendPageQuery.eq(SiteSetting::getPage, Constants.PAGE_SETTING_FRIEND);
-                SiteSetting friendPageSetting = siteSettingService.getOne(friendPageQuery);
-                return !friendPageSetting.getContent().equals("false");
             case 2:
-                LambdaQueryWrapper<SiteSetting> aboutPageQuery = new LambdaQueryWrapper<>();
-                aboutPageQuery.eq(SiteSetting::getNameEn, "isComment");
-                aboutPageQuery.eq(SiteSetting::getPage, Constants.PAGE_SETTING_ABOUT);
-                SiteSetting aboutPageSetting = siteSettingService.getOne(aboutPageQuery);
-                return !aboutPageSetting.getContent().equals("false");
+                LambdaQueryWrapper<Setting> friendPageQuery = new LambdaQueryWrapper<>();
+                friendPageQuery.eq(Setting::getKey, "isComment");
+                friendPageQuery.eq(Setting::getPage, PageEnum.FRIEND.getPageCode());
+                Setting friendPageSetting = siteSettingService.getOne(friendPageQuery);
+                return !friendPageSetting.getValue().equals("false");
+            case 3:
+                LambdaQueryWrapper<Setting> aboutPageQuery = new LambdaQueryWrapper<>();
+                aboutPageQuery.eq(Setting::getKey, "isComment");
+                aboutPageQuery.eq(Setting::getPage, PageEnum.ABOUT.getPageCode());
+                Setting aboutPageSetting = siteSettingService.getOne(aboutPageQuery);
+                return !aboutPageSetting.getValue().equals("false");
             default:
                 return false;
         }
