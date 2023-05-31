@@ -5,7 +5,7 @@ import com.natsu.blog.enums.PageEnum;
 import com.natsu.blog.enums.VisitorBehavior;
 import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.service.FriendService;
-import com.natsu.blog.service.SiteSettingService;
+import com.natsu.blog.service.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,10 +23,10 @@ import java.util.Map;
 public class FriendsController {
 
     /**
-     * SiteSettingService
+     * SettingService
      */
     @Autowired
-    private SiteSettingService siteSettingService;
+    private SettingService settingService;
 
     /**
      * FriendService
@@ -50,7 +50,7 @@ public class FriendsController {
      */
     @GetMapping("/getSetting")
     public Result getFriendsPageSetting() {
-        Map<String, String> settings = siteSettingService.getPageSetting(PageEnum.FRIEND.getPageCode());
+        Map<String, String> settings = settingService.getPageSetting(PageEnum.FRIEND.getPageCode());
         return Result.success(settings);
     }
 }

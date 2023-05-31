@@ -9,7 +9,7 @@
         from
             article
         where
-            is_published = 1
+            is_published = true
         group by date_format(create_time, '%Y-%m')
         order by create_time desc
     </select>
@@ -20,7 +20,7 @@
         from
             article
         where
-            date_format(create_time, '%Y-%m') = #{date} and is_published = 1
+            date_format(create_time, '%Y-%m') = #{date} and is_published = true
         order by create_time desc
     </select>
 
@@ -30,7 +30,7 @@
         from
             article
         where
-            is_published = 1
+            is_published = true
         order by rand() limit ${count}
     </select>
 
@@ -58,7 +58,7 @@
             <if test="queryCond.keyword != null">
                 and a.title like concat('%',#{queryCond.keyword},'%')
             </if>
-            and a.is_published = 1
+            and a.is_published = true
         </where>
         group by a.id
         order by is_top desc , is_recommend desc , create_time desc

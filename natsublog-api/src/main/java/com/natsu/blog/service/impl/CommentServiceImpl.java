@@ -9,9 +9,14 @@ import com.natsu.blog.enums.PageEnum;
 import com.natsu.blog.mapper.CommentMapper;
 import com.natsu.blog.model.dto.CommentDTO;
 import com.natsu.blog.model.dto.CommentQueryDTO;
+import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.entity.Comment;
+import com.natsu.blog.model.entity.Setting;
+import com.natsu.blog.service.ArticleService;
 import com.natsu.blog.service.CommentService;
+import com.natsu.blog.service.SettingService;
 import com.natsu.blog.utils.QQInfoUtils;
+import com.natsu.blog.utils.SpringContextUtils;
 import com.natsu.blog.utils.tree.TreeNode;
 import com.natsu.blog.utils.tree.TreeUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -39,10 +44,17 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private CommentMapper commentMapper;
 
     @Autowired
+    private SettingService settingService;
+
+    @Autowired
     private QQInfoUtils qqInfoUtils;
 
     @Override
     public void saveComment(CommentDTO commentDTO) {
+        //验证目标页面能否评论
+        if (!checkPageIsComment(commentDTO.getPage(), commentDTO.getArticleId())) {
+            throw new RuntimeException("评论区已关闭");
+        }
         //组装实体
         commentDTO.setAvatar("");//TODO 设置随机头像，暂时搁置
         if (commentDTO.getParentCommentId().equals(Constants.TOP_COMMENT_PARENT_ID)) {
@@ -76,14 +88,15 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
     @Override
-    public IPage<Comment> getCommentsByQueryParams(CommentQueryDTO commentQueryDTO) {
-        IPage<Comment> page = new Page<>(commentQueryDTO.getPageNo(), commentQueryDTO.getPageSize());
-        return commentMapper.getComments(page, commentQueryDTO);
-    }
+    public Map<String, Object> getComments(CommentQueryDTO commentQueryDTO) {
+        //验证目标页面能否评论
+        if (!checkPageIsComment(commentQueryDTO.getPage(), commentQueryDTO.getArticleId())) {
+            throw new RuntimeException("评论区已关闭");
+        }
 
-    @Override
-    public Map<String, Object> buildCommentTree(CommentQueryDTO commentQueryDTO) {
-        IPage<Comment> pageResult = this.getCommentsByQueryParams(commentQueryDTO);
+        //分页获取root评论
+        IPage<Comment> page = new Page<>(commentQueryDTO.getPageNo(), commentQueryDTO.getPageSize());
+        IPage<Comment> pageResult = commentMapper.getRootComments(page, commentQueryDTO);
         List<Comment> rootComments = pageResult.getRecords();
 
         /*//根据rootComment查找childComment。forEach操作
@@ -101,7 +114,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         List<Comment> childComments = new ArrayList<>();
         if (!MapUtils.isEmpty(queryMap)) {
             LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
-            wrapper.eq(Comment::getIsPublished, commentQueryDTO.getIsPublished());
+            wrapper.eq(Comment::getIsPublished, Constants.PUBLISHED);
             wrapper.notIn(Comment::getId, queryMap.keySet());
             wrapper.in(Comment::getOriginId, queryMap.values());
             childComments = commentMapper.selectList(wrapper);
@@ -116,7 +129,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         List<TreeNode> comments = new ArrayList<>();
         Map<String, Object> result = new HashMap<>();
         List<TreeNode> treeNodes = buildCommentTreeNode(allComment);
-        treeNodes = TreeUtils.listToTree(treeNodes, node -> node.getPid().equals(commentQueryDTO.getParentCommentId()));
+        treeNodes = TreeUtils.listToTree(treeNodes, node -> node.getPid().equals(Constants.TOP_COMMENT_PARENT_ID));
 
         //遍历评论树，并转为两级评论树
         for (TreeNode treeNode : treeNodes) {
@@ -127,9 +140,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             }
         }
 
-        //获取当前页面(或文章)的评论数量和分页总页数
+        //获取当前页面的评论数量和分页总页数
         LambdaQueryWrapper<Comment> queryCount = new LambdaQueryWrapper<>();
-        queryCount.eq(Comment::getIsPublished, commentQueryDTO.getIsPublished());
+        queryCount.eq(Comment::getIsPublished, Constants.PUBLISHED);
         queryCount.eq(Comment::getPage, commentQueryDTO.getPage());
         if (commentQueryDTO.getPage().equals(PageEnum.ARTICLE.getPageCode())) {
             queryCount.eq(Comment::getArticleId, commentQueryDTO.getArticleId());
@@ -166,6 +179,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     /**
      * 转两级评论树
+     *
+     * @param treeNode 树节点
+     * @return TreeNode
      */
     private TreeNode conTwoLevelCommentTree(TreeNode treeNode) {
         List<TreeNode> childNodes = TreeUtils.getAllChildNodeByRootNode(treeNode);
@@ -177,5 +193,34 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
         treeNode.setChildren(ascTreeNodes);
         return treeNode;
+    }
+
+    /**
+     * 验证目标页面能否评论
+     */
+    private Boolean checkPageIsComment(Integer page, Long articleId) {
+        ArticleService articleService = SpringContextUtils.getBean(ArticleService.class);
+        switch (page) {
+            case 1:
+                Article article = articleService.getById(articleId);
+                if (article == null) {
+                    return false;
+                }
+                return article.getIsPublished().equals(Constants.PUBLISHED) && article.getIsCommentEnabled().equals(Constants.ALLOW_COMMENT);
+            case 2:
+                LambdaQueryWrapper<Setting> friendPageQuery = new LambdaQueryWrapper<>();
+                friendPageQuery.eq(Setting::getSettingKey, "isComment");
+                friendPageQuery.eq(Setting::getPage, PageEnum.FRIEND.getPageCode());
+                Setting friendPageSetting = settingService.getOne(friendPageQuery);
+                return !friendPageSetting.getSettingValue().equals("false");
+            case 3:
+                LambdaQueryWrapper<Setting> aboutPageQuery = new LambdaQueryWrapper<>();
+                aboutPageQuery.eq(Setting::getSettingKey, "isComment");
+                aboutPageQuery.eq(Setting::getPage, PageEnum.ABOUT.getPageCode());
+                Setting aboutPageSetting = settingService.getOne(aboutPageQuery);
+                return !aboutPageSetting.getSettingValue().equals("false");
+            default:
+                return false;
+        }
     }
 }

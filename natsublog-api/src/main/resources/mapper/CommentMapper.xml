@@ -3,7 +3,7 @@
 
 <mapper namespace="com.natsu.blog.mapper.CommentMapper">
 
-    <select id="getComments" resultType="com.natsu.blog.model.entity.Comment" >
+    <select id="getRootComments" resultType="com.natsu.blog.model.entity.Comment" >
         select
             id, nickname, email, content, avatar, create_time, ip, is_published, website, qq,
             is_admin_comment, page, reply_nickname, article_id, origin_id, parent_comment_id
@@ -16,15 +16,8 @@
             <if test="queryCond.articleId != null">
                 and article_id = ${queryCond.articleId}
             </if>
-            <if test="queryCond.isPublished != null">
-                and is_published = ${queryCond.isPublished}
-            </if>
-            <if test="queryCond.parentCommentId != null">
-                and parent_comment_id = ${queryCond.parentCommentId}
-            </if>
-            <if test="queryCond.keyword != null">
-                and content like CONCAT('%',#{queryCond.keyword},'%')
-            </if>
+            and parent_comment_id = -1
+            and is_published = true
         </where>
         order by create_time desc
     </select>

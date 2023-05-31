@@ -7,9 +7,9 @@
         select
             id, name, color, create_time, update_time
         from
-            tag
+            tag a
         where
-            id in ( select tag_id from article_tag where article_id = #{articleId} )
+            exists( select 1 from article_tag b where article_id = #{articleId} and a.id = b.tag_id)
     </select>
 
     <select id="getTagTable" resultType="com.natsu.blog.model.dto.TagDTO">

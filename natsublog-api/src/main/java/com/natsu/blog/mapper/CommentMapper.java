@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CommentMapper extends BaseMapper<Comment> {
 
-    IPage<Comment> getComments(IPage<Comment> page, @Param("queryCond") CommentQueryDTO queryCond);
+    IPage<Comment> getRootComments(IPage<Comment> page, @Param("queryCond") CommentQueryDTO queryCond);
 
 }

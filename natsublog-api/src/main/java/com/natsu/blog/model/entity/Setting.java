@@ -31,14 +31,14 @@ public class Setting implements Serializable {
     /**
      * 设置key
      */
-    @TableField("key")
-    private String key;
+    @TableField("setting_key")
+    private String settingKey;
 
     /**
      * 设置value
      */
-    @TableField("value")
-    private String value;
+    @TableField("setting_value")
+    private String settingValue;
 
     /**
      * 备注

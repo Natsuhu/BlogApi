@@ -165,13 +165,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Transactional
     @Override
     public void updateArticle(ArticleDTO articleDTO) {
-        //先更新文章
-        articleDTO.setUpdateTime(new Date());
-        //判断文章内容有无变化，更新编辑时间
+        //若文章内容变化，则更新编辑时间
         Article dbArticle = articleMapper.selectById(articleDTO);
         if (!MD5Utils.checkContentChange(dbArticle.getContent(), articleDTO.getContent())) {
             articleDTO.setEditTime(new Date());
         }
+        articleDTO.setUpdateTime(new Date());
         articleMapper.updateById(articleDTO);
         //标签对象为null不更新标签
         List<Long> updateTagIds = articleDTO.getTagIds();

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.natsu.blog.mapper.SettingMapper;
 import com.natsu.blog.model.entity.Setting;
-import com.natsu.blog.service.SiteSettingService;
+import com.natsu.blog.service.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> implements SiteSettingService {
+public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> implements SettingService {
 
     @Autowired
     private SettingMapper settingMapper;
@@ -24,7 +24,7 @@ public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> impl
         List<Setting> settings = settingMapper.selectList(wrapper);
         Map<String, String> resultMap = new HashMap<>(settings.size());
         for (Setting setting : settings) {
-            resultMap.put(setting.getKey(), setting.getValue());
+            resultMap.put(setting.getSettingKey(), setting.getSettingValue());
         }
         return resultMap;
     }

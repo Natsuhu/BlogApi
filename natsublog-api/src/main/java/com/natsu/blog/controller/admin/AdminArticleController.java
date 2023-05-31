@@ -116,7 +116,7 @@ public class AdminArticleController {
 
     private Result checkParam(ArticleDTO articleDTO) {
         if (StringUtils.isEmpty(articleDTO.getTitle())) {
-            return Result.fail("参数错误！文章必须包含标题和正文内容");
+            return Result.fail("参数错误！文章必须包含标题");
         }
         if (StringUtils.isEmpty(articleDTO.getContent())) {
             return Result.fail("参数错误！文章必须包含正文内容");
@@ -128,7 +128,7 @@ public class AdminArticleController {
             return Result.fail("参数错误！文章必须选择是否推荐");
         }
         if (articleDTO.getIsAppreciation() == null) {
-            return Result.fail("参数错误！文章必须选择是否开启赞赏和是否开启评论");
+            return Result.fail("参数错误！文章必须选择是否开启赞赏");
         }
         if (articleDTO.getIsCommentEnabled() == null) {
             return Result.fail("参数错误！文章必须选择是否开启评论");

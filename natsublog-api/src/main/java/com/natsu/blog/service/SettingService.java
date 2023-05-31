@@ -5,6 +5,8 @@ import com.natsu.blog.model.entity.Setting;
 
 import java.util.Map;
 
-public interface SiteSettingService extends IService<Setting> {
+public interface SettingService extends IService<Setting> {
+
     Map<String, String> getPageSetting(Integer page);
+
 }
