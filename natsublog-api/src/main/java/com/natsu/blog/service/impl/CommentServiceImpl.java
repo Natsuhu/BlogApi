@@ -56,18 +56,26 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             throw new RuntimeException("评论区已关闭");
         }
         //组装实体
-        commentDTO.setAvatar("");//TODO 设置随机头像，暂时搁置
         if (commentDTO.getParentCommentId().equals(Constants.TOP_COMMENT_PARENT_ID)) {
-            //TODO 设置数字UUID（伪），后面应该抽象出来改为工具类
-            String uuid = UUID.randomUUID().toString().replace("-", "");
-            String unmUUid = new BigInteger(uuid, 16).toString();
+            //设置8位的数字ID
             int begin = RandomUtils.nextInt(1, 9);
             int end = begin + 8;
+            String uuid = UUID.randomUUID().toString().replace("-", "");
+            String unmUUid = new BigInteger(uuid, 16).toString().replace("0", String.valueOf(begin));
             Long uuidL = Long.parseLong(unmUUid.substring(begin, end));
             commentDTO.setOriginId(uuidL);
+        } else {
+            //如果是回复评论，则检查上级评论状态，并设置originId
+            Comment parentComment = commentMapper.selectById(commentDTO.getParentCommentId());
+            if (parentComment == null || !parentComment.getIsPublished()) {
+                throw new RuntimeException("目标评论无法回复");
+            }
+            commentDTO.setReplyNickname(parentComment.getNickname());
+            commentDTO.setOriginId(parentComment.getOriginId());
         }
+        //填了QQ则直接使用QQ的头像和昵称
         String qqNum = commentDTO.getQq();
-        if (!StringUtils.isEmpty(qqNum)) {
+        if (StringUtils.isNotBlank(qqNum)) {
             if (!qqInfoUtils.isQQNumber(qqNum)) {
                 throw new RuntimeException("QQ号格式错误");
             }
@@ -75,11 +83,16 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 commentDTO.setAvatar(qqInfoUtils.getQQAvatarUrl(qqNum));
                 commentDTO.setNickname(qqInfoUtils.getQQNickname(qqNum));
             } catch (Exception e) {
-                log.error("保存评论失败，{}", e.getMessage());
+                log.error("获取QQ信息昵称和头像失败，{}", e.getMessage());
                 throw new RuntimeException("获取QQ信息昵称和头像失败");
             }
-        } else if (StringUtils.isEmpty(commentDTO.getNickname()) || commentDTO.getNickname().length() > 10) {
-            throw new RuntimeException("昵称格式错误");
+        } else {
+            //没填QQ则检查昵称格式，并设置随机头像
+            if (StringUtils.isBlank(commentDTO.getNickname()) || commentDTO.getNickname().length() > 10) {
+                throw new RuntimeException("昵称格式错误");
+            }
+            //TODO 设置随机avatar，目前先空着
+            commentDTO.setAvatar("");
         }
         commentDTO.setIsPublished(Constants.PUBLISHED);
         commentDTO.setIsAdminComment(false);
@@ -98,16 +111,6 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         IPage<Comment> page = new Page<>(commentQueryDTO.getPageNo(), commentQueryDTO.getPageSize());
         IPage<Comment> pageResult = commentMapper.getRootComments(page, commentQueryDTO);
         List<Comment> rootComments = pageResult.getRecords();
-
-        /*//根据rootComment查找childComment。forEach操作
-        for (Comment comment : rootComments) {
-            LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
-            wrapper.eq(Comment::getIsPublished , commentQueryDTO.getIsPublished());
-            wrapper.eq(Comment::getOriginId , comment.getOriginId());
-            wrapper.ne(Comment::getId , comment.getId());
-            wrapper.orderByAsc(Comment::getCreateTime);
-            childComments.addAll(commentMapper.selectList(wrapper));
-        }*/
 
         //根据rootComment查找childComment。Stream操作。
         Map<Long, Long> queryMap = rootComments.stream().collect(Collectors.toMap(Comment::getId, Comment::getOriginId));

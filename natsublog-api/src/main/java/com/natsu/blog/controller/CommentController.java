@@ -6,9 +6,7 @@ import com.natsu.blog.model.dto.CommentDTO;
 import com.natsu.blog.model.dto.CommentQueryDTO;
 import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.model.entity.Comment;
-import com.natsu.blog.service.ArticleService;
 import com.natsu.blog.service.CommentService;
-import com.natsu.blog.service.SettingService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,18 +35,6 @@ public class CommentController {
     private CommentService commentService;
 
     /**
-     * ArticleService
-     */
-    @Autowired
-    private ArticleService articleService;
-
-    /**
-     * SiteSettingService
-     */
-    @Autowired
-    private SettingService settingService;
-
-    /**
      * 获取评论数量
      */
     @GetMapping("/count")
@@ -75,9 +61,9 @@ public class CommentController {
     public Result saveComment(@RequestBody CommentDTO commentDTO) {
         //参数校验
         if (StringUtils.isBlank(commentDTO.getContent()) || commentDTO.getContent().length() > 250) {
-            return Result.fail("评论内容超过长度！");
+            return Result.fail("评论内容超长！");
         }
-        if (commentDTO.getParentCommentId() == null || commentDTO.getOriginId() == null) {
+        if (commentDTO.getParentCommentId() == null) {
             return Result.fail("参数错误!");
         }
         //开始保存
