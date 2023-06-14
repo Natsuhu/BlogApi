@@ -9,6 +9,7 @@ import com.natsu.blog.model.dto.MomentDTO;
 import com.natsu.blog.model.dto.MomentQueryDTO;
 import com.natsu.blog.model.entity.Moment;
 import com.natsu.blog.service.MomentService;
+import com.natsu.blog.utils.MD5Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +43,11 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper, Moment> impleme
         if (momentDTO.getLikes() == null) {
             momentDTO.setLikes(Constants.COM_NUM_ZERO.longValue());
         }
-        //TODO 1.应该新增字段“发布时间”。2.不应该叫author,字段名改为nickName比较合适。3.头像和名称前端未设置时，应该从数据库的setting表读取
-        if (momentDTO.getCreateTime() == null) {
-            momentDTO.setCreateTime(new Date());
+        if (momentDTO.getPublishTime() == null) {
+            momentDTO.setPublishTime(new Date());
+            momentDTO.setEditTime(new Date());
+        } else {
+            momentDTO.setEditTime(momentDTO.getPublishTime());
         }
         if (StringUtils.isBlank(momentDTO.getAvatar())) {
             momentDTO.setAvatar("/avatar.jpg");
@@ -52,20 +55,23 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper, Moment> impleme
         if (StringUtils.isBlank(momentDTO.getAuthor())) {
             momentDTO.setAuthor(Constants.DEFAULT_AUTHOR);
         }
-        momentDTO.setUpdateTime(new Date());
         //保存动态
         momentMapper.insert(momentDTO);
     }
 
     @Override
     public void updateMoment(MomentDTO momentDTO) {
-        momentDTO.setUpdateTime(new Date());
+        //验证动态内容改变
+        Moment dbMoment = momentMapper.selectById(momentDTO);
+        if (!MD5Utils.checkContentChange(dbMoment.getContent(), momentDTO.getContent())) {
+            momentDTO.setEditTime(new Date());
+        }
+        //开始更新
         momentMapper.updateById(momentDTO);
     }
 
     @Override
     public void deleteMoment(MomentDTO momentDTO) {
-        //TODO 需要删除对应评论
         momentMapper.deleteById(momentDTO);
     }
 

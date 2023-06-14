@@ -143,6 +143,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public void saveArticle(ArticleDTO articleDTO) {
         //组装实体
         articleDTO.setId(null);
+        if (articleDTO.getEditTime() == null) {
+            articleDTO.setEditTime(new Date());
+        }
         if (articleDTO.getViews() == null) {
             articleDTO.setViews(Constants.COM_NUM_ZERO);
         }
@@ -170,7 +173,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         if (!MD5Utils.checkContentChange(dbArticle.getContent(), articleDTO.getContent())) {
             articleDTO.setEditTime(new Date());
         }
-        articleDTO.setUpdateTime(new Date());
         articleMapper.updateById(articleDTO);
         //标签对象为null不更新标签
         List<Long> updateTagIds = articleDTO.getTagIds();

@@ -64,9 +64,8 @@ public class AdminMomentController {
     @PostMapping("/updateMoment")
     public Result updateMoment(@RequestBody MomentDTO momentDTO) {
         //参数校验
-        Result result = checkParam(momentDTO);
-        if (result != null) {
-            return result;
+        if (momentDTO.getId() == null) {
+            return Result.fail("更新动态失败，ID必填");
         }
         //开始更新
         try {

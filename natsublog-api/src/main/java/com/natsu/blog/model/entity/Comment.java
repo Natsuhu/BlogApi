@@ -59,7 +59,7 @@ public class Comment implements Serializable {
     /**
      * 更新时间
      */
-    @TableField(value = "update_time", fill = FieldFill.INSERT)
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 

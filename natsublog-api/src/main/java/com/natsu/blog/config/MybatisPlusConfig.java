@@ -42,10 +42,11 @@ public class MybatisPlusConfig implements MetaObjectHandler {
 
 
     /**
-     * 自动注入update_time字段，不要开启此功能，会导致更新文章阅读数量时一并更新时间
+     * 自动注入update_time字段
      */
     @Override
     public void updateFill(MetaObject metaObject) {
-
+        Date date = new Date();
+        this.setFieldValByName("updateTime", date, metaObject);
     }
 }

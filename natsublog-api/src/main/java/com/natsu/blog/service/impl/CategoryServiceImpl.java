@@ -16,8 +16,6 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-
 @Service
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService {
 
@@ -29,13 +27,11 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         //校验名称重复
         LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(Category::getName, categoryDTO.getName().trim());
-        if (!ObjectUtils.isEmpty(categoryMapper.selectOne(queryWrapper))) {
+        if (ObjectUtils.isNotEmpty(categoryMapper.selectOne(queryWrapper))) {
             throw new RuntimeException("此分类已存在");
         }
-        //组装实体
-        categoryDTO.setCreateTime(new Date());
-        categoryDTO.setUpdateTime(new Date());
         //开始保存
+        categoryDTO.setName(categoryDTO.getName().trim());
         categoryMapper.insert(categoryDTO);
     }
 
@@ -48,8 +44,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         if (!ObjectUtils.isEmpty(categoryMapper.selectOne(queryWrapper))) {
             throw new RuntimeException("此分类已存在");
         }
-        //组装实体
-        categoryDTO.setUpdateTime(new Date());
         //开始更新
         categoryMapper.updateById(categoryDTO);
     }
