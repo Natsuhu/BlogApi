@@ -61,7 +61,7 @@ public class Friend {
      * 审核
      */
     @TableField(value = "is_audit")
-    private Boolean is_audit;
+    private Boolean isAudit;
 
     /**
      * 点击次数
@@ -75,4 +75,11 @@ public class Friend {
     @TableField(value = "create_time")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    @TableField(value = "update_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date updateTime;
 }

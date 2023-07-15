@@ -7,6 +7,6 @@ import com.natsu.blog.service.ArticleTagService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ArticleTagRefServiceImpl extends ServiceImpl<ArticleTagMapper, ArticleTag> implements ArticleTagService {
+public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, ArticleTag> implements ArticleTagService {
 
 }
