@@ -26,7 +26,7 @@
 
     <select id="getRandomArticles" parameterType="int" resultType="com.natsu.blog.model.dto.ArticleDTO">
         select
-            id, title, thumbnail
+            id, title, thumbnail, create_time
         from
             article
         where
