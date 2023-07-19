@@ -11,7 +11,7 @@ public class MD5Utils {
      * @param contentB 文本B
      * @return Boolean
      */
-    public static Boolean checkContentChange(String contentA, String contentB) {
+    public static Boolean compareString(String contentA, String contentB) {
         String aSha256 = DigestUtil.sha256Hex(contentA);
         String bSha256 = DigestUtil.sha256Hex(contentB);
         return aSha256.equals(bSha256);

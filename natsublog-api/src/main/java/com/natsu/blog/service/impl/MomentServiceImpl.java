@@ -63,7 +63,7 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper, Moment> impleme
     public void updateMoment(MomentDTO momentDTO) {
         //验证动态内容改变
         Moment dbMoment = momentMapper.selectById(momentDTO);
-        if (!MD5Utils.checkContentChange(dbMoment.getContent(), momentDTO.getContent())) {
+        if (!MD5Utils.compareString(dbMoment.getContent(), momentDTO.getContent())) {
             momentDTO.setEditTime(new Date());
         }
         //开始更新

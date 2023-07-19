@@ -170,7 +170,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public void updateArticle(ArticleDTO articleDTO) {
         //若文章内容变化，则更新编辑时间
         Article dbArticle = articleMapper.selectById(articleDTO);
-        if (!MD5Utils.checkContentChange(dbArticle.getContent(), articleDTO.getContent())) {
+        if (!MD5Utils.compareString(dbArticle.getContent(), articleDTO.getContent())) {
             articleDTO.setEditTime(new Date());
         }
         articleMapper.updateById(articleDTO);
