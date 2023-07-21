@@ -69,4 +69,6 @@ public class Constants {
      * 标签默认颜色
      */
     public static final String TAG_DEFAULT_COLOR = "#000000";
+
+    public static final String FILE_NAME_QQ_AVATAR = "qq_avatar";
 }

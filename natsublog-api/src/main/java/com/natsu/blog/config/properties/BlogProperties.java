@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashMap;
+
 /**
  * 博客配置
  *
@@ -29,5 +31,10 @@ public class BlogProperties {
      * 博客前端前台URL
      */
     private String front;
+
+    /**
+     * 博客文件管理
+     */
+    private HashMap<String, String> file;
 
 }

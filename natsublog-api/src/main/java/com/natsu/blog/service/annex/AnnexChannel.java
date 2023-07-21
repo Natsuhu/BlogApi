@@ -40,6 +40,9 @@ public interface AnnexChannel {
 
     /**
      * 存储文件
+     *
+     * @param file 文件对象
+     * @param annexDTO 存储信息
      */
     void store(File file, AnnexDTO annexDTO);
 
@@ -56,6 +59,6 @@ public interface AnnexChannel {
      *
      * @param annexDTO 额外信息
      */
-    void remove(AnnexDTO annexDTO);
+    Boolean remove(AnnexDTO annexDTO);
 
 }

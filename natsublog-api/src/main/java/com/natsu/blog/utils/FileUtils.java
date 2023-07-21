@@ -1,5 +1,6 @@
 package com.natsu.blog.utils;
 
+import cn.hutool.core.io.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -30,39 +31,41 @@ public class FileUtils {
 
     /**
      * 流转文件对象
-     * @param in 输入流
+     *
+     * @param in       输入流
      * @param fileName 文件名
-     * @param path 目标路径
+     * @param path     目标路径
      * @return 文件对象
      */
-    public static File streamToFile(InputStream in, String fileName, String path) {
-        OutputStream os = null;
-
-        try {
-            //1KB缓冲区
-            byte[] buffer = new byte[1024];
-            int len = 0;
-
-            //建立缓存文件夹
-            File tempContent = new File(path);
-            if (!tempContent.exists() || !tempContent.isDirectory()) {
-                tempContent.mkdirs();
-            }
-
-            //读取文件到缓存文件夹
-            os = new FileOutputStream(path + File.separator +fileName);
-            while ((len = in.read(buffer)) != -1) {
-                os.write(buffer, 0, len);
-            }
-
-            //关流
-            in.close();
-            os.close();
-            return new File(path + File.separator + fileName);
-        } catch (Exception e) {
-            log.error("流转文件夹出错，{}", e.getMessage());
-            return null;
+    public static File streamToFile(InputStream in, String fileName, String path) throws Exception {
+        //1KB缓冲区
+        byte[] buffer = new byte[1024];
+        int len = 0;
+        //建立文件夹
+        File tempContent = new File(path);
+        if (!tempContent.exists() || !tempContent.isDirectory()) {
+            tempContent.mkdirs();
         }
+        //读取文件到文件夹
+        OutputStream os = new FileOutputStream(path + File.separator + fileName);
+        while ((len = in.read(buffer)) != -1) {
+            os.write(buffer, 0, len);
+        }
+        //关流
+        in.close();
+        os.close();
+        return new File(path + File.separator + fileName);
+    }
+
+    /**
+     * 删除文件或文件夹
+     * 直接调用hutool
+     *
+     * @param path 文件路径或文件夹路径
+     * @return 删除成功或失败
+     */
+    public static boolean moveFile(String path) {
+        return FileUtil.del(path);
     }
 
 }

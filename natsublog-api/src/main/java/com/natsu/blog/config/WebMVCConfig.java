@@ -1,13 +1,11 @@
 package com.natsu.blog.config;
 
-import com.natsu.blog.config.properties.UploadProperties;
 import com.natsu.blog.handler.LoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -25,12 +23,6 @@ public class WebMVCConfig implements WebMvcConfigurer {
      */
     @Autowired
     private LoginInterceptor loginInterceptor;
-
-    /**
-     * 文件上传
-     */
-    @Autowired
-    private UploadProperties uploadProperties;
 
     /**
      * 跨域配置，因为前后端端口不同，需要允许前端服务器访问后端端口
@@ -52,9 +44,9 @@ public class WebMVCConfig implements WebMvcConfigurer {
     /**
      * 静态资源映射
      */
-    //TODO 测试用，生产环境统一使用Nginx代理静态资源
-    @Override
+    //TODO 测试用，生产环境统一使用Nginx代理静态资源。2023/7/21 为测试博客文件管理框架，现关闭静态资源映射
+/*    @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(uploadProperties.getAccessPath()).addResourceLocations(uploadProperties.getResourcesLocations());
-    }
+    }*/
 }

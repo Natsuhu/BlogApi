@@ -6,12 +6,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.natsu.blog.constant.Constants;
 import com.natsu.blog.enums.PageEnum;
+import com.natsu.blog.enums.StorageType;
 import com.natsu.blog.mapper.CommentMapper;
 import com.natsu.blog.model.dto.CommentDTO;
 import com.natsu.blog.model.dto.CommentQueryDTO;
 import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.entity.Comment;
 import com.natsu.blog.model.entity.Setting;
+import com.natsu.blog.service.AnnexService;
 import com.natsu.blog.service.ArticleService;
 import com.natsu.blog.service.CommentService;
 import com.natsu.blog.service.SettingService;
@@ -47,7 +49,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private SettingService settingService;
 
     @Autowired
-    private QQInfoUtils qqInfoUtils;
+    private AnnexService annexService;
 
     @Override
     public void saveComment(CommentDTO commentDTO) {
@@ -76,16 +78,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         //填了QQ则直接使用QQ的头像和昵称
         String qqNum = commentDTO.getQq();
         if (StringUtils.isNotBlank(qqNum)) {
-            if (!qqInfoUtils.isQQNumber(qqNum)) {
-                throw new RuntimeException("QQ号格式错误");
-            }
-            try {
-                commentDTO.setAvatar(qqInfoUtils.getQQAvatarUrl(qqNum));
-                commentDTO.setNickname(qqInfoUtils.getQQNickname(qqNum));
-            } catch (Exception e) {
-                log.error("获取QQ信息昵称和头像失败，{}", e.getMessage());
-                throw new RuntimeException("获取QQ信息昵称和头像失败");
-            }
+            String annexId = annexService.saveQQAvatar(qqNum, StorageType.LOCAL.getType());
+            commentDTO.setNickname(QQInfoUtils.getQQNickname(qqNum));
+            commentDTO.setAvatar(annexId);
         } else {
             //没填QQ则检查昵称格式，并设置随机头像
             if (StringUtils.isBlank(commentDTO.getNickname()) || commentDTO.getNickname().length() > 10) {

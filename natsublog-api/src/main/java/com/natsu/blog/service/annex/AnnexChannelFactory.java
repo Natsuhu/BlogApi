@@ -1,6 +1,5 @@
 package com.natsu.blog.service.annex;
 
-import com.natsu.blog.enums.StorageType;
 import com.natsu.blog.utils.SpringContextUtils;
 import org.springframework.stereotype.Component;
 
@@ -20,11 +19,11 @@ public class AnnexChannelFactory {
      * @param storageType 处理器类型
      * @return 处理器实例
      */
-    public AnnexChannel getChannel(StorageType storageType) {
+    public AnnexChannel getChannel(Integer storageType) {
         switch (storageType) {
-            case LOCAL:
+            case 1:
                 return SpringContextUtils.getBean(LocalChannel.class);
-            case MINIO:
+            case 2:
                 return null;
         }
         throw new RuntimeException("不支持的存储方式");
