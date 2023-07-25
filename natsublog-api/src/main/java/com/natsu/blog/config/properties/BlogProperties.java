@@ -35,6 +35,6 @@ public class BlogProperties {
     /**
      * 博客文件管理
      */
-    private HashMap<String, String> file;
+    private HashMap<String, String> annex;
 
 }

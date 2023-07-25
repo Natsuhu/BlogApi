@@ -35,6 +35,9 @@ public class Annex implements Serializable {
     @TableField("file_type")
     private String fileType;
 
+    @TableField("is_published")
+    private Boolean isPublished;
+
     @TableField("storage_type")
     private Integer storageType;
 
