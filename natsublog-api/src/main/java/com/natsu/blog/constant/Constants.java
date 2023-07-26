@@ -91,7 +91,7 @@ public class Constants {
     /**
      * CONTENT_DISPOSITION - 附件（在浏览器下载）
      */
-    public static final String CONTENT_DISPOSITION_ATTACHMENT = "attachment";
+    public static final String CONTENT_DISPOSITION_ANNEX = "attachment";
 
     /**
      * CONTENT_DISPOSITION - 内嵌（在浏览器内嵌显示）

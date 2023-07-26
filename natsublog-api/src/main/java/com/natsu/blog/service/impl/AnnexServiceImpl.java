@@ -3,17 +3,20 @@ package com.natsu.blog.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.natsu.blog.config.properties.BlogProperties;
 import com.natsu.blog.constant.Constants;
+import com.natsu.blog.enums.StorageType;
 import com.natsu.blog.mapper.AnnexMapper;
 import com.natsu.blog.model.dto.AnnexDTO;
 import com.natsu.blog.model.entity.Annex;
 import com.natsu.blog.service.AnnexService;
 import com.natsu.blog.service.annex.AnnexStorageService;
+import com.natsu.blog.utils.FileUtils;
 import com.natsu.blog.utils.QQInfoUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.InputStream;
@@ -39,9 +42,28 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
     @Autowired
     private BlogProperties blogProperties;
 
+    @Transactional
     @Override
-    public String saveAnnex() {
-        return null;
+    public String upload(MultipartFile multipartFile, Boolean isPublished) {
+        //获取文件信息
+        String reflectId = UUID.randomUUID().toString().replace("-", "");
+        String fileName = multipartFile.getOriginalFilename();
+        //组装参数
+        AnnexDTO annexDTO = new AnnexDTO();
+        annexDTO.setReflectId(reflectId);
+        annexDTO.setName(fileName);
+        annexDTO.setSuffix(FileUtils.getFileSuffix(fileName));
+        annexDTO.setSize(multipartFile.getSize());
+        annexDTO.setIsPublished(isPublished);
+        annexDTO.setPath(blogProperties.getAnnex().get(Constants.PATH) + File.separator + reflectId);
+        annexDTO.setParentPath(blogProperties.getAnnex().get(Constants.PATH));
+        //TODO 额外信息--后续需针对媒体文件进行解析。存储方式--后续准备接入minio，目前默认磁盘存储
+        annexDTO.setExtra("{\"null\":\"null\"}");
+        annexDTO.setStorageType(StorageType.LOCAL.getType());
+        //开始保存
+        annexStorageService.store(multipartFile, annexDTO);
+        annexMapper.insert(annexDTO);
+        return annexDTO.getId();
     }
 
     @Transactional
@@ -57,6 +79,7 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
             annex.setName(Constants.FILE_NAME_QQ_AVATAR + "." + qqAvatar.getImgType());
             annex.setSuffix(qqAvatar.getImgType());
             annex.setSize(qqAvatar.getImgSize());
+            annex.setIsPublished(Constants.PUBLISHED);
             annex.setStorageType(storageType);
             annex.setPath(blogProperties.getAnnex().get(Constants.PATH) + File.separator + reflectId);
             annex.setExtra(qq);

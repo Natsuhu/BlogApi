@@ -11,6 +11,7 @@ import com.natsu.blog.model.dto.ArticleQueryDTO;
 import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.entity.ArticleTag;
 import com.natsu.blog.model.entity.Tag;
+import com.natsu.blog.service.AnnexService;
 import com.natsu.blog.service.ArticleService;
 import com.natsu.blog.service.ArticleTagService;
 import com.natsu.blog.service.CategoryService;
@@ -50,6 +51,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Autowired
     private TagService tagService;
+
+    @Autowired
+    private AnnexService annexService;
 
     @Autowired
     private AsyncTaskService asyncTaskService;
@@ -100,7 +104,11 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public List<ArticleDTO> getRandomArticles(Integer count) {
-        return articleMapper.getRandomArticles(count);
+        List<ArticleDTO> randomArticles = articleMapper.getRandomArticles(count);
+        for (ArticleDTO articleDTO : randomArticles) {
+            articleDTO.setThumbnail(annexService.getAnnexAccessAddress(articleDTO.getThumbnail()));
+        }
+        return randomArticles;
     }
 
     @Override
@@ -109,8 +117,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         IPage<ArticleDTO> page = new Page<>(queryCond.getPageNo(), queryCond.getPageSize());
         IPage<ArticleDTO> articles = articleMapper.getArticles(page, queryCond);
         List<ArticleDTO> records = articles.getRecords();
-        //补充标签
+        //补充标签和缩略图
         for (ArticleDTO article : records) {
+            article.setThumbnail(annexService.getAnnexAccessAddress(article.getThumbnail()));
             article.setTags(tagService.getTagsByArticleId(article.getId()));
         }
         //封装结果

@@ -32,10 +32,10 @@ public class AnnexController {
 
     @GetMapping("/resource/{annexId}")
     public void getResource(@PathVariable("annexId") String annexId, HttpServletResponse response) {
-        try {
-            OutputStream os = null;
-            BufferedInputStream bis = null;
+        OutputStream os = null;
+        BufferedInputStream bis = null;
 
+        try {
             //获取文件信息
             HashMap<String, Object> result = annexService.download(annexId);
             String fileName = result.get("fileName").toString();
@@ -55,7 +55,7 @@ public class AnnexController {
             //文件名 - 判定是否支持在线展示
             response.addHeader("Content-Disposition", getContentDisposition(fileName) + ";filename=" +
                     new String(fileName.getBytes(StandardCharsets.UTF_8), "ISO8859-1"));
-            // 流处理
+            //流处理
             bis = new BufferedInputStream(is, Constants.FILE_BUFFER_SIZE);
             os = response.getOutputStream();
 
@@ -64,10 +64,17 @@ public class AnnexController {
             while ((len = bis.read(buffer)) != -1) {
                 os.write(buffer, 0, len);
             }
-            bis.close();
-            os.close();
         } catch (Exception e) {
             log.error("文件下载失败：{}", e.getMessage());
+        } finally {
+            try {
+                if (os != null) {
+                    os.close();
+                }
+                if (bis != null) {
+                    bis.close();
+                }
+            } catch (Exception ignored) {}
         }
     }
 
@@ -92,7 +99,7 @@ public class AnnexController {
     }
 
     /**
-     * AttachmentOrInLine
+     * 6
      *
      * @param filename 文件名
      * @return 返回结果
@@ -106,10 +113,10 @@ public class AnnexController {
             } else if (Arrays.stream(Constants.FILE_EXTENSION_IMG).anyMatch(s -> s.equalsIgnoreCase(suffix))) {
                 return Constants.CONTENT_DISPOSITION_INLINE;
             } else {
-                return Constants.CONTENT_DISPOSITION_ATTACHMENT;
+                return Constants.CONTENT_DISPOSITION_ANNEX;
             }
         } else {
-            return Constants.CONTENT_DISPOSITION_ATTACHMENT;
+            return Constants.CONTENT_DISPOSITION_ANNEX;
         }
     }
 
