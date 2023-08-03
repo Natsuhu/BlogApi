@@ -17,7 +17,7 @@ import com.natsu.blog.service.ArticleTagService;
 import com.natsu.blog.service.CategoryService;
 import com.natsu.blog.service.TagService;
 import com.natsu.blog.service.async.AsyncTaskService;
-import com.natsu.blog.utils.MD5Utils;
+import com.natsu.blog.utils.CommonUtils;
 import com.natsu.blog.utils.markdown.MarkdownUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -179,7 +179,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public void updateArticle(ArticleDTO articleDTO) {
         //若文章内容变化，则更新编辑时间
         Article dbArticle = articleMapper.selectById(articleDTO);
-        if (!MD5Utils.compareString(dbArticle.getContent(), articleDTO.getContent())) {
+        if (!CommonUtils.compareString(dbArticle.getContent(), articleDTO.getContent())) {
             articleDTO.setEditTime(new Date());
         }
         articleMapper.updateById(articleDTO);

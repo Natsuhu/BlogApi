@@ -9,7 +9,7 @@ import com.natsu.blog.model.dto.MomentDTO;
 import com.natsu.blog.model.dto.MomentQueryDTO;
 import com.natsu.blog.model.entity.Moment;
 import com.natsu.blog.service.MomentService;
-import com.natsu.blog.utils.MD5Utils;
+import com.natsu.blog.utils.CommonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +63,7 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper, Moment> impleme
     public void updateMoment(MomentDTO momentDTO) {
         //验证动态内容改变
         Moment dbMoment = momentMapper.selectById(momentDTO);
-        if (!MD5Utils.compareString(dbMoment.getContent(), momentDTO.getContent())) {
+        if (!CommonUtils.compareString(dbMoment.getContent(), momentDTO.getContent())) {
             momentDTO.setEditTime(new Date());
         }
         //开始更新
