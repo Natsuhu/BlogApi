@@ -8,5 +8,14 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class CommentDTO extends Comment {
 
+    /**
+     * 页面名称
+     */
+    private String pageName;
+
+    /**
+     * 城市名称
+     */
+    private String city;
 
 }

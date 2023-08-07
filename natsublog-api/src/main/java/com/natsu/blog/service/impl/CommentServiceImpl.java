@@ -17,6 +17,7 @@ import com.natsu.blog.service.AnnexService;
 import com.natsu.blog.service.ArticleService;
 import com.natsu.blog.service.CommentService;
 import com.natsu.blog.service.SettingService;
+import com.natsu.blog.utils.IPUtils;
 import com.natsu.blog.utils.QQInfoUtils;
 import com.natsu.blog.utils.SpringContextUtils;
 import com.natsu.blog.utils.tree.TreeNode;
@@ -27,6 +28,7 @@ import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -154,6 +156,65 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         result.put("comments", comments);
         return result;
 
+    }
+
+    /**
+     * 获取评论表格
+     *
+     * @param commentQueryDTO 查询DTO
+     * @return 分页数据
+     */
+    @Override
+    public IPage<CommentDTO> getCommentTable(CommentQueryDTO commentQueryDTO) {
+        //查询
+        IPage<CommentDTO> page = new Page<>(commentQueryDTO.getPageNo(), commentQueryDTO.getPageSize());
+        IPage<CommentDTO> commentTable = commentMapper.getCommentTable(page, commentQueryDTO);
+        //处理头像和IP
+        List<CommentDTO> commentDTOS = commentTable.getRecords();
+        for (CommentDTO commentDTO : commentDTOS) {
+            commentDTO.setAvatar(annexService.getAnnexAccessAddress(commentDTO.getAvatar()));
+            commentDTO.setCity(IPUtils.getCityInfo(commentDTO.getIp()));
+        }
+        //封装处理结果
+        IPage<CommentDTO> pageResult = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
+        pageResult.setRecords(commentDTOS);
+        return pageResult;
+    }
+
+    /**
+     * 更新评论
+     * 当设置评论公开\非公开时，会影响其子评论的权限
+     *
+     * @param commentDTO commentDTO
+     */
+    @Transactional
+    @Override
+    public void updateComment(CommentDTO commentDTO) {
+        //先查到这条记录
+        Comment comment = commentMapper.selectById(commentDTO);
+        //更新记录
+        commentMapper.updateById(commentDTO);
+        if (!comment.getIsPublished().equals(commentDTO.getIsPublished())) {
+            //修改了权限，要同时修改所有子评论的权限,先获取同树的全部评论
+            LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(Comment::getOriginId, comment.getOriginId());
+            List<Comment> comments = commentMapper.selectList(queryWrapper);
+            //转为树结构并过滤出目标子树
+            List<TreeNode> treeNodes = buildCommentTreeNode(comments);
+            TreeNode rootNode = TreeUtils.listToTree(treeNodes, node -> node.getId().equals(comment.getId())).get(Constants.COM_NUM_ZERO);
+            List<TreeNode> childNode = TreeUtils.getAllChildNodeByRootNode(rootNode);
+            if (!childNode.isEmpty()) {
+                //更新子评论权限
+                List<Comment> updateList = new ArrayList<>(childNode.size());
+                for (TreeNode treeNode : childNode) {
+                    Comment updateComment = new Comment();
+                    updateComment.setId(treeNode.getId());
+                    updateComment.setIsPublished(commentDTO.getIsPublished());
+                    updateList.add(updateComment);
+                }
+                updateBatchById(updateList);
+            }
+        }
     }
 
     /**

@@ -22,4 +22,33 @@
         order by create_time desc
     </select>
 
+    <select id="getCommentTable" resultType="com.natsu.blog.model.dto.CommentDTO">
+        select
+            c.id, avatar, nickname, c.content,
+            (case page when 1 then a.title when 2 then '友链' when 3 then '关于我' end) as 'page_name',
+            c.is_published, ip,
+            ifnull(email, '--') as email,
+            ifnull(website, '--') as website,
+            ifnull(qq, '--') as qq,
+            c.create_time
+        from
+            comment as c left join article as a on c.article_id = a.id
+        <where>
+            <if test="queryCond.keyword != null and queryCond.keyword != ''">
+                and c.nickname like concat('%',#{queryCond.keyword},'%')
+                or c.content like concat('%',#{queryCond.keyword},'%')
+            </if>
+            <if test="queryCond.startTime != null and queryCond.endTime != null">
+                and c.create_time between #{queryCond.startTime} and #{queryCond.endTime}
+            </if>
+            <if test="queryCond.page != null">
+                and c.page = #{queryCond.page}
+            </if>
+            <if test="queryCond.articleId != null">
+                and a.id = #{queryCond.articleId}
+            </if>
+        </where>
+        order by c.create_time desc
+    </select>
+
 </mapper>
