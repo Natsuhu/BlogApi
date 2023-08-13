@@ -218,6 +218,14 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
     /**
+     * 获取评论表格的文章筛选下拉框
+     * @return ArticleList
+     */
+    public List<Article> getArticleSelector() {
+        return commentMapper.getArticleSelector();
+    }
+
+    /**
      * 构建评论树Node
      */
     private List<TreeNode> buildCommentTreeNode(List<Comment> comments) {

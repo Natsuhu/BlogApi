@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.natsu.blog.model.dto.CommentDTO;
 import com.natsu.blog.model.dto.CommentQueryDTO;
 import com.natsu.blog.model.dto.Result;
+import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.service.CommentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/comment")
@@ -44,6 +47,17 @@ public class AdminCommentController {
         } catch (Exception e) {
             log.error("更新评论失败：{}", e.getMessage());
             return Result.fail("更新评论失败，" + e.getMessage());
+        }
+    }
+
+    @PostMapping("/getArticleSelector")
+    public Result getArticleSelector() {
+        try {
+            List<Article> articleSelector = commentService.getArticleSelector();
+            return Result.success(articleSelector);
+        } catch (Exception e){
+            log.error("获取文章下拉框失败：{}", e.getMessage());
+            return Result.fail("获取文章下拉框失败，" + e.getMessage());
         }
     }
 
