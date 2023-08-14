@@ -17,7 +17,7 @@
 
     <select id="getMomentTable" resultType="com.natsu.blog.model.dto.MomentDTO">
         select
-            id, content, likes, avatar, create_time, update_time, is_published,
+            id, content, likes, avatar, publish_time, edit_time, is_published,
             is_comment_enabled, author
         from
             moment
