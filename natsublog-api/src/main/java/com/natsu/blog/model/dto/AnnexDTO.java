@@ -13,4 +13,6 @@ public class AnnexDTO extends Annex {
      */
     private String parentPath;
 
+    private String downloadAddress;
+
 }

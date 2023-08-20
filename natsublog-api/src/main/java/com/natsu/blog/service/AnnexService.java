@@ -1,10 +1,15 @@
 package com.natsu.blog.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.natsu.blog.model.dto.AnnexDTO;
+import com.natsu.blog.model.dto.AnnexQueryDTO;
 import com.natsu.blog.model.entity.Annex;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 
 public interface AnnexService extends IService<Annex> {
 
@@ -40,4 +45,21 @@ public interface AnnexService extends IService<Annex> {
      * @return 访问地址
      */
     String getAnnexAccessAddress(String annexId);
+
+    String getAdminAnnexAccessAddress(String annexId);
+
+    /**
+     * 获取文件管理表格
+     *
+     * @param queryCond 查询条件
+     * @return 分页结果
+     */
+    IPage<AnnexDTO> getAnnexTable(AnnexQueryDTO queryCond);
+
+    /**
+     * 获取文件管理后缀名筛选项
+     *
+     * @return string
+     */
+    List<String> getSuffixSelector();
 }

@@ -60,7 +60,7 @@ public class AnnexController {
                 os.write(buffer, 0, len);
             }
         } catch (Exception e) {
-            log.error("文件下载失败：{}", e.getMessage());
+            log.error("文件：[{}]，下载失败：{}",annexId, e.getMessage());
         } finally {
             try {
                 if (os != null) {

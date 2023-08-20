@@ -1,11 +1,16 @@
 package com.natsu.blog.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.beust.ah.A;
 import com.natsu.blog.config.properties.BlogProperties;
 import com.natsu.blog.constant.Constants;
 import com.natsu.blog.enums.StorageType;
 import com.natsu.blog.mapper.AnnexMapper;
 import com.natsu.blog.model.dto.AnnexDTO;
+import com.natsu.blog.model.dto.AnnexQueryDTO;
+import com.natsu.blog.model.dto.ArticleDTO;
 import com.natsu.blog.model.entity.Annex;
 import com.natsu.blog.service.AnnexService;
 import com.natsu.blog.service.annex.AnnexStorageService;
@@ -21,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -133,4 +139,43 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
         return blogProperties.getApi() + "/annex/resource/" + annexId;
     }
 
+    /**
+     * Admin使用--获取文件访问地址
+     *
+     * @param annexId 文件ID
+     * @return 访问地址
+     */
+    @Override
+    public String getAdminAnnexAccessAddress(String annexId) {
+        return blogProperties.getApi() + "/admin/annex/download/" + annexId;
+    }
+
+    /**
+     * 获取文件管理表格
+     *
+     * @param queryCond 查询条件
+     * @return 分页结果
+     */
+    @Override
+    public IPage<AnnexDTO> getAnnexTable(AnnexQueryDTO queryCond) {
+        IPage<AnnexDTO> page = new Page<>(queryCond.getPageNo(), queryCond.getPageSize());
+        IPage<AnnexDTO> annexTable = annexMapper.getAnnexTable(page, queryCond);
+        List<AnnexDTO> records = annexTable.getRecords();
+        for (AnnexDTO annexDTO : records) {
+            annexDTO.setDownloadAddress(getAdminAnnexAccessAddress(annexDTO.getId()));
+        }
+        IPage<AnnexDTO> pageResult = new Page<>(annexTable.getCurrent(), annexTable.getSize(), annexTable.getTotal());
+        pageResult.setRecords(records);
+        return pageResult;
+    }
+
+    /**
+     * 获取文件管理后缀名筛选项
+     *
+     * @return string
+     */
+    @Override
+    public List<String> getSuffixSelector() {
+        return annexMapper.getSuffixSelector();
+    }
 }

@@ -3,4 +3,34 @@
 
 <mapper namespace="com.natsu.blog.mapper.AnnexMapper">
 
+    <select id="getAnnexTable" resultType="com.natsu.blog.model.dto.AnnexDTO">
+        select
+            id, name, suffix, size, is_published, create_time
+        from
+            annex
+        <where>
+            <if test="queryCond.keyword != null and queryCond.keyword != ''">
+                and name like concat('%',#{queryCond.keyword},'%')
+            </if>
+            <if test="queryCond.suffix != null and queryCond.suffix != ''">
+                and suffix = #{queryCond.suffix}
+            </if>
+            <if test="queryCond.startTime != null and queryCond.endTime != null">
+                and create_time between #{queryCond.startTime} and #{queryCond.endTime}
+            </if>
+            <if test="queryCond.isPublished != null">
+                and is_published = #{queryCond.isPublished}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getSuffixSelector" resultType="java.lang.String">
+        select
+            suffix
+        from
+            annex
+        group by suffix
+    </select>
+
 </mapper>
