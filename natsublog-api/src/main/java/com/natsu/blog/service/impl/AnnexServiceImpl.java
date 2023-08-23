@@ -3,20 +3,19 @@ package com.natsu.blog.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.beust.ah.A;
 import com.natsu.blog.config.properties.BlogProperties;
 import com.natsu.blog.constant.Constants;
 import com.natsu.blog.enums.StorageType;
 import com.natsu.blog.mapper.AnnexMapper;
 import com.natsu.blog.model.dto.AnnexDTO;
 import com.natsu.blog.model.dto.AnnexQueryDTO;
-import com.natsu.blog.model.dto.ArticleDTO;
 import com.natsu.blog.model.entity.Annex;
 import com.natsu.blog.service.AnnexService;
 import com.natsu.blog.service.annex.AnnexStorageService;
 import com.natsu.blog.utils.FileUtils;
 import com.natsu.blog.utils.QQInfoUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -163,6 +162,7 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
         List<AnnexDTO> records = annexTable.getRecords();
         for (AnnexDTO annexDTO : records) {
             annexDTO.setDownloadAddress(getAdminAnnexAccessAddress(annexDTO.getId()));
+            annexDTO.setFormatSize(FileUtils.formatFileSize(annexDTO.getSize()));
         }
         IPage<AnnexDTO> pageResult = new Page<>(annexTable.getCurrent(), annexTable.getSize(), annexTable.getTotal());
         pageResult.setRecords(records);
@@ -177,5 +177,22 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
     @Override
     public List<String> getSuffixSelector() {
         return annexMapper.getSuffixSelector();
+    }
+
+    /**
+     * 更新文件
+     *
+     * @param annexDTO annexDTO
+     */
+    @Override
+    public void updateAnnex(AnnexDTO annexDTO) {
+        if (!StringUtils.isBlank(annexDTO.getName())) {
+            String suffix = FileUtils.getFileSuffix(annexDTO.getName());
+            if (suffix == null) {
+                throw new RuntimeException("未知文件类型");
+            }
+            annexDTO.setSuffix(suffix);
+        }
+        updateById(annexDTO);
     }
 }

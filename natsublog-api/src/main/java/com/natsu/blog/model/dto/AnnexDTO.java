@@ -13,6 +13,14 @@ public class AnnexDTO extends Annex {
      */
     private String parentPath;
 
+    /**
+     * 文件下载地址
+     */
     private String downloadAddress;
+
+    /**
+     * 格式化的文件大小
+     */
+    private String formatSize;
 
 }

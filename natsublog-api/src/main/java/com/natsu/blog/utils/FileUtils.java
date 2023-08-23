@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.DecimalFormat;
 
 @Slf4j
 public class FileUtils {
@@ -66,6 +67,30 @@ public class FileUtils {
      */
     public static boolean moveFile(String path) {
         return FileUtil.del(path);
+    }
+
+    /**
+     * 格式文件大小
+     *
+     * @param fileSize 文件大小Byte
+     * @return 格式化结果
+     */
+    public static String formatFileSize(Long fileSize) {
+        if (fileSize == null || fileSize < 0) {
+            return null;
+        }
+        String result = null;
+        DecimalFormat df = new DecimalFormat("#.00");
+        if (fileSize < 1024L) {
+            result = fileSize + " B";
+        } else if (fileSize < 1048576L) {
+            result = df.format((double) fileSize / 1024L) + " KB";
+        } else if (fileSize < 1073741824L) {
+            result = df.format((double) fileSize / 1048576L) + " MB";
+        } else {
+            result = df.format((double) fileSize / 1073741824L) + " GB";
+        }
+        return result;
     }
 
 }

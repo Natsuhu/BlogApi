@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.natsu.blog.model.dto.AnnexDTO;
 import com.natsu.blog.model.dto.AnnexQueryDTO;
 import com.natsu.blog.model.entity.Annex;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
@@ -46,6 +45,12 @@ public interface AnnexService extends IService<Annex> {
      */
     String getAnnexAccessAddress(String annexId);
 
+    /**
+     * Admin获取文件访问地址
+     *
+     * @param annexId 文件ID
+     * @return 地址
+     */
     String getAdminAnnexAccessAddress(String annexId);
 
     /**
@@ -62,4 +67,10 @@ public interface AnnexService extends IService<Annex> {
      * @return string
      */
     List<String> getSuffixSelector();
+
+    /**
+     * 更新文件
+     * @param annexDTO annexDTO
+     */
+    void updateAnnex(AnnexDTO annexDTO);
 }

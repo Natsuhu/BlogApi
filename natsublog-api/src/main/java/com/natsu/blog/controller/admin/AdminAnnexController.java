@@ -116,4 +116,18 @@ public class AdminAnnexController {
             return Result.fail("获取文件管理下拉框G了：" + e.getMessage());
         }
     }
+
+    @PostMapping("/updateAnnex")
+    public Result updateAnnex(@RequestBody AnnexDTO annexDTO) {
+        if (annexDTO.getId() == null) {
+            return Result.fail("参数错误，必须填写文件ID");
+        }
+        try {
+            annexService.updateAnnex(annexDTO);
+            return Result.success("更新成功");
+        } catch (Exception e) {
+            log.error("文件更新失败！{}", e.getMessage());
+            return Result.fail("文件更新失败！" + e.getMessage());
+        }
+    }
 }
