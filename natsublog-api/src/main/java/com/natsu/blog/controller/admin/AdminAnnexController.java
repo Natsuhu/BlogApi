@@ -65,7 +65,7 @@ public class AdminAnnexController {
             response.setContentType(CommonUtils.getContentType(fileName));
             //设置为UTF-8
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-            //文件大小
+            //文件大小 (可以不设置长度，这样在size字段和文件实际大小不同情况下，也可保证下载成功)
             response.addHeader("Content-Length", size);
             //文件名 - 判定是否支持在线展示
             String utf8FileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
@@ -128,6 +128,20 @@ public class AdminAnnexController {
         } catch (Exception e) {
             log.error("文件更新失败！{}", e.getMessage());
             return Result.fail("文件更新失败！" + e.getMessage());
+        }
+    }
+
+    @PostMapping("deleteAnnex")
+    public Result deleteAnnex(@RequestBody AnnexDTO annexDTO) {
+        if (annexDTO.getId() == null) {
+            return Result.fail("参数错误，必须填写文件ID");
+        }
+        try {
+            annexService.deleteAnnex(annexDTO);
+            return Result.success("删除成功");
+        } catch (Exception e) {
+            log.error("删除文件失败！{}", e.getMessage());
+            return Result.fail("删除文件失败！" + e.getMessage());
         }
     }
 }

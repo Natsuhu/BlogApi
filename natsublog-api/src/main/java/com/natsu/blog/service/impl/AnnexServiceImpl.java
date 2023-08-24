@@ -195,4 +195,20 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
         }
         updateById(annexDTO);
     }
+
+    /**
+     * 删除文件
+     *
+     * @param annexDTO annexDTO
+     */
+    @Transactional
+    @Override
+    public void deleteAnnex(AnnexDTO annexDTO) {
+        //获取记录
+        Annex annex = annexMapper.selectById(annexDTO);
+        BeanUtils.copyProperties(annex, annexDTO);
+        //删除文件
+        annexStorageService.remove(annexDTO);
+        annexMapper.deleteById(annex);
+    }
 }

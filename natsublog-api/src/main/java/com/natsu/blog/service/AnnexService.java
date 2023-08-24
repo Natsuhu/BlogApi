@@ -73,4 +73,9 @@ public interface AnnexService extends IService<Annex> {
      * @param annexDTO annexDTO
      */
     void updateAnnex(AnnexDTO annexDTO);
+
+    /**
+     * 删除文件
+     */
+    void deleteAnnex(AnnexDTO annexDTO);
 }
