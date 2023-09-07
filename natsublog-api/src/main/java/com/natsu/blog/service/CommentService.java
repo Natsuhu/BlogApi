@@ -14,6 +14,8 @@ public interface CommentService extends IService<Comment> {
 
     void updateComment(CommentDTO commentDTO);
 
+    Integer deleteComment(CommentDTO commentDTO);
+
     IPage<CommentDTO> getCommentTable(CommentQueryDTO commentQueryDTO);
 
     void saveComment(CommentDTO commentDTO);

@@ -24,12 +24,12 @@ public class Constants {
     public static final Long TOP_COMMENT_PARENT_ID = -1L;
 
     /**
-     * 文章公开状态，公开
+     * 公开状态，公开
      */
     public static final Boolean PUBLISHED = true;
 
     /**
-     * 文章公开状态，不公开
+     * 公开状态，不公开
      */
     public static final Boolean NO_PUBLISHED = false;
 

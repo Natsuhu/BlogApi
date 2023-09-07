@@ -217,10 +217,32 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         }
     }
 
+    @Transactional
+    @Override
+    public Integer deleteComment(CommentDTO commentDTO) {
+        //删除评论时，顺带删除所有子评论
+        LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Comment::getOriginId, commentDTO.getOriginId());
+        List<Comment> comments = commentMapper.selectList(queryWrapper);
+        //转为树结构并过滤出目标子树
+        List<TreeNode> treeNodes = buildCommentTreeNode(comments);
+        TreeNode rootNode = TreeUtils.listToTree(treeNodes, node -> node.getId().equals(commentDTO.getId())).get(Constants.COM_NUM_ZERO);
+        List<TreeNode> childNode = TreeUtils.getAllChildNodeByRootNode(rootNode);
+        //批量删除
+        List<Long> ids = new ArrayList<>();
+        ids.add(commentDTO.getId());
+        for (TreeNode treeNode : childNode) {
+            ids.add(treeNode.getId());
+        }
+        commentMapper.deleteBatchIds(ids);
+        return ids.size();
+    }
+
     /**
      * 获取评论表格的文章筛选下拉框
      * @return ArticleList
      */
+    @Override
     public List<Article> getArticleSelector() {
         return commentMapper.getArticleSelector();
     }

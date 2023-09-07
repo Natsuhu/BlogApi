@@ -24,7 +24,7 @@
 
     <select id="getCommentTable" resultType="com.natsu.blog.model.dto.CommentDTO">
         select
-            c.id, avatar, nickname, c.content,
+            c.id, avatar, nickname, c.content, c.origin_id,
             (case page when 1 then a.title when 2 then '友链' when 3 then '关于我' end) as 'page_name',
             c.is_published, ip,
             ifnull(email, '--') as email,

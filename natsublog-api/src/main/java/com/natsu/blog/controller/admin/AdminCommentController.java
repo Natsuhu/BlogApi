@@ -50,6 +50,22 @@ public class AdminCommentController {
         }
     }
 
+    @PostMapping("/deleteComment")
+    public Result deleteComment(@RequestBody CommentDTO commentDTO) {
+        //参数校验
+        if (commentDTO.getId() == null) {
+            return Result.fail("删除失败，ID必填");
+        }
+        //开始删除
+        try {
+            Integer count = commentService.deleteComment(commentDTO);
+            return Result.success(count);
+        } catch (Exception e) {
+            log.error("删除评论失败：{}", e.getMessage());
+            return Result.fail("删除评论失败，" + e.getMessage());
+        }
+    }
+
     @PostMapping("/getArticleSelector")
     public Result getArticleSelector() {
         try {
