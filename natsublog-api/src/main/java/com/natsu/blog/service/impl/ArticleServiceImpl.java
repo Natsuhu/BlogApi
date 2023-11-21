@@ -139,7 +139,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         List<Long> tagIds = tags.stream().map(Tag::getId).collect(Collectors.toList());
         articleDTO.setTagIds(tagIds);
         //补充缩略图
-        articleDTO.setThumbnail(annexService.getAnnexAccessAddress(article.getThumbnail()));
+        //articleDTO.setThumbnail(annexService.getAnnexAccessAddress(article.getThumbnail()));
         return articleDTO;
     }
 

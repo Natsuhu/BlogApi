@@ -76,10 +76,10 @@ public class FileUtils {
      * @return 格式化结果
      */
     public static String formatFileSize(Long fileSize) {
+        String result = "0 B";
         if (fileSize == null || fileSize < 0) {
-            return null;
+            return result;
         }
-        String result = null;
         DecimalFormat df = new DecimalFormat("#.00");
         if (fileSize < 1024L) {
             result = fileSize + " B";

@@ -39,6 +39,7 @@ public class AnnexController {
             Boolean isPublished = (Boolean) result.get("isPublished");
             //无权限直接结束
             if (!isPublished) {
+                is.close();
                 return;
             }
             //内容类型 - 设定适合的类型（配合在线展示判定）

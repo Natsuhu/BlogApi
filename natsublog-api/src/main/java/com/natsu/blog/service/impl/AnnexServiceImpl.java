@@ -161,7 +161,6 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
         IPage<AnnexDTO> annexTable = annexMapper.getAnnexTable(page, queryCond);
         List<AnnexDTO> records = annexTable.getRecords();
         for (AnnexDTO annexDTO : records) {
-            annexDTO.setDownloadAddress(getAdminAnnexAccessAddress(annexDTO.getId()));
             annexDTO.setFormatSize(FileUtils.formatFileSize(annexDTO.getSize()));
         }
         IPage<AnnexDTO> pageResult = new Page<>(annexTable.getCurrent(), annexTable.getSize(), annexTable.getTotal());

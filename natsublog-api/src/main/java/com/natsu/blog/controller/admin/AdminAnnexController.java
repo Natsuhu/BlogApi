@@ -96,7 +96,6 @@ public class AdminAnnexController {
 
     @PostMapping("/getAnnexTable")
     public Result getAnnexTable(@RequestBody AnnexQueryDTO annexQueryDTO) {
-        System.out.println(annexQueryDTO);
         try {
             IPage<AnnexDTO> result = annexService.getAnnexTable(annexQueryDTO);
             return Result.success(result.getPages(), result.getTotal(), result.getRecords());
