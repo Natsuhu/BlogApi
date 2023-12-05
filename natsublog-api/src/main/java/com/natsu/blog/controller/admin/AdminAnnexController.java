@@ -9,6 +9,7 @@ import com.natsu.blog.service.AnnexService;
 import com.natsu.blog.utils.CommonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,7 +63,7 @@ public class AdminAnnexController {
             //暴露请求头，允许fetch api拿到
             response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
             //内容类型 - 设定适合的类型（配合在线展示判定）
-            response.setContentType(CommonUtils.getContentType(fileName));
+            response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
             //设置为UTF-8
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             //文件大小 (可以不设置长度，这样在size字段和文件实际大小不同情况下，也可保证下载成功)
