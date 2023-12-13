@@ -31,6 +31,7 @@
         from
             annex
         group by suffix
+        having suffix is not null
     </select>
 
 </mapper>

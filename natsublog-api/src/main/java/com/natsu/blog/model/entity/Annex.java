@@ -1,6 +1,7 @@
 package com.natsu.blog.model.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -26,7 +27,7 @@ public class Annex implements Serializable {
     @TableField("name")
     private String name;
 
-    @TableField("suffix")
+    @TableField(value = "suffix", updateStrategy = FieldStrategy.IGNORED)
     private String suffix;
 
     @TableField("size")

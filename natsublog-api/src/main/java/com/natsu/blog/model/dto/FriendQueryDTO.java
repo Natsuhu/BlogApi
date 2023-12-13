@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class MomentQueryDTO extends BaseQueryDTO{
+public class FriendQueryDTO extends BaseQueryDTO {
 
 
 

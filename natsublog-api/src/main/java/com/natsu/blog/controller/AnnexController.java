@@ -1,6 +1,7 @@
 package com.natsu.blog.controller;
 
 import com.natsu.blog.constant.Constants;
+import com.natsu.blog.model.vo.AnnexDownloadVO;
 import com.natsu.blog.service.AnnexService;
 import com.natsu.blog.utils.CommonUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +16,6 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 
 @RestController
 @RequestMapping("/annex")
@@ -32,17 +32,19 @@ public class AnnexController {
 
         try {
             //获取文件信息
-            HashMap<String, Object> result = annexService.download(annexId);
-            String fileName = result.get("fileName").toString();
-            String size = result.get("size").toString();
-            InputStream is = (InputStream) result.get("inputStream");
-            Boolean isPublished = (Boolean) result.get("isPublished");
+            AnnexDownloadVO result = annexService.download(annexId);
+            String fileName = result.getName();
+            String size = result.getSize().toString();
+            InputStream is = result.getInputStream();
+            Boolean isPublished = result.getIsPublished();
             //无权限直接结束
             if (!isPublished) {
                 is.close();
                 return;
             }
+            response.addHeader("Accept-Ranges","bytes");
             //内容类型 - 设定适合的类型（配合在线展示判定）
+            //response.setContentType("audio/mpeg;charset=UTF-8");
             response.setContentType(CommonUtils.getContentType(fileName));
             //设置为UTF-8
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());

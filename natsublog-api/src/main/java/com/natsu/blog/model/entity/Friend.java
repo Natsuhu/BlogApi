@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -19,7 +20,7 @@ import java.util.Date;
 @Data
 @Accessors(chain = true)
 @TableName("friend")
-public class Friend {
+public class Friend implements Serializable {
 
     /**
      * id
@@ -56,12 +57,6 @@ public class Friend {
      */
     @TableField(value = "is_published")
     private Boolean isPublished;
-
-    /**
-     * 审核
-     */
-    @TableField(value = "is_audit")
-    private Boolean isAudit;
 
     /**
      * 点击次数

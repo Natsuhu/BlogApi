@@ -10,6 +10,7 @@ import com.natsu.blog.mapper.AnnexMapper;
 import com.natsu.blog.model.dto.AnnexDTO;
 import com.natsu.blog.model.dto.AnnexQueryDTO;
 import com.natsu.blog.model.entity.Annex;
+import com.natsu.blog.model.vo.AnnexDownloadVO;
 import com.natsu.blog.service.AnnexService;
 import com.natsu.blog.service.annex.AnnexStorageService;
 import com.natsu.blog.utils.FileUtils;
@@ -24,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -106,7 +106,7 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
      * @return HashMap
      */
     @Override
-    public HashMap<String, Object> download(String annexId) {
+    public AnnexDownloadVO download(String annexId) {
         try {
             //从文件表获取记录
             Annex annex = annexMapper.selectById(annexId);
@@ -115,11 +115,11 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
             BeanUtils.copyProperties(annex, annexDTO);
             InputStream is = annexStorageService.fetch(annexDTO);
             //封装结果
-            HashMap<String, Object> result = new HashMap<>();
-            result.put("inputStream", is);
-            result.put("size", annex.getSize());
-            result.put("fileName", annex.getName());
-            result.put("isPublished", annex.getIsPublished());
+            AnnexDownloadVO result = new AnnexDownloadVO();
+            result.setInputStream(is);
+            result.setName(annexDTO.getName());
+            result.setSize(annexDTO.getSize());
+            result.setIsPublished(annexDTO.getIsPublished());
             return result;
         } catch (Exception e) {
             log.error("下载文件失败：{}", e.getMessage());
@@ -186,11 +186,7 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
     @Override
     public void updateAnnex(AnnexDTO annexDTO) {
         if (!StringUtils.isBlank(annexDTO.getName())) {
-            String suffix = FileUtils.getFileSuffix(annexDTO.getName());
-            if (suffix == null) {
-                throw new RuntimeException("未知文件类型");
-            }
-            annexDTO.setSuffix(suffix);
+            annexDTO.setSuffix(FileUtils.getFileSuffix(annexDTO.getName()));
         }
         updateById(annexDTO);
     }

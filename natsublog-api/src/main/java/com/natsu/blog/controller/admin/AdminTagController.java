@@ -1,5 +1,6 @@
 package com.natsu.blog.controller.admin;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.model.dto.TagDTO;
@@ -57,14 +58,17 @@ public class AdminTagController {
     }
 
     @PostMapping("/updateTag")
-    public Result updateTag(@RequestBody TagDTO TagDTO) {
+    public Result updateTag(@RequestBody TagDTO tagDTO) {
         //参数校验
-        if (TagDTO.getId() == null) {
+        if (tagDTO.getId() == null) {
             return Result.fail("更新失败，ID必填");
+        }
+        if (StrUtil.isBlank(tagDTO.getName())) {
+            return Result.fail("标签名称必填");
         }
         //开始更新
         try {
-            tagService.updateTag(TagDTO);
+            tagService.updateTag(tagDTO);
             return Result.success("更新标签成功");
         } catch (Exception e) {
             log.error("更新标签失败：{}", e.getMessage());

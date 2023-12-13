@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.natsu.blog.model.dto.AnnexDTO;
 import com.natsu.blog.model.dto.AnnexQueryDTO;
 import com.natsu.blog.model.entity.Annex;
+import com.natsu.blog.model.vo.AnnexDownloadVO;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
 
 public interface AnnexService extends IService<Annex> {
@@ -35,7 +35,7 @@ public interface AnnexService extends IService<Annex> {
      * @param annexId 文件Id
      * @return HashMap
      */
-    HashMap<String, Object> download(String annexId);
+    AnnexDownloadVO download(String annexId);
 
     /**
      * 获取文件访问地址

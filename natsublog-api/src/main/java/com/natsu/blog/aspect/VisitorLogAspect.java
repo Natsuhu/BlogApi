@@ -44,7 +44,7 @@ public class VisitorLogAspect {
     /**
      * 切入点配置
      *
-     * @param visitorLogger
+     * @param visitorLogger 访问记录注解
      **/
     @Pointcut("@annotation(visitorLogger)")
     public void pointcut(VisitorLogger visitorLogger) {
@@ -53,11 +53,11 @@ public class VisitorLogAspect {
     /**
      * 环绕
      *
-     * @param visitorLogger
-     * @param joinPoint
+     * @param visitorLogger 访问记录注解
+     * @param joinPoint 切入点
      * @return Object
      */
-    @Around("pointcut(visitorLogger)")
+    @Around(value = "pointcut(visitorLogger)", argNames = "joinPoint,visitorLogger")
     public Object around(ProceedingJoinPoint joinPoint, VisitorLogger visitorLogger) throws Throwable {
         //计算响应时间，毫秒
         // TODO 计算响应时间后续改为StopWatch工具 (SpringUtil)

@@ -44,14 +44,54 @@ public class Constants {
     public static final Boolean FORBID_COMMENT = false;
 
     /**
-     * 友情链接，审核
+     * 设置值-博客名称
      */
-    public static final Boolean AUDIT = true;
+    public static final String SETTING_KEY_BLOG_NAME = "blogName";
 
     /**
-     * 友情链接，未审核
+     * 设置值-网页标题后缀
      */
-    public static final Boolean NO_AUDIT = false;
+    public static final String SETTING_KEY_WEB_TITLE_SUFFIX = "webTitleSuffix";
+
+    /**
+     * 设置值-资料卡头像
+     */
+    public static final String SETTING_KEY_CARD_AVATAR = "cardAvatar";
+
+    /**
+     * 设置值-资料卡名字
+     */
+    public static final String SETTING_KEY_CARD_NAME = "cardName";
+
+    /**
+     * 设置值-资料卡个性签名
+     */
+    public static final String SETTING_KEY_CARD_SIGNATURE = "cardSignature";
+
+    /**
+     * 设置值-友情链接文案
+     */
+    public static final String SETTING_KEY_FRIEND_CONTENT = "friendContent";
+
+    /**
+     * 设置值-友情链接评论区开关
+     */
+    public static final String SETTING_KEY_FRIEND_IS_COMMENT = "friendIsComment";
+
+    /**
+     * 设置值-关于我页面音乐ID
+     */
+    public static final String SETTING_KEY_ABOUT_MUSIC_ID = "aboutMusicId";
+
+    /**
+     * 设置值-关于我页面文案
+     */
+    public static final String SETTING_KEY_ABOUT_CONTENT = "aboutContent";
+
+    /**
+     * 设置值-关于我页面评论区开关
+     */
+    public static final String SETTING_KEY_ABOUT_IS_COMMENT = "aboutIsComment";
 
     /**
      * 评论中QQ头像存储方式-本地

@@ -1,5 +1,6 @@
 package com.natsu.blog.controller.admin;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.natsu.blog.model.dto.CategoryDTO;
 import com.natsu.blog.model.dto.CategoryQueryDTO;
@@ -61,6 +62,9 @@ public class AdminCategoryController {
         //参数校验
         if (categoryDTO.getId() == null) {
             return Result.fail("更新失败，ID必填");
+        }
+        if (StrUtil.isBlank(categoryDTO.getName())) {
+            return Result.fail("分类名称必填");
         }
         //开始更新
         try {
