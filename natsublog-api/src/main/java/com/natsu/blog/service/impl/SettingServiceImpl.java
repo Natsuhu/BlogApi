@@ -1,5 +1,6 @@
 package com.natsu.blog.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -31,6 +32,7 @@ public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> impl
         LambdaUpdateWrapper<Setting> wrapper = new LambdaUpdateWrapper<>();
         wrapper.eq(Setting::getSettingKey, settingKey);
         wrapper.set(Setting::getSettingValue, settingValue);
+        wrapper.set(Setting::getUpdateTime, DateUtil.date());
         update(wrapper);
     }
 
