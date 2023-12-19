@@ -34,7 +34,7 @@ public class AdminFriendController {
     }
 
     @PostMapping("/saveFriend")
-    public Result saveFriend(FriendDTO friendDTO) {
+    public Result saveFriend(@RequestBody FriendDTO friendDTO) {
         if (friendDTO.getId() != null) {
             return Result.fail("不要携带ID");
         }

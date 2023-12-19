@@ -1,6 +1,7 @@
 package com.natsu.blog.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -63,20 +64,22 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend> impleme
     public void updateFriend(FriendDTO friendDTO) {
         //验证站点域名重复
         String website = friendDTO.getWebsite();
-        try {
-            URL url = new URL(website);
-            website = url.getAuthority();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        LambdaQueryWrapper<Friend> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.select(Friend::getId, Friend::getWebsite);
-        queryWrapper.ne(Friend::getId, friendDTO.getId());
-        queryWrapper.like(Friend::getWebsite, website);
-        List<Friend> friends = friendMapper.selectList(queryWrapper);
-        if (CollectionUtil.isNotEmpty(friends)) {
-            log.warn("重复站点ID：{}", friends);
-            throw new RuntimeException("此站点已存在");
+        if (StrUtil.isNotBlank(website)) {
+            try {
+                URL url = new URL(website);
+                website = url.getAuthority();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            LambdaQueryWrapper<Friend> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.select(Friend::getId, Friend::getWebsite);
+            queryWrapper.ne(Friend::getId, friendDTO.getId());
+            queryWrapper.like(Friend::getWebsite, website);
+            List<Friend> friends = friendMapper.selectList(queryWrapper);
+            if (CollectionUtil.isNotEmpty(friends)) {
+                log.warn("重复站点ID：{}", friends);
+                throw new RuntimeException("此站点已存在");
+            }
         }
         updateById(friendDTO);
     }
