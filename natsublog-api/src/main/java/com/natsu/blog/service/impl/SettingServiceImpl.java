@@ -62,6 +62,8 @@ public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> impl
         settingVO.setAboutIsComment(allSettingMap.get(Constants.SETTING_KEY_ABOUT_IS_COMMENT));
         settingVO.setAboutContent(allSettingMap.get(Constants.SETTING_KEY_ABOUT_CONTENT));
         settingVO.setAboutMusicId(allSettingMap.get(Constants.SETTING_KEY_ABOUT_MUSIC_ID));
+        settingVO.setAboutTitle(allSettingMap.get(Constants.SETTING_KEY_ABOUT_TITLE));
+        settingVO.setAboutMusicServer(allSettingMap.get(Constants.SETTING_KEY_ABOUT_MUSIC_SERVER));
         settingVO.setCardName(allSettingMap.get(Constants.SETTING_KEY_CARD_NAME));
         settingVO.setCardSignature(allSettingMap.get(Constants.SETTING_KEY_CARD_SIGNATURE));
         settingVO.setCardAvatar(allSettingMap.get(Constants.SETTING_KEY_CARD_AVATAR));

@@ -61,4 +61,14 @@ public class SettingVO {
      */
     private String aboutIsComment;
 
+    /**
+     * 设置值-关于我页面音乐服务器
+     */
+    private String aboutMusicServer;
+
+    /**
+     * 设置值-关于我页面标题
+     */
+    private String aboutTitle;
+
 }

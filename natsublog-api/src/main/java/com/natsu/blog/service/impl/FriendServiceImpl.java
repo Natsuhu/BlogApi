@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.natsu.blog.constant.Constants;
+import com.natsu.blog.enums.PageEnum;
 import com.natsu.blog.mapper.FriendMapper;
 import com.natsu.blog.model.dto.FriendDTO;
 import com.natsu.blog.model.dto.FriendQueryDTO;
@@ -97,10 +98,7 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend> impleme
 
     @Override
     public SettingVO getFriendSetting() {
-        SettingVO settingVO = new SettingVO();
-        settingVO.setFriendContent(settingService.getSetting(Constants.SETTING_KEY_FRIEND_CONTENT));
-        settingVO.setFriendIsComment(settingService.getSetting(Constants.SETTING_KEY_FRIEND_IS_COMMENT));
-        return settingVO;
+        return settingService.getPageSetting(PageEnum.FRIEND.getPageCode());
     }
 
     @Override

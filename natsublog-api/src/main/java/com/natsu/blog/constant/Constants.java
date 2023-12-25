@@ -94,6 +94,16 @@ public class Constants {
     public static final String SETTING_KEY_ABOUT_IS_COMMENT = "aboutIsComment";
 
     /**
+     * 设置值-关于我页面音乐服务器
+     */
+    public static final String SETTING_KEY_ABOUT_MUSIC_SERVER = "aboutMusicServer";
+
+    /**
+     * 设置值-关于我页面标题
+     */
+    public static final String SETTING_KEY_ABOUT_TITLE = "aboutTitle";
+
+    /**
      * 评论中QQ头像存储方式-本地
      */
     public static final String LOCAL = "local";
