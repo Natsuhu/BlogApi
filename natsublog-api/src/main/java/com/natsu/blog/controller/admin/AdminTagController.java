@@ -1,6 +1,5 @@
 package com.natsu.blog.controller.admin;
 
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.model.dto.TagDTO;
@@ -62,9 +61,6 @@ public class AdminTagController {
         //参数校验
         if (tagDTO.getId() == null) {
             return Result.fail("更新失败，ID必填");
-        }
-        if (StrUtil.isBlank(tagDTO.getName())) {
-            return Result.fail("标签名称必填");
         }
         //开始更新
         try {

@@ -1,5 +1,7 @@
 package com.natsu.blog.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -56,11 +58,15 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
     @Override
     public void updateTag(TagDTO tagDTO) {
         //校验名称重复
-        LambdaQueryWrapper<Tag> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.ne(Tag::getId, tagDTO.getId());
-        queryWrapper.eq(Tag::getName, tagDTO.getName().trim());
-        if (!ObjectUtils.isEmpty(tagMapper.selectOne(queryWrapper))) {
-            throw new RuntimeException("此标签已存在");
+        if (StrUtil.isNotBlank(tagDTO.getName())) {
+            LambdaQueryWrapper<Tag> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.ne(Tag::getId, tagDTO.getId());
+            queryWrapper.eq(Tag::getName, tagDTO.getName().trim());
+            if (CollectionUtil.isNotEmpty(tagMapper.selectList(queryWrapper))) {
+                throw new RuntimeException("此标签已存在");
+            }
+        } else {
+            tagDTO.setName(null);
         }
         //组装实体
         //TODO 需要验证十六进制颜色格式正确性
