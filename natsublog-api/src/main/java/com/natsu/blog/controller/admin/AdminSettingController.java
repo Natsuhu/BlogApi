@@ -1,6 +1,7 @@
 package com.natsu.blog.controller.admin;
 
 import cn.hutool.core.util.StrUtil;
+import com.natsu.blog.annotation.Admin;
 import com.natsu.blog.constant.Constants;
 import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.model.vo.SettingVO;
@@ -26,6 +27,9 @@ public class AdminSettingController {
             SettingVO settingVO = new SettingVO();
             settingVO.setBlogName(settingService.getSetting(Constants.SETTING_KEY_BLOG_NAME));
             settingVO.setWebTitleSuffix(settingService.getSetting(Constants.SETTING_KEY_WEB_TITLE_SUFFIX));
+            settingVO.setHeaderTitle(settingService.getSetting(Constants.SETTING_KET_HEADER_TITLE));
+            settingVO.setHeaderImage(settingService.getSetting(Constants.SETTING_KET_HEADER_IMAGE));
+            settingVO.setBodyImage(settingService.getSetting(Constants.SETTING_KET_BODY_IMAGE));
             return Result.success(settingVO);
         } catch (Exception e) {
             log.error("获取通用设置失败：{}", e.getMessage());
@@ -33,6 +37,7 @@ public class AdminSettingController {
         }
     }
 
+    @Admin
     @PostMapping("/updateCommonSetting")
     public Result updateCommonSetting(@RequestBody SettingVO settingVO) {
         try {
@@ -44,6 +49,9 @@ public class AdminSettingController {
             }
             settingService.updateSetting(Constants.SETTING_KEY_BLOG_NAME, settingVO.getBlogName());
             settingService.updateSetting(Constants.SETTING_KEY_WEB_TITLE_SUFFIX, settingVO.getWebTitleSuffix());
+            settingService.updateSetting(Constants.SETTING_KET_HEADER_TITLE, settingVO.getHeaderTitle());
+            settingService.updateSetting(Constants.SETTING_KET_HEADER_IMAGE, settingVO.getHeaderImage());
+            settingService.updateSetting(Constants.SETTING_KET_BODY_IMAGE, settingVO.getBodyImage());
             return Result.success("更新成功");
         } catch (Exception e) {
             log.error("更新通用配置失败：{}", e.getMessage());
@@ -58,6 +66,11 @@ public class AdminSettingController {
             settingVO.setCardAvatar(settingService.getSetting(Constants.SETTING_KEY_CARD_AVATAR));
             settingVO.setCardName(settingService.getSetting(Constants.SETTING_KEY_CARD_NAME));
             settingVO.setCardSignature(settingService.getSetting(Constants.SETTING_KEY_CARD_SIGNATURE));
+            settingVO.setGithub(settingService.getSetting(Constants.SETTING_KET_GITHUB));
+            settingVO.setQq(settingService.getSetting(Constants.SETTING_KET_QQ));
+            settingVO.setBilibili(settingService.getSetting(Constants.SETTING_KET_BILIBILI));
+            settingVO.setNetease(settingService.getSetting(Constants.SETTING_KET_NETEASE));
+            settingVO.setEmail(settingService.getSetting(Constants.SETTING_KET_EMAIL));
             return Result.success(settingVO);
         } catch (Exception e) {
             log.error("获取资料卡设置失败：{}", e.getMessage());
@@ -65,6 +78,7 @@ public class AdminSettingController {
         }
     }
 
+    @Admin
     @PostMapping("/updateCardSetting")
     public Result updateCardSetting(@RequestBody SettingVO settingVO) {
         try {
@@ -77,6 +91,11 @@ public class AdminSettingController {
             settingService.updateSetting(Constants.SETTING_KEY_CARD_AVATAR, settingVO.getCardAvatar());
             settingService.updateSetting(Constants.SETTING_KEY_CARD_NAME, settingVO.getCardName());
             settingService.updateSetting(Constants.SETTING_KEY_CARD_SIGNATURE, settingVO.getCardSignature());
+            settingService.updateSetting(Constants.SETTING_KET_GITHUB, settingVO.getGithub());
+            settingService.updateSetting(Constants.SETTING_KET_QQ, settingVO.getQq());
+            settingService.updateSetting(Constants.SETTING_KET_BILIBILI, settingVO.getBilibili());
+            settingService.updateSetting(Constants.SETTING_KET_NETEASE, settingVO.getNetease());
+            settingService.updateSetting(Constants.SETTING_KET_EMAIL, settingVO.getEmail());
             return Result.success("更新成功");
         } catch (Exception e) {
             log.error("更新资料卡配置失败：{}", e.getMessage());

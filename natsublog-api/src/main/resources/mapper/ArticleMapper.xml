@@ -16,7 +16,7 @@
 
     <select id="getArchives" resultType="com.natsu.blog.model.dto.ArticleDTO">
         select
-            id, title, thumbnail, date_format(create_time, '%Y-%m-%d') as create_time
+            id, title, thumbnail, date_format(create_time, '%Y-%m-%d %H:%i:%s') as create_time
         from
             article
         where

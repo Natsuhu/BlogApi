@@ -2,6 +2,7 @@ package com.natsu.blog.controller.admin;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.natsu.blog.annotation.Admin;
 import com.natsu.blog.model.dto.FriendDTO;
 import com.natsu.blog.model.dto.FriendQueryDTO;
 import com.natsu.blog.model.dto.Result;
@@ -33,6 +34,7 @@ public class AdminFriendController {
         }
     }
 
+    @Admin
     @PostMapping("/saveFriend")
     public Result saveFriend(@RequestBody FriendDTO friendDTO) {
         if (friendDTO.getId() != null) {
@@ -51,6 +53,7 @@ public class AdminFriendController {
         }
     }
 
+    @Admin
     @PostMapping("/updateFriend")
     public Result updateFriend(@RequestBody FriendDTO friendDTO) {
         if (friendDTO.getId() == null) {
@@ -65,6 +68,7 @@ public class AdminFriendController {
         }
     }
 
+    @Admin
     @PostMapping("/deleteFriend")
     public Result deleteFriend(@RequestBody FriendDTO friendDTO) {
         if (friendDTO.getId() == null) {
@@ -90,6 +94,7 @@ public class AdminFriendController {
         }
     }
 
+    @Admin
     @PostMapping("/updateFriendSetting")
     public Result updateFriendSetting(@RequestBody SettingVO settingVO) {
         try {

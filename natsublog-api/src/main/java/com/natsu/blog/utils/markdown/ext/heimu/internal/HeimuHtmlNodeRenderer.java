@@ -7,11 +7,6 @@ import org.commonmark.renderer.html.HtmlWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @Description: HTML节点渲染
- * @Author: Naccl
- * @Date: 2020-05-13
- */
 public class HeimuHtmlNodeRenderer extends AbstractHeimuNodeRenderer {
     private final HtmlNodeRendererContext context;
     private final HtmlWriter html;
@@ -24,7 +19,7 @@ public class HeimuHtmlNodeRenderer extends AbstractHeimuNodeRenderer {
     @Override
     public void render(Node node) {
         Map<String, String> attributes = new HashMap<>(4);
-        attributes.put("class", "m-text-heimu");
+        attributes.put("class", "base_text_heimu");
         attributes.put("title", "你知道的太多了");
         html.tag("span", context.extendAttributes(node, "span", attributes));
         renderChildren(node);

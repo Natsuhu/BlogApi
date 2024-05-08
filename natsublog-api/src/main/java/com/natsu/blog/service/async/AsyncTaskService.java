@@ -1,10 +1,16 @@
 package com.natsu.blog.service.async;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.natsu.blog.mapper.ArticleMapper;
+import com.natsu.blog.mapper.FriendMapper;
 import com.natsu.blog.mapper.VisitLogMapper;
 import com.natsu.blog.model.entity.Article;
+import com.natsu.blog.model.entity.Friend;
+import com.natsu.blog.model.entity.Moment;
 import com.natsu.blog.model.entity.VisitLog;
+import com.natsu.blog.service.FriendService;
+import com.natsu.blog.service.MomentService;
 import com.natsu.blog.utils.IPUtils;
 import com.natsu.blog.utils.UserAgentUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +36,7 @@ public class AsyncTaskService {
     private UserAgentUtils userAgentUtils;
 
     /**
-     * 更新文章阅读数量
+     * 更新文章阅读数量, 后续改为redis
      */
     public void updateArticleViewCount(ArticleMapper articleMapper, Article article) {
         int viewCount = article.getViews();
@@ -47,6 +53,37 @@ public class AsyncTaskService {
         } catch (InterruptedException e) {
             log.error("更新文章阅读数量失败：{}", e.getMessage());
             throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    /**
+     * 更新友链点击次数，后续改为redis
+     *
+     * @param friendService f
+     * @param nickname n
+     */
+    public void updateFriendClickCount(FriendService friendService, String nickname) {
+        try {
+            LambdaQueryWrapper<Friend> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(Friend::getNickname, nickname);
+            Friend friend = friendService.getOne(wrapper);
+            if (friend != null) {
+                friend.setClick(friend.getClick() + 1);
+                friendService.updateById(friend);
+            }
+        } catch (Exception e) {log.error(e.getMessage());}
+    }
+
+    /**
+     * 点赞动态，后续改为redis
+     * @param momentService m
+     * @param id id
+     */
+    public void momentLike(MomentService momentService, String id) {
+        Moment moment = momentService.getById(id);
+        if (moment != null) {
+            moment.setLikes(moment.getLikes() + 1);
+            momentService.updateById(moment);
         }
     }
 

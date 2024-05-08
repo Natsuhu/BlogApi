@@ -1,8 +1,8 @@
 package com.natsu.blog.utils.markdown.ext.heimu;
 
 import com.natsu.blog.utils.markdown.ext.heimu.internal.HeimuDelimiterProcessor;
-import com.natsu.blog.utils.markdown.ext.heimu.internal.HeimuTextContentNodeRenderer;
 import com.natsu.blog.utils.markdown.ext.heimu.internal.HeimuHtmlNodeRenderer;
+import com.natsu.blog.utils.markdown.ext.heimu.internal.HeimuTextContentNodeRenderer;
 import org.commonmark.Extension;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.NodeRenderer;
@@ -13,11 +13,6 @@ import org.commonmark.renderer.text.TextContentNodeRendererContext;
 import org.commonmark.renderer.text.TextContentNodeRendererFactory;
 import org.commonmark.renderer.text.TextContentRenderer;
 
-/**
- * @Description: 自定义黑幕拓展
- * @Author: Naccl
- * @Date: 2020-05-13
- */
 public class HeimuExtension implements Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension, TextContentRenderer.TextContentRendererExtension {
     private HeimuExtension() {
     }

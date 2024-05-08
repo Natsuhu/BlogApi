@@ -1,5 +1,6 @@
 package com.natsu.blog.service.impl;
 
+import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -77,19 +78,28 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             commentDTO.setReplyNickname(parentComment.getNickname());
             commentDTO.setOriginId(parentComment.getOriginId());
         }
-        //填了QQ则直接使用QQ的头像和昵称
+        //如果是QQ则直接使用QQ的头像和昵称
         String qqNum = commentDTO.getQq();
-        if (StringUtils.isNotBlank(qqNum)) {
-            String annexId = annexService.saveQQAvatar(qqNum, StorageType.LOCAL.getType());
-            commentDTO.setNickname(QQInfoUtils.getQQNickname(qqNum));
-            commentDTO.setAvatar(annexId);
-        } else {
-            //没填QQ则检查昵称格式，并设置随机头像
-            if (StringUtils.isBlank(commentDTO.getNickname()) || commentDTO.getNickname().length() > 10) {
-                throw new RuntimeException("昵称格式错误");
+        //随机头像目前是这样的：在附件表中手动设置ID为1到5的图片，设置随机头像就从5个里面取1个。先从后台管理系统上传，然后手动修改ID。
+        //此方法暂不清楚以后会不会改
+        int randomAvatar = RandomUtil.randomInt(1, 6);
+        if (QQInfoUtils.isQQNumber(qqNum)) {
+            //尝试获取QQ头像和昵称，获取失败使用随机头像
+            try {
+                String annexId = annexService.saveQQAvatar(qqNum, StorageType.LOCAL.getType());
+                commentDTO.setAvatar(annexId);
+                commentDTO.setNickname(QQInfoUtils.getQQNickname(qqNum));
+            } catch (Exception e) {
+                log.error("获取QQ头像失败：{}", e.getMessage());
+                commentDTO.setNickname("nickname");
+                commentDTO.setAvatar(String.valueOf(randomAvatar));
             }
-            //TODO 设置随机avatar，目前先空着
-            commentDTO.setAvatar("");
+        } else {
+            if (qqNum.length() > 15) {
+                throw new RuntimeException("昵称过长！");
+            }
+            commentDTO.setNickname(qqNum);
+            commentDTO.setAvatar(String.valueOf(randomAvatar));
         }
         commentDTO.setIsPublished(Constants.PUBLISHED);
         commentDTO.setIsAdminComment(false);
@@ -240,6 +250,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     /**
      * 获取评论表格的文章筛选下拉框
+     *
      * @return ArticleList
      */
     @Override
@@ -298,13 +309,13 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 return article.getIsPublished().equals(Constants.PUBLISHED) && article.getIsCommentEnabled().equals(Constants.ALLOW_COMMENT);
             case 2:
                 LambdaQueryWrapper<Setting> friendPageQuery = new LambdaQueryWrapper<>();
-                friendPageQuery.eq(Setting::getSettingKey, "isComment");
+                friendPageQuery.eq(Setting::getSettingKey, Constants.SETTING_KEY_FRIEND_IS_COMMENT);
                 friendPageQuery.eq(Setting::getPage, PageEnum.FRIEND.getPageCode());
                 Setting friendPageSetting = settingService.getOne(friendPageQuery);
                 return !friendPageSetting.getSettingValue().equals("false");
             case 3:
                 LambdaQueryWrapper<Setting> aboutPageQuery = new LambdaQueryWrapper<>();
-                aboutPageQuery.eq(Setting::getSettingKey, "isComment");
+                aboutPageQuery.eq(Setting::getSettingKey, Constants.SETTING_KEY_ABOUT_IS_COMMENT);
                 aboutPageQuery.eq(Setting::getPage, PageEnum.ABOUT.getPageCode());
                 Setting aboutPageSetting = settingService.getOne(aboutPageQuery);
                 return !aboutPageSetting.getSettingValue().equals("false");

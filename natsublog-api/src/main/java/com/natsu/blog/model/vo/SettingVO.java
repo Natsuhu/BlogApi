@@ -71,4 +71,44 @@ public class SettingVO {
      */
     private String aboutTitle;
 
+    /**
+     * 设置值--首页背景图标题
+     */
+    private String headerTitle;
+
+    /**
+     * 设置值--首页背景图地址
+     */
+    private String headerImage;
+
+    /**
+     * 设置值--全局背景图地址
+     */
+    private String bodyImage;
+
+    /**
+     * 设置值--资料卡Github
+     */
+    private String github;
+
+    /**
+     * 设置值--资料卡QQ
+     */
+    private String qq;
+
+    /**
+     * 设置值--资料卡B站
+     */
+    private String bilibili;
+
+    /**
+     * 设置值--资料卡网易云
+     */
+    private String netease;
+
+    /**
+     * 设置值--资料卡邮箱
+     */
+    private String email;
+
 }

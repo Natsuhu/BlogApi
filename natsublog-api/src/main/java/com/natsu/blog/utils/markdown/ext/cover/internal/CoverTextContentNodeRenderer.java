@@ -4,11 +4,6 @@ import org.commonmark.node.Node;
 import org.commonmark.renderer.text.TextContentNodeRendererContext;
 import org.commonmark.renderer.text.TextContentWriter;
 
-/**
- * @Description: 文本节点渲染
- * @Author: Naccl
- * @Date: 2020-05-13
- */
 public class CoverTextContentNodeRenderer extends AbstractCoverNodeRenderer {
     private final TextContentNodeRendererContext context;
     private final TextContentWriter textContent;

@@ -3,6 +3,17 @@
 
 <mapper namespace="com.natsu.blog.mapper.FriendMapper">
 
+    <!--  前台-友链列表  -->
+    <select id="getFriends" resultType="com.natsu.blog.model.dto.FriendDTO">
+        select
+            nickname, description, website, avatar
+        from
+            friend
+        where
+            is_published = true
+        order by rand()
+    </select>
+
     <!--  后台管理-友情链接表格  -->
     <select id="getFriendTable" resultType="com.natsu.blog.model.dto.FriendDTO">
         select

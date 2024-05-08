@@ -2,6 +2,7 @@ package com.natsu.blog.controller.admin;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.natsu.blog.annotation.Admin;
 import com.natsu.blog.model.dto.CategoryDTO;
 import com.natsu.blog.model.dto.CategoryQueryDTO;
 import com.natsu.blog.model.dto.Result;
@@ -22,6 +23,7 @@ public class AdminCategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    @Admin
     @PostMapping("/saveCategory")
     public Result saveCategory(@RequestBody CategoryDTO categoryDTO) {
         //参数校验
@@ -41,6 +43,7 @@ public class AdminCategoryController {
         }
     }
 
+    @Admin
     @PostMapping("/deleteCategory")
     public Result deleteCategory(@RequestBody CategoryDTO categoryDTO) {
         //参数校验
@@ -57,6 +60,7 @@ public class AdminCategoryController {
         }
     }
 
+    @Admin
     @PostMapping("/updateCategory")
     public Result updateCategory(@RequestBody CategoryDTO categoryDTO) {
         //参数校验

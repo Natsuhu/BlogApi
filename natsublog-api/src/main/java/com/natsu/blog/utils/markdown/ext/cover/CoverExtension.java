@@ -13,11 +13,6 @@ import org.commonmark.renderer.text.TextContentNodeRendererContext;
 import org.commonmark.renderer.text.TextContentNodeRendererFactory;
 import org.commonmark.renderer.text.TextContentRenderer;
 
-/**
- * @Description: 自定义遮盖层拓展
- * @Author: Naccl
- * @Date: 2020-05-13
- */
 public class CoverExtension implements Parser.ParserExtension, HtmlRenderer.HtmlRendererExtension, TextContentRenderer.TextContentRendererExtension {
     private CoverExtension() {
     }

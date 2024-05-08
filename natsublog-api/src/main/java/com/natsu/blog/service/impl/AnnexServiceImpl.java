@@ -1,5 +1,6 @@
 package com.natsu.blog.service.impl;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -135,7 +136,15 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
      */
     @Override
     public String getAnnexAccessAddress(String annexId) {
-        return blogProperties.getApi() + "/annex/resource/" + annexId;
+        if (StrUtil.isBlank(annexId)) {
+            return null;
+        }
+        if (annexId.startsWith("http")) {
+            return annexId;
+        } else {
+            return blogProperties.getApi() + "/annex/resource/" + annexId;
+        }
+
     }
 
     /**
@@ -146,7 +155,14 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
      */
     @Override
     public String getAdminAnnexAccessAddress(String annexId) {
-        return blogProperties.getApi() + "/admin/annex/download/" + annexId;
+        if (StrUtil.isBlank(annexId)) {
+            return null;
+        }
+        if (annexId.startsWith("http")) {
+            return annexId;
+        } else {
+            return blogProperties.getApi() + "/admin/annex/download/" + annexId;
+        }
     }
 
     /**
@@ -162,6 +178,7 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
         List<AnnexDTO> records = annexTable.getRecords();
         for (AnnexDTO annexDTO : records) {
             annexDTO.setFormatSize(FileUtils.formatFileSize(annexDTO.getSize()));
+            annexDTO.setDownloadAddress(getAdminAnnexAccessAddress(annexDTO.getId()));
         }
         IPage<AnnexDTO> pageResult = new Page<>(annexTable.getCurrent(), annexTable.getSize(), annexTable.getTotal());
         pageResult.setRecords(records);
@@ -185,7 +202,7 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
      */
     @Override
     public void updateAnnex(AnnexDTO annexDTO) {
-        if (!StringUtils.isBlank(annexDTO.getName())) {
+        if (StringUtils.isNotBlank(annexDTO.getName())) {
             annexDTO.setSuffix(FileUtils.getFileSuffix(annexDTO.getName()));
         }
         updateById(annexDTO);

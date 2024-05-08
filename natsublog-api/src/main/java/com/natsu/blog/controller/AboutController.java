@@ -6,6 +6,7 @@ import com.natsu.blog.enums.VisitorBehavior;
 import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.model.vo.SettingVO;
 import com.natsu.blog.service.SettingService;
+import com.natsu.blog.utils.markdown.MarkdownUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +37,8 @@ public class AboutController {
     public Result getAboutPageSetting() {
         try {
             SettingVO settings = settingService.getPageSetting(PageEnum.ABOUT.getPageCode());
+            //文案markdown转义
+            settings.setAboutContent(MarkdownUtils.markdownToHtmlExtensions(settings.getAboutContent()));
             return Result.success(settings);
         } catch (Exception e) {
             log.error("获取关于我页面配置失败：{}", e.getMessage());

@@ -7,11 +7,6 @@ import org.commonmark.renderer.html.HtmlWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @Description: HTML节点渲染
- * @Author: Naccl
- * @Date: 2020-05-13
- */
 public class CoverHtmlNodeRenderer extends AbstractCoverNodeRenderer {
     private final HtmlNodeRendererContext context;
     private final HtmlWriter html;

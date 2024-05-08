@@ -1,8 +1,8 @@
 package com.natsu.blog.utils.markdown.ext.heimu.internal;
 
+import com.natsu.blog.utils.markdown.ext.heimu.Heimu;
 import org.commonmark.node.Node;
 import org.commonmark.renderer.NodeRenderer;
-import com.natsu.blog.utils.markdown.ext.heimu.Heimu;
 
 import java.util.Collections;
 import java.util.Set;

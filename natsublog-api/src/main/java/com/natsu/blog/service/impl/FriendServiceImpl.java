@@ -33,6 +33,11 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend> impleme
     private SettingService settingService;
 
     @Override
+    public List<FriendDTO> getFriends() {
+        return friendMapper.getFriends();
+    }
+
+    @Override
     public void saveFriend(FriendDTO friendDTO) {
         //验证站点域名重复
         String website = friendDTO.getWebsite();

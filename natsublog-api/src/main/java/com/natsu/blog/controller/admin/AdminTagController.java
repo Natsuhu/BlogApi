@@ -1,6 +1,7 @@
 package com.natsu.blog.controller.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.natsu.blog.annotation.Admin;
 import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.model.dto.TagDTO;
 import com.natsu.blog.model.dto.TagQueryDTO;
@@ -21,6 +22,7 @@ public class AdminTagController {
     @Autowired
     private TagService tagService;
 
+    @Admin
     @PostMapping("/saveTag")
     public Result saveTag(@RequestBody TagDTO TagDTO) {
         //参数校验
@@ -40,6 +42,7 @@ public class AdminTagController {
         }
     }
 
+    @Admin
     @PostMapping("/deleteTag")
     public Result deleteTag(@RequestBody TagDTO TagDTO) {
         //参数校验
@@ -56,6 +59,7 @@ public class AdminTagController {
         }
     }
 
+    @Admin
     @PostMapping("/updateTag")
     public Result updateTag(@RequestBody TagDTO tagDTO) {
         //参数校验

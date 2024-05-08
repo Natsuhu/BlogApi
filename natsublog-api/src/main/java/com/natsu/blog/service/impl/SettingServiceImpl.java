@@ -8,6 +8,7 @@ import com.natsu.blog.constant.Constants;
 import com.natsu.blog.mapper.SettingMapper;
 import com.natsu.blog.model.entity.Setting;
 import com.natsu.blog.model.vo.SettingVO;
+import com.natsu.blog.service.AnnexService;
 import com.natsu.blog.service.SettingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> impl
 
     @Autowired
     private SettingMapper settingMapper;
+
+    @Autowired
+    private AnnexService annexService;
 
     @Override
     public SettingVO getAllSetting() {
@@ -66,7 +70,16 @@ public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> impl
         settingVO.setAboutMusicServer(allSettingMap.get(Constants.SETTING_KEY_ABOUT_MUSIC_SERVER));
         settingVO.setCardName(allSettingMap.get(Constants.SETTING_KEY_CARD_NAME));
         settingVO.setCardSignature(allSettingMap.get(Constants.SETTING_KEY_CARD_SIGNATURE));
-        settingVO.setCardAvatar(allSettingMap.get(Constants.SETTING_KEY_CARD_AVATAR));
+        settingVO.setGithub(allSettingMap.get(Constants.SETTING_KET_GITHUB));
+        settingVO.setQq(allSettingMap.get(Constants.SETTING_KET_QQ));
+        settingVO.setBilibili(allSettingMap.get(Constants.SETTING_KET_BILIBILI));
+        settingVO.setNetease(allSettingMap.get(Constants.SETTING_KET_NETEASE));
+        settingVO.setEmail(allSettingMap.get(Constants.SETTING_KET_EMAIL));
+        settingVO.setHeaderTitle(allSettingMap.get(Constants.SETTING_KET_HEADER_TITLE));
+        //所有图片使用文件管理处理地址
+        settingVO.setCardAvatar(annexService.getAnnexAccessAddress(allSettingMap.get(Constants.SETTING_KEY_CARD_AVATAR)));
+        settingVO.setHeaderImage(annexService.getAnnexAccessAddress(allSettingMap.get(Constants.SETTING_KET_HEADER_IMAGE)));
+        settingVO.setBodyImage(annexService.getAnnexAccessAddress(allSettingMap.get(Constants.SETTING_KET_BODY_IMAGE)));
         return settingVO;
     }
 

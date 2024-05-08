@@ -144,6 +144,14 @@ public class VisitorLogAspect {
                 articleQueryDTO = (ArticleQueryDTO) requestParams;
                 content = "标签ID：" + articleQueryDTO.getTagIds();
                 break;
+            case CLICK_FRIEND:
+                String nickname = (String) requestParams;
+                content = "朋友昵称：" + nickname;
+                break;
+            case LIKE_MOMENT:
+                String id = (String) requestParams;
+                content = "动态ID：" + requestParams;
+                break;
         }
         return content;
     }

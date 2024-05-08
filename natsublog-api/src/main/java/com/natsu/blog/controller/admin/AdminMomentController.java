@@ -1,6 +1,7 @@
 package com.natsu.blog.controller.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.natsu.blog.annotation.Admin;
 import com.natsu.blog.model.dto.MomentDTO;
 import com.natsu.blog.model.dto.MomentQueryDTO;
 import com.natsu.blog.model.dto.Result;
@@ -44,6 +45,7 @@ public class AdminMomentController {
         }
     }
 
+    @Admin
     @PostMapping("/saveMoment")
     public Result saveMoment(@RequestBody MomentDTO momentDTO) {
         //参数校验
@@ -61,6 +63,7 @@ public class AdminMomentController {
         }
     }
 
+    @Admin
     @PostMapping("/updateMoment")
     public Result updateMoment(@RequestBody MomentDTO momentDTO) {
         //参数校验
@@ -77,6 +80,7 @@ public class AdminMomentController {
         }
     }
 
+    @Admin
     @PostMapping("/deleteMoment")
     public Result deleteMoment(@RequestBody MomentDTO momentDTO) {
         //参数校验

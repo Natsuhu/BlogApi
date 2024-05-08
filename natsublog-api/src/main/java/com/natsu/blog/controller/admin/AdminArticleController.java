@@ -1,6 +1,7 @@
 package com.natsu.blog.controller.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.natsu.blog.annotation.Admin;
 import com.natsu.blog.model.dto.ArticleDTO;
 import com.natsu.blog.model.dto.ArticleQueryDTO;
 import com.natsu.blog.model.dto.Result;
@@ -68,6 +69,7 @@ public class AdminArticleController {
     /**
      * 保存文章
      */
+    @Admin
     @PostMapping("/saveArticle")
     public Result saveArticle(@RequestBody ArticleDTO articleDTO) {
         //参数校验
@@ -93,6 +95,7 @@ public class AdminArticleController {
     /**
      * 更新文章
      */
+    @Admin
     @PostMapping("/updateArticle")
     public Result updateArticle(@RequestBody ArticleDTO articleDTO) {
         //参数校验

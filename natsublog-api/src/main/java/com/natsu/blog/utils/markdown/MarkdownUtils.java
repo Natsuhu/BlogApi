@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-// TODO 需要重构
 public class MarkdownUtils {
     //为h标签生成id 供tocbot目录生成
     private static final Set<Extension> headingAnchorExtensions = Collections.singleton(HeadingAnchorExtension.create());
@@ -104,6 +103,6 @@ public class MarkdownUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(markdownToHtmlExtensions("@@axxa@@"));
+        System.out.println(markdownToHtmlExtensions(""));
     }
 }

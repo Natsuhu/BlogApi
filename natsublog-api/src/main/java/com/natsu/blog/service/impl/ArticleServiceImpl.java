@@ -1,5 +1,6 @@
 package com.natsu.blog.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -68,6 +69,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         //根据日期查询对应日期下的所有文章
         for (String date : archivesDate) {
             List<ArticleDTO> archives = articleMapper.getArchives(date);
+            //日期格式化
+            String[] split = date.split("-");
+            date = split[0] + " 年 " + split[1].replace("0", "") + " 月";
             archivesMap.put(date, archives);
         }
         //获取文章数量
@@ -92,7 +96,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             BeanUtils.copyProperties(article, articleDTO);
             //补充分类和标签
             String content = article.getContent();
-            articleDTO.setContent(MarkdownUtils.markdownToHtml(content));
+            articleDTO.setContent(MarkdownUtils.markdownToHtmlExtensions(content));
             articleDTO.setCategoryName(categoryService.getById(article.getCategoryId()).getName());
             articleDTO.setTags(tagService.getTagsByArticleId(article.getId()));
             //更新文章阅读数量
@@ -119,6 +123,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         List<ArticleDTO> records = articles.getRecords();
         //补充标签和缩略图
         for (ArticleDTO article : records) {
+            article.setDescription(MarkdownUtils.markdownToHtmlExtensions(article.getDescription()));
             article.setThumbnail(annexService.getAnnexAccessAddress(article.getThumbnail()));
             article.setTags(tagService.getTagsByArticleId(article.getId()));
         }

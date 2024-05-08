@@ -33,6 +33,11 @@ public class BlogProperties {
     private String front;
 
     /**
+     * 博客管理系统URL
+     */
+    private String ms;
+
+    /**
      * 博客文件管理
      */
     private HashMap<String, String> annex;

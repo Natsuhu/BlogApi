@@ -104,6 +104,46 @@ public class Constants {
     public static final String SETTING_KEY_ABOUT_TITLE = "aboutTitle";
 
     /**
+     * 设置值--首页背景图标题
+     */
+    public static final String SETTING_KET_HEADER_TITLE = "headerTitle";
+
+    /**
+     * 设置值--首页背景图地址
+     */
+    public static final String SETTING_KET_HEADER_IMAGE = "headerImage";
+
+    /**
+     * 设置值--全局背景图地址
+     */
+    public static final String SETTING_KET_BODY_IMAGE = "bodyImage";
+
+    /**
+     * 设置值--资料卡Github
+     */
+    public static final String SETTING_KET_GITHUB = "github";
+
+    /**
+     * 设置值--资料卡QQ
+     */
+    public static final String SETTING_KET_QQ = "qq";
+
+    /**
+     * 设置值--资料卡B站
+     */
+    public static final String SETTING_KET_BILIBILI = "bilibili";
+
+    /**
+     * 设置值--资料卡网易云
+     */
+    public static final String SETTING_KET_NETEASE = "netease";
+
+    /**
+     * 设置值--资料卡邮箱
+     */
+    public static final String SETTING_KET_EMAIL = "email";
+
+    /**
      * 评论中QQ头像存储方式-本地
      */
     public static final String LOCAL = "local";

@@ -3,6 +3,7 @@ package com.natsu.blog.controller.admin;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpException;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.natsu.blog.annotation.Admin;
 import com.natsu.blog.constant.Constants;
 import com.natsu.blog.model.dto.AnnexDTO;
 import com.natsu.blog.model.dto.AnnexQueryDTO;
@@ -39,6 +40,7 @@ public class AdminAnnexController {
     @Autowired
     private AnnexService annexService;
 
+    @Admin
     @PostMapping("/upload")
     public Result upload(@RequestParam(value = "file") MultipartFile multipartFile,
                          @RequestParam(value = "isPublished", defaultValue = "false", required = false) Boolean isPublished) {
@@ -51,6 +53,7 @@ public class AdminAnnexController {
         }
     }
 
+    @Admin
     @GetMapping("/download/{annexId}")
     public void getResource(@PathVariable("annexId") String annexId, HttpServletRequest request, HttpServletResponse response) {
         OutputStream os = null;
@@ -141,13 +144,11 @@ public class AdminAnnexController {
         }
     }
 
+    @Admin
     @PostMapping("/updateAnnex")
     public Result updateAnnex(@RequestBody AnnexDTO annexDTO) {
         if (annexDTO.getId() == null) {
             return Result.fail("参数错误，必须填写文件ID");
-        }
-        if (StrUtil.isBlank(annexDTO.getName())) {
-            return Result.fail("文件名不能为空");
         }
         try {
             annexService.updateAnnex(annexDTO);
@@ -158,6 +159,7 @@ public class AdminAnnexController {
         }
     }
 
+    @Admin
     @PostMapping("deleteAnnex")
     public Result deleteAnnex(@RequestBody AnnexDTO annexDTO) {
         if (annexDTO.getId() == null) {

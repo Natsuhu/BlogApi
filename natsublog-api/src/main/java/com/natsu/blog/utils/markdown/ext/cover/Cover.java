@@ -4,7 +4,7 @@ import org.commonmark.node.CustomNode;
 import org.commonmark.node.Delimited;
 
 public class Cover extends CustomNode implements Delimited {
-    private static final String DELIMITER = "@@";
+    private static final String DELIMITER = "%%";
 
     @Override
     public String getOpeningDelimiter() {

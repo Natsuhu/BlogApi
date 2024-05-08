@@ -53,8 +53,8 @@ public class ArticleController {
      * 随机文章
      */
     @GetMapping("/random")
-    public Result getRandomArticles(@RequestParam(defaultValue = "5") Integer count) {
-        List<ArticleDTO> articles = articleService.getRandomArticles(count);
+    public Result getRandomArticles() {
+        List<ArticleDTO> articles = articleService.getRandomArticles(5);
         return Result.success(articles);
     }
 

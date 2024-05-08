@@ -1,6 +1,8 @@
 package com.natsu.blog.config;
 
-import com.natsu.blog.handler.LoginInterceptor;
+import com.natsu.blog.config.properties.BlogProperties;
+import com.natsu.blog.interceptor.AccessLimitInterceptor;
+import com.natsu.blog.interceptor.LoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -25,6 +27,12 @@ public class WebMVCConfig implements WebMvcConfigurer {
     private LoginInterceptor loginInterceptor;
 
     /**
+     * 限制访问拦截器
+     */
+    @Autowired
+    private AccessLimitInterceptor accessLimitInterceptor;
+
+    /**
      * 跨域配置，因为前后端端口不同，需要允许前端服务器访问后端端口
      */
     @Override
@@ -37,8 +45,10 @@ public class WebMVCConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(accessLimitInterceptor);
         registry.addInterceptor(loginInterceptor)
-                .addPathPatterns("/user/test");
+                .addPathPatterns("/admin/**")
+                .excludePathPatterns("/admin/login");
     }
 
     /**

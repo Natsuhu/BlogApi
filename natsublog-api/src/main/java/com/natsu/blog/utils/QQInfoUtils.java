@@ -1,5 +1,7 @@
 package com.natsu.blog.utils;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +17,7 @@ import java.nio.charset.Charset;
 public class QQInfoUtils {
 
     private static final String QQ_NICKNAME_URL = "https://users.qzone.qq.com/fcg-bin/cgi_get_portrait.fcg?uins={1}";
+/*    private static final String QQ_NICKNAME_URL = "https://api.oioweb.cn/api/qq/info?qq={1}";*/
     private static final String QQ_AVATAR_URL = "https://q.qlogo.cn/g?b=qq&nk=%s&s=100";
     private static final RestTemplate restTemplate = new RestTemplate();
 
@@ -30,6 +33,8 @@ public class QQInfoUtils {
 
     /**
      * 获取QQ昵称
+     * @param qq　ｑｑ
+     * @return String
      */
     public static String getQQNickname(String qq) {
         if (!isQQNumber(qq)) {
@@ -42,12 +47,30 @@ public class QQInfoUtils {
             byte[] bytes = res.getBytes(Charset.forName("ISO_8859_1"));
             String nickname = new String(bytes, Charset.forName("GB18030")).split(",")[6].replace("\"", "");
             if (StringUtils.isBlank(nickname)) {
-                return "null";
+                return "nickname";
             }
             return nickname;
         }
-        return "null";
+        return "nickname";
     }
+
+/*    *//**
+     * 获取QQ昵称，新版接口
+     * @param qq qq
+     * @return String
+     *//*
+    public static String getQQNickname(String qq) {
+        //发送请求
+        String res = restTemplate.getForObject(QQ_NICKNAME_URL, String.class, qq);
+        System.out.println(res);
+        //处理结果
+        if (StringUtils.isNotBlank(res)) {
+            JSONObject jsonObject = JSON.parseObject(res);
+            JSONObject result = jsonObject.getJSONObject("result");
+            return result.getString("nickname");
+        }
+        return null;
+    }*/
 
     /**
      * 获取头像

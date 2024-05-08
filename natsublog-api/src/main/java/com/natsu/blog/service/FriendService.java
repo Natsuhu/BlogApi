@@ -7,7 +7,11 @@ import com.natsu.blog.model.dto.FriendQueryDTO;
 import com.natsu.blog.model.entity.Friend;
 import com.natsu.blog.model.vo.SettingVO;
 
+import java.util.List;
+
 public interface FriendService extends IService<Friend> {
+
+    List<FriendDTO> getFriends();
 
     void saveFriend(FriendDTO friendDTO);
 

@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * 全局异常处理
  * 对所有的controller进行拦截处理，是AOP的实现
@@ -22,8 +24,8 @@ public class AllExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public Result doException(Exception e) {
-        log.error("拦截器捕获到异常：{}", e.getMessage());
+    public Result doException(HttpServletRequest request, Exception e) {
+        log.error("Request URL : {}, Exception : {}", request.getRequestURL(), e.getMessage());
         return Result.fail(e.getMessage());
     }
 }

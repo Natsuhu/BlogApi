@@ -1,6 +1,7 @@
 package com.natsu.blog.controller.admin;
 
 import cn.hutool.core.util.StrUtil;
+import com.natsu.blog.annotation.Admin;
 import com.natsu.blog.constant.Constants;
 import com.natsu.blog.enums.PageEnum;
 import com.natsu.blog.model.dto.Result;
@@ -32,6 +33,7 @@ public class AdminAboutController {
         }
     }
 
+    @Admin
     @PostMapping("/updateAboutSetting")
     public Result updateAboutSetting(@RequestBody SettingVO settingVO) {
         try {
