@@ -1,3 +1,4 @@
 /natsublog-api/target/
 /.idea/
+/logs/
 *.iml

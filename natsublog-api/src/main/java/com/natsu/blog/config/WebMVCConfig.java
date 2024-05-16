@@ -1,8 +1,7 @@
 package com.natsu.blog.config;
 
-import com.natsu.blog.config.properties.BlogProperties;
 import com.natsu.blog.interceptor.AccessLimitInterceptor;
-import com.natsu.blog.interceptor.LoginInterceptor;
+import com.natsu.blog.interceptor.AdminInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -24,7 +23,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
      * 登录拦截器
      */
     @Autowired
-    private LoginInterceptor loginInterceptor;
+    private AdminInterceptor adminInterceptor;
 
     /**
      * 限制访问拦截器
@@ -46,9 +45,7 @@ public class WebMVCConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(accessLimitInterceptor);
-        registry.addInterceptor(loginInterceptor)
-                .addPathPatterns("/admin/**")
-                .excludePathPatterns("/admin/login");
+        registry.addInterceptor(adminInterceptor).addPathPatterns("/admin/**");
     }
 
     /**
