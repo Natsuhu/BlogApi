@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.natsu.blog.mapper.DashboardMapper">
+
+    <select id="getArticleCount" resultType="java.lang.Integer">
+        select count(*) as articleCount from article
+    </select>
+
+    <select id="getCommentCount" resultType="java.lang.Integer">
+        select count(*) as commentCount from comment
+    </select>
+
+    <select id="getCategoryEcharts" resultType="com.natsu.blog.model.vo.DashboardVO">
+        select
+            name, count(b.id) as value
+        from
+            category as a left join article as b on a.id = b.category_id
+        group by a.id
+    </select>
+
+    <select id="getTagEcharts" resultType="com.natsu.blog.model.vo.DashboardVO">
+        select
+            name, count(b.article_id) as value
+        from
+            tag as a left join article_tag as b on a.id = b.tag_id
+        group by a.id
+    </select>
+
+</mapper>

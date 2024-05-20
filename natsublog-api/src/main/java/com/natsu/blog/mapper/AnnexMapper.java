@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.natsu.blog.model.dto.AnnexDTO;
 import com.natsu.blog.model.dto.AnnexQueryDTO;
-import com.natsu.blog.model.dto.ArticleDTO;
-import com.natsu.blog.model.dto.ArticleQueryDTO;
 import com.natsu.blog.model.entity.Annex;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
