@@ -43,6 +43,7 @@ public class AnnexController {
                 return;
             }
             response.addHeader("Accept-Ranges","bytes");
+            response.addHeader("Cache-Control", "public, must-revalidate, max-age=86400");
             //内容类型 - 设定适合的类型（配合在线展示判定）
             //response.setContentType("audio/mpeg;charset=UTF-8");
             response.setContentType(CommonUtils.getContentType(fileName));
