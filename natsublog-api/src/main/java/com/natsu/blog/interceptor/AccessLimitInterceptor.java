@@ -5,6 +5,7 @@ import com.natsu.blog.annotation.AccessLimit;
 import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.utils.IPUtils;
 import com.natsu.blog.utils.RedisUtils;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -19,6 +20,7 @@ import java.io.PrintWriter;
  * 访问控制拦截器
  */
 @Component
+@Order(5)
 public class AccessLimitInterceptor implements HandlerInterceptor {
 
     @Override

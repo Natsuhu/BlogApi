@@ -2,7 +2,9 @@ package com.natsu.blog.controller.admin;
 
 import cn.hutool.core.util.StrUtil;
 import com.natsu.blog.annotation.Admin;
+import com.natsu.blog.annotation.OperationLogger;
 import com.natsu.blog.constant.Constants;
+import com.natsu.blog.enums.OperationTypeEnum;
 import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.model.vo.SettingVO;
 import com.natsu.blog.service.SettingService;
@@ -21,6 +23,7 @@ public class AdminSettingController {
     @Autowired
     private SettingService settingService;
 
+    @OperationLogger(type = OperationTypeEnum.QUERY, description = "网站设置-通用")
     @PostMapping("/getCommonSetting")
     public Result getCommonSetting() {
         try {
@@ -38,6 +41,7 @@ public class AdminSettingController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.UPDATE, description = "网站设置-通用")
     @PostMapping("/updateCommonSetting")
     public Result updateCommonSetting(@RequestBody SettingVO settingVO) {
         try {
@@ -59,6 +63,7 @@ public class AdminSettingController {
         }
     }
 
+    @OperationLogger(type = OperationTypeEnum.QUERY, description = "网站设置-资料卡")
     @PostMapping("/getCardSetting")
     public Result getCardSetting() {
         try {
@@ -79,6 +84,7 @@ public class AdminSettingController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.UPDATE, description = "网站设置-资料卡")
     @PostMapping("/updateCardSetting")
     public Result updateCardSetting(@RequestBody SettingVO settingVO) {
         try {

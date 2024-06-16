@@ -2,6 +2,8 @@ package com.natsu.blog.controller.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.natsu.blog.annotation.Admin;
+import com.natsu.blog.annotation.OperationLogger;
+import com.natsu.blog.enums.OperationTypeEnum;
 import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.model.dto.TagDTO;
 import com.natsu.blog.model.dto.TagQueryDTO;
@@ -23,6 +25,7 @@ public class AdminTagController {
     private TagService tagService;
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.INSERT, description = "标签")
     @PostMapping("/saveTag")
     public Result saveTag(@RequestBody TagDTO TagDTO) {
         //参数校验
@@ -43,6 +46,7 @@ public class AdminTagController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.DELETE, description = "标签")
     @PostMapping("/deleteTag")
     public Result deleteTag(@RequestBody TagDTO TagDTO) {
         //参数校验
@@ -60,6 +64,7 @@ public class AdminTagController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.UPDATE, description = "标签")
     @PostMapping("/updateTag")
     public Result updateTag(@RequestBody TagDTO tagDTO) {
         //参数校验
@@ -76,6 +81,7 @@ public class AdminTagController {
         }
     }
 
+    @OperationLogger(type = OperationTypeEnum.QUERY, description = "标签管理")
     @PostMapping("/getTagTable")
     public Result getTagTable(@RequestBody TagQueryDTO queryDTO) {
         try {

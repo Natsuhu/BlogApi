@@ -3,6 +3,8 @@ package com.natsu.blog.controller.admin;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.natsu.blog.annotation.Admin;
+import com.natsu.blog.annotation.OperationLogger;
+import com.natsu.blog.enums.OperationTypeEnum;
 import com.natsu.blog.model.dto.CategoryDTO;
 import com.natsu.blog.model.dto.CategoryQueryDTO;
 import com.natsu.blog.model.dto.Result;
@@ -24,6 +26,7 @@ public class AdminCategoryController {
     private CategoryService categoryService;
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.INSERT, description = "分类")
     @PostMapping("/saveCategory")
     public Result saveCategory(@RequestBody CategoryDTO categoryDTO) {
         //参数校验
@@ -44,6 +47,7 @@ public class AdminCategoryController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.DELETE, description = "分类")
     @PostMapping("/deleteCategory")
     public Result deleteCategory(@RequestBody CategoryDTO categoryDTO) {
         //参数校验
@@ -61,6 +65,7 @@ public class AdminCategoryController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.UPDATE, description = "分类")
     @PostMapping("/updateCategory")
     public Result updateCategory(@RequestBody CategoryDTO categoryDTO) {
         //参数校验
@@ -80,6 +85,7 @@ public class AdminCategoryController {
         }
     }
 
+    @OperationLogger(type = OperationTypeEnum.QUERY, description = "分类管理")
     @PostMapping("/getCategoryTable")
     public Result getCategoryTable(@RequestBody CategoryQueryDTO queryDTO) {
         try {

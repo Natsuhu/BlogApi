@@ -1,5 +1,6 @@
 package com.natsu.blog.aspect;
 
+import com.alibaba.fastjson.JSON;
 import com.natsu.blog.annotation.VisitorLogger;
 import com.natsu.blog.enums.VisitorBehavior;
 import com.natsu.blog.model.dto.ArticleDTO;
@@ -93,7 +94,7 @@ public class VisitorLogAspect {
         visitLog.setIp(ip);
         visitLog.setUserAgent(userAgent);
         if (requestParams != null) {
-            visitLog.setParam(requestParams.toString());
+            visitLog.setParam(JSON.toJSONString(requestParams));
         }
         visitLog.setBehavior(visitorLogger.value().getBehavior());
         visitLog.setRemark(remark);

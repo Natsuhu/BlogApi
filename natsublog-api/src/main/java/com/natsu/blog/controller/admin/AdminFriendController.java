@@ -3,6 +3,8 @@ package com.natsu.blog.controller.admin;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.natsu.blog.annotation.Admin;
+import com.natsu.blog.annotation.OperationLogger;
+import com.natsu.blog.enums.OperationTypeEnum;
 import com.natsu.blog.model.dto.FriendDTO;
 import com.natsu.blog.model.dto.FriendQueryDTO;
 import com.natsu.blog.model.dto.Result;
@@ -23,6 +25,7 @@ public class AdminFriendController {
     @Autowired
     private FriendService friendService;
 
+    @OperationLogger(type = OperationTypeEnum.QUERY, description = "友链管理")
     @PostMapping("/getFriendTable")
     public Result getFriendTable(@RequestBody FriendQueryDTO friendQueryDTO) {
         try {
@@ -35,6 +38,7 @@ public class AdminFriendController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.INSERT, description = "友链")
     @PostMapping("/saveFriend")
     public Result saveFriend(@RequestBody FriendDTO friendDTO) {
         if (friendDTO.getId() != null) {
@@ -54,6 +58,7 @@ public class AdminFriendController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.UPDATE, description = "友链")
     @PostMapping("/updateFriend")
     public Result updateFriend(@RequestBody FriendDTO friendDTO) {
         if (friendDTO.getId() == null) {
@@ -69,6 +74,7 @@ public class AdminFriendController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.DELETE, description = "友链")
     @PostMapping("/deleteFriend")
     public Result deleteFriend(@RequestBody FriendDTO friendDTO) {
         if (friendDTO.getId() == null) {
@@ -95,6 +101,7 @@ public class AdminFriendController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.UPDATE, description = "友链页面配置")
     @PostMapping("/updateFriendSetting")
     public Result updateFriendSetting(@RequestBody SettingVO settingVO) {
         try {

@@ -2,6 +2,8 @@ package com.natsu.blog.controller.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.natsu.blog.annotation.Admin;
+import com.natsu.blog.annotation.OperationLogger;
+import com.natsu.blog.enums.OperationTypeEnum;
 import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.model.dto.VisitLogDTO;
 import com.natsu.blog.model.dto.VisitLogQueryDTO;
@@ -21,6 +23,7 @@ public class AdminVisitLogController {
     @Autowired
     private VisitLogService visitLogService;
 
+    @OperationLogger(type = OperationTypeEnum.QUERY, description = "访问日志")
     @PostMapping("/getVisitLogTable")
     public Result getVisitLogTable(@RequestBody VisitLogQueryDTO queryCond) {
         try {
@@ -33,6 +36,7 @@ public class AdminVisitLogController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.DELETE, description = "访问日志")
     @PostMapping("/deleteVisitLog")
     public Result deleteVisitLog(@RequestBody VisitLogDTO visitLogDTO) {
         try {

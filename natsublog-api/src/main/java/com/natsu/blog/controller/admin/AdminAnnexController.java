@@ -4,7 +4,9 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpException;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.natsu.blog.annotation.Admin;
+import com.natsu.blog.annotation.OperationLogger;
 import com.natsu.blog.constant.Constants;
+import com.natsu.blog.enums.OperationTypeEnum;
 import com.natsu.blog.model.dto.AnnexDTO;
 import com.natsu.blog.model.dto.AnnexQueryDTO;
 import com.natsu.blog.model.dto.Result;
@@ -41,6 +43,7 @@ public class AdminAnnexController {
     private AnnexService annexService;
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.UPLOAD, description = "文件")
     @PostMapping("/upload")
     public Result upload(@RequestParam(value = "file") MultipartFile multipartFile,
                          @RequestParam(value = "isPublished", defaultValue = "false", required = false) Boolean isPublished) {
@@ -54,6 +57,7 @@ public class AdminAnnexController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.DOWNLOAD, description = "文件")
     @GetMapping("/download/{annexId}")
     public void getResource(@PathVariable("annexId") String annexId, HttpServletRequest request, HttpServletResponse response) {
         OutputStream os = null;
@@ -122,6 +126,7 @@ public class AdminAnnexController {
         }
     }
 
+    @OperationLogger(type = OperationTypeEnum.QUERY, description = "文件管理")
     @PostMapping("/getAnnexTable")
     public Result getAnnexTable(@RequestBody AnnexQueryDTO annexQueryDTO) {
         try {
@@ -145,6 +150,7 @@ public class AdminAnnexController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.UPDATE, description = "文件")
     @PostMapping("/updateAnnex")
     public Result updateAnnex(@RequestBody AnnexDTO annexDTO) {
         if (annexDTO.getId() == null) {
@@ -160,6 +166,7 @@ public class AdminAnnexController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.DELETE, description = "文件")
     @PostMapping("deleteAnnex")
     public Result deleteAnnex(@RequestBody AnnexDTO annexDTO) {
         if (annexDTO.getId() == null) {

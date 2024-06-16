@@ -4,11 +4,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.natsu.blog.mapper.ArticleMapper;
 import com.natsu.blog.mapper.FriendMapper;
+import com.natsu.blog.mapper.OperationLogMapper;
 import com.natsu.blog.mapper.VisitLogMapper;
-import com.natsu.blog.model.entity.Article;
-import com.natsu.blog.model.entity.Friend;
-import com.natsu.blog.model.entity.Moment;
-import com.natsu.blog.model.entity.VisitLog;
+import com.natsu.blog.model.entity.*;
 import com.natsu.blog.service.FriendService;
 import com.natsu.blog.service.MomentService;
 import com.natsu.blog.utils.IPUtils;
@@ -104,4 +102,21 @@ public class AsyncTaskService {
         }
     }
 
+    /**
+     * 保存操作记录
+     * @param operationLogMapper m
+     * @param operationLog o
+     */
+    public void saveOperationLog(OperationLogMapper operationLogMapper, OperationLog operationLog) {
+        HashMap<String, String> userAgent = userAgentUtils.parseOsAndBrowser(operationLog.getUserAgent());
+        operationLog.setIpSource(IPUtils.getCityInfo(operationLog.getIp()));
+        operationLog.setBrowser(userAgent.get("browser"));
+        operationLog.setOs(userAgent.get("os"));
+        try {
+            operationLogMapper.insert(operationLog);
+        } catch (Exception e) {
+            log.error("保存操作记录失败：{}", e.getMessage());
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 }

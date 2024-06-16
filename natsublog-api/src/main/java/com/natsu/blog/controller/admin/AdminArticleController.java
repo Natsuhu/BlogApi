@@ -2,6 +2,8 @@ package com.natsu.blog.controller.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.natsu.blog.annotation.Admin;
+import com.natsu.blog.annotation.OperationLogger;
+import com.natsu.blog.enums.OperationTypeEnum;
 import com.natsu.blog.model.dto.ArticleDTO;
 import com.natsu.blog.model.dto.ArticleQueryDTO;
 import com.natsu.blog.model.dto.Result;
@@ -39,6 +41,7 @@ public class AdminArticleController {
      *
      * @description 用于从文章管理页面的编辑按钮跳转到写文章页面时，通过ID获取文章填充表单
      */
+    @OperationLogger(type = OperationTypeEnum.QUERY, description = "博客管理-编辑")
     @PostMapping("/getUpdateArticle")
     public Result getUpdateArticle(@RequestParam("id") Long articleId) {
         try {
@@ -55,6 +58,7 @@ public class AdminArticleController {
      *
      * @description 用于文章管理页面获取文章表格
      */
+    @OperationLogger(type = OperationTypeEnum.QUERY, description = "博客管理")
     @PostMapping("/getArticleTable")
     public Result getArticleTable(@RequestBody ArticleQueryDTO queryDTO) {
         try {
@@ -70,6 +74,7 @@ public class AdminArticleController {
      * 保存文章
      */
     @Admin
+    @OperationLogger(type = OperationTypeEnum.INSERT, description = "博客")
     @PostMapping("/saveArticle")
     public Result saveArticle(@RequestBody ArticleDTO articleDTO) {
         //参数校验
@@ -96,6 +101,7 @@ public class AdminArticleController {
      * 更新文章
      */
     @Admin
+    @OperationLogger(type = OperationTypeEnum.UPDATE, description = "博客")
     @PostMapping("/updateArticle")
     public Result updateArticle(@RequestBody ArticleDTO articleDTO) {
         //参数校验

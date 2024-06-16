@@ -2,6 +2,8 @@ package com.natsu.blog.controller.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.natsu.blog.annotation.Admin;
+import com.natsu.blog.annotation.OperationLogger;
+import com.natsu.blog.enums.OperationTypeEnum;
 import com.natsu.blog.model.dto.MomentDTO;
 import com.natsu.blog.model.dto.MomentQueryDTO;
 import com.natsu.blog.model.dto.Result;
@@ -23,6 +25,7 @@ public class AdminMomentController {
     @Autowired
     private MomentService momentService;
 
+    @OperationLogger(type = OperationTypeEnum.QUERY, description = "动态管理-编辑")
     @PostMapping("/getUpdateMoment")
     public Result getUpdateMoment(@RequestParam("id") Long momentId) {
         try {
@@ -34,6 +37,7 @@ public class AdminMomentController {
         }
     }
 
+    @OperationLogger(type = OperationTypeEnum.QUERY, description = "动态管理")
     @PostMapping("/getMomentTable")
     public Result getMomentTable(@RequestBody MomentQueryDTO momentQueryDTO) {
         try {
@@ -46,6 +50,7 @@ public class AdminMomentController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.INSERT, description = "动态")
     @PostMapping("/saveMoment")
     public Result saveMoment(@RequestBody MomentDTO momentDTO) {
         //参数校验
@@ -64,6 +69,7 @@ public class AdminMomentController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.UPDATE, description = "动态")
     @PostMapping("/updateMoment")
     public Result updateMoment(@RequestBody MomentDTO momentDTO) {
         //参数校验
@@ -81,6 +87,7 @@ public class AdminMomentController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.DELETE, description = "动态")
     @PostMapping("/deleteMoment")
     public Result deleteMoment(@RequestBody MomentDTO momentDTO) {
         //参数校验

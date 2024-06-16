@@ -1,5 +1,7 @@
 package com.natsu.blog.controller.admin;
 
+import com.natsu.blog.annotation.OperationLogger;
+import com.natsu.blog.enums.OperationTypeEnum;
 import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.service.DashboardService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,7 @@ public class AdminDashboardController {
      *
      * @return result
      */
+    @OperationLogger(type = OperationTypeEnum.QUERY, description = "主页")
     @PostMapping("/getTopBaseData")
     public Result getTopBaseData() {
         try {

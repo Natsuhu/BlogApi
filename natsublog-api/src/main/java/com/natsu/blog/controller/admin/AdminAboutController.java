@@ -2,7 +2,9 @@ package com.natsu.blog.controller.admin;
 
 import cn.hutool.core.util.StrUtil;
 import com.natsu.blog.annotation.Admin;
+import com.natsu.blog.annotation.OperationLogger;
 import com.natsu.blog.constant.Constants;
+import com.natsu.blog.enums.OperationTypeEnum;
 import com.natsu.blog.enums.PageEnum;
 import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.model.vo.SettingVO;
@@ -22,6 +24,7 @@ public class AdminAboutController {
     @Autowired
     private SettingService settingService;
 
+    @OperationLogger(type = OperationTypeEnum.QUERY, description = "关于我页面配置")
     @PostMapping("/getAboutSetting")
     public Result getAboutSetting() {
         try {
@@ -34,6 +37,7 @@ public class AdminAboutController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.UPDATE, description = "关于我页面配置")
     @PostMapping("/updateAboutSetting")
     public Result updateAboutSetting(@RequestBody SettingVO settingVO) {
         try {

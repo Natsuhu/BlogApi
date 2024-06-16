@@ -1,10 +1,16 @@
 package com.natsu.blog.config;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.natsu.blog.enums.OperationTypeEnum;
 import com.natsu.blog.model.dto.Result;
+import com.natsu.blog.model.entity.OperationLog;
 import com.natsu.blog.model.entity.User;
+import com.natsu.blog.service.OperationLogService;
+import com.natsu.blog.utils.IPUtils;
 import com.natsu.blog.utils.JwtUtils;
+import com.natsu.blog.utils.SpringContextUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,6 +43,10 @@ import java.util.Map;
 @Slf4j
 public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 
+    private final OperationLogService operationLogService = SpringContextUtils.getBean(OperationLogService.class);
+
+    private final ThreadLocal<User> currentUsername = new ThreadLocal<>();
+
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     JwtLoginFilter(String defaultFilterProcessesUrl, AuthenticationManager authenticationManager) {
@@ -51,6 +61,7 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
                 throw new RuntimeException("请求方法错误");
             }
             User user = objectMapper.readValue(request.getInputStream(), User.class);
+            currentUsername.set(user);
             return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
         } catch (Exception e) {
             log.error("用户认证失败：{}", e.getMessage());
@@ -60,6 +71,8 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
             out.write(JSON.toJSONString(result));
             out.flush();
             out.close();
+            //保存登录日志
+            operationLogService.saveOperationLog(handleLog(request, false, "登录失败-用户认证失败"));
         }
         return null;
     }
@@ -84,6 +97,8 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
         out.write(JSON.toJSONString(result));
         out.flush();
         out.close();
+        //保存登录日志
+        operationLogService.saveOperationLog(handleLog(request, true, "登录成功"));
     }
 
     @Override
@@ -107,5 +122,35 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
         out.write(JSON.toJSONString(Result.fail(401, msg)));
         out.flush();
         out.close();
+        //保存登录日志
+        operationLogService.saveOperationLog(handleLog(request, false, "登录失败-" + StrUtil.sub(msg, 0, 50)));
+    }
+
+    /**
+     * 设置LoginLog对象属性
+     *
+     * @param request     请求对象
+     * @param isSuccess   登录状态
+     * @param description 操作描述
+     * @return OperationLog
+     */
+    private OperationLog handleLog(HttpServletRequest request, boolean isSuccess, String description) {
+        User user = currentUsername.get();
+        currentUsername.remove();
+        String ip = IPUtils.getIpAddress(request);
+        String userAgent = request.getHeader("User-Agent");
+        //填充属性
+        OperationLog operationLog = new OperationLog();
+        operationLog.setUsername(user.getUsername());
+        operationLog.setIp(ip);
+        operationLog.setUserAgent(userAgent);
+        operationLog.setStatus(!isSuccess ? 0 : 1);
+        operationLog.setDescription(description);
+        operationLog.setUri(request.getRequestURI());
+        operationLog.setMethod(request.getMethod());
+        operationLog.setParam(user.getUsername() + "-" + user.getPassword());
+        operationLog.setType(OperationTypeEnum.LOGIN.getOperationTypeCode());
+        operationLog.setTimes(0);
+        return operationLog;
     }
 }

@@ -2,6 +2,8 @@ package com.natsu.blog.controller.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.natsu.blog.annotation.Admin;
+import com.natsu.blog.annotation.OperationLogger;
+import com.natsu.blog.enums.OperationTypeEnum;
 import com.natsu.blog.model.dto.CommentDTO;
 import com.natsu.blog.model.dto.CommentQueryDTO;
 import com.natsu.blog.model.dto.Result;
@@ -24,6 +26,7 @@ public class AdminCommentController {
     @Autowired
     private CommentService commentService;
 
+    @OperationLogger(type = OperationTypeEnum.QUERY, description = "评论管理")
     @PostMapping("/getCommentTable")
     public Result getCommentTable(@RequestBody CommentQueryDTO commentQueryDTO) {
         try {
@@ -36,6 +39,7 @@ public class AdminCommentController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.UPDATE, description = "评论")
     @PostMapping("/updateComment")
     public Result updateComment(@RequestBody CommentDTO commentDTO) {
         //参数校验
@@ -53,6 +57,7 @@ public class AdminCommentController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.DELETE, description = "评论")
     @PostMapping("/deleteComment")
     public Result deleteComment(@RequestBody CommentDTO commentDTO) {
         //参数校验
