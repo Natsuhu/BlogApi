@@ -1,6 +1,5 @@
 package com.natsu.blog.config;
 
-import com.natsu.blog.service.OperationLogService;
 import com.natsu.blog.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
