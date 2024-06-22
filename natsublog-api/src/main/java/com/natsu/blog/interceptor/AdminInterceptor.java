@@ -78,11 +78,13 @@ public class AdminInterceptor implements HandlerInterceptor {
             response.getWriter().print(JSON.toJSONString(result));
             //记录失败日志
             OperationLogger operationLogger = handlerMethod.getMethodAnnotation(OperationLogger.class);
-            OperationLog operationLog = new OperationLog();
-            operationLog.setUsername(claims.getSubject());
-            operationLog.setType(operationLogger.type().getOperationTypeCode());
-            operationLog.setDescription(operationLogger.description());
-            operationLogService.saveOperationLog(handleLog(request, operationLog));
+            if (operationLogger != null) {
+                OperationLog operationLog = new OperationLog();
+                operationLog.setUsername(claims.getSubject());
+                operationLog.setType(operationLogger.type().getOperationTypeCode());
+                operationLog.setDescription(operationLogger.description());
+                operationLogService.saveOperationLog(handleLog(request, operationLog));
+            }
             return false;
         }
         return true;

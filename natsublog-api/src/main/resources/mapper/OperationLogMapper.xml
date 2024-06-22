@@ -3,4 +3,35 @@
 
 <mapper namespace="com.natsu.blog.mapper.OperationLogMapper">
 
+    <select id="getOperationLogTable" resultType="com.natsu.blog.model.dto.OperationLogDTO">
+        select
+            id, username,
+            (case type when 1 then '登录'
+                       when 2 then '新增'
+                       when 3 then '更新'
+                       when 4 then '删除'
+                       when 5 then '查询'
+                       when 6 then '上传'
+                       when 7 then '下载' end) as typeString,
+            description,
+            (case status when 0 then '失败' when 1 then '成功' end) as statusString,
+            times, ip, ip_source, os, browser, create_time
+        from operation_log
+        <where>
+            <if test="queryCond.keyword != null and queryCond.keyword != ''">
+                and username like concat('%',#{queryCond.keyword},'%')
+            </if>
+            <if test="queryCond.type != null and queryCond.type != ''">
+                and type = #{queryCond.type}
+            </if>
+            <if test="queryCond.status != null and queryCond.status != ''">
+                and status = #{queryCond.status}
+            </if>
+            <if test="queryCond.startTime != null and queryCond.endTime != null">
+                and create_time between #{queryCond.startTime} and #{queryCond.endTime}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
 </mapper>
