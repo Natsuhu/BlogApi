@@ -49,7 +49,7 @@ public class AdminAnnexController {
                          @RequestParam(value = "isPublished", defaultValue = "false", required = false) Boolean isPublished) {
         try {
             String annexId = annexService.upload(multipartFile, isPublished);
-            return Result.success(annexId);
+            return Result.success(annexService.getAnnexAccessAddress(annexId));
         } catch (Exception e) {
             log.error("上传失败：{}", e.getMessage());
             return Result.fail("上传失败：" + e.getMessage());

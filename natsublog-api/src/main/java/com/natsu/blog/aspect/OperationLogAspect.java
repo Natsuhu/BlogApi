@@ -87,7 +87,7 @@ public class OperationLogAspect {
         operationLog.setMethod(method);
         operationLog.setIp(ip);
         operationLog.setUserAgent(userAgent);
-        if (requestParams != null) {
+        if (requestParams != null && !operationLogger.type().getOperationTypeCode().equals(6)) {
             operationLog.setParam(JSON.toJSONString(requestParams));
         }
         operationLog.setDescription(operationLogger.description());
