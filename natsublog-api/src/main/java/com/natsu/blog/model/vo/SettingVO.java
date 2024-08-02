@@ -111,4 +111,9 @@ public class SettingVO {
      */
     private String email;
 
+    /**
+     * 设置值--博主评论标识
+     */
+    private String adminCommentLabel;
+
 }

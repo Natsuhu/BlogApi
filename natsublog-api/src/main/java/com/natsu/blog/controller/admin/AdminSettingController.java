@@ -33,6 +33,7 @@ public class AdminSettingController {
             settingVO.setHeaderTitle(settingService.getSetting(Constants.SETTING_KET_HEADER_TITLE));
             settingVO.setHeaderImage(settingService.getSetting(Constants.SETTING_KET_HEADER_IMAGE));
             settingVO.setBodyImage(settingService.getSetting(Constants.SETTING_KET_BODY_IMAGE));
+            settingVO.setAdminCommentLabel(settingService.getSetting(Constants.SETTING_KEY_ADMIN_COMMENT_LABEL));
             return Result.success(settingVO);
         } catch (Exception e) {
             log.error("获取通用设置失败：{}", e.getMessage());
@@ -56,6 +57,7 @@ public class AdminSettingController {
             settingService.updateSetting(Constants.SETTING_KET_HEADER_TITLE, settingVO.getHeaderTitle());
             settingService.updateSetting(Constants.SETTING_KET_HEADER_IMAGE, settingVO.getHeaderImage());
             settingService.updateSetting(Constants.SETTING_KET_BODY_IMAGE, settingVO.getBodyImage());
+            settingService.updateSetting(Constants.SETTING_KEY_ADMIN_COMMENT_LABEL, settingVO.getAdminCommentLabel());
             return Result.success("更新成功");
         } catch (Exception e) {
             log.error("更新通用配置失败：{}", e.getMessage());

@@ -76,6 +76,7 @@ public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> impl
         settingVO.setNetease(allSettingMap.get(Constants.SETTING_KET_NETEASE));
         settingVO.setEmail(allSettingMap.get(Constants.SETTING_KET_EMAIL));
         settingVO.setHeaderTitle(allSettingMap.get(Constants.SETTING_KET_HEADER_TITLE));
+        settingVO.setAdminCommentLabel(allSettingMap.get(Constants.SETTING_KEY_ADMIN_COMMENT_LABEL));
         //所有图片使用文件管理处理地址
         settingVO.setCardAvatar(annexService.getAnnexAccessAddress(allSettingMap.get(Constants.SETTING_KEY_CARD_AVATAR)));
         settingVO.setHeaderImage(annexService.getAnnexAccessAddress(allSettingMap.get(Constants.SETTING_KET_HEADER_IMAGE)));

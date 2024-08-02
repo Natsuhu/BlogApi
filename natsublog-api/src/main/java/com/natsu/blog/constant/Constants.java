@@ -144,6 +144,11 @@ public class Constants {
     public static final String SETTING_KET_EMAIL = "email";
 
     /**
+     * 设置值--博主评论标识
+     */
+    public static final String SETTING_KEY_ADMIN_COMMENT_LABEL = "adminCommentLabel";
+
+    /**
      * 评论中QQ头像存储方式-本地
      */
     public static final String LOCAL = "local";

@@ -271,6 +271,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             contentMap.put("avatar", annexService.getAnnexAccessAddress(comment.getAvatar()));
             contentMap.put("createTime", comment.getCreateTime());
             contentMap.put("replyNickname", comment.getReplyNickname());
+            contentMap.put("isAdminComment", comment.getIsAdminComment());
             TreeNode treeNode = new TreeNode(comment.getId(), comment.getParentCommentId(), contentMap, null);
             treeNodes.add(treeNode);
         }
