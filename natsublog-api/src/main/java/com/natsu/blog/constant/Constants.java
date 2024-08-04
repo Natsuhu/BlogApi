@@ -149,6 +149,16 @@ public class Constants {
     public static final String SETTING_KEY_ADMIN_COMMENT_LABEL = "adminCommentLabel";
 
     /**
+     * 设置值--博客前台登录页背景图
+     */
+    public static final String SETTING_KET_FRONT_LOGIN_IMAGE = "frontLoginImage";
+
+    /**
+     * 设置值--博客后台登录页背景图
+     */
+    public static final String SETTING_KET_BACK_LOGIN_IMAGE = "backLoginImage";
+
+    /**
      * 评论中QQ头像存储方式-本地
      */
     public static final String LOCAL = "local";

@@ -17,7 +17,8 @@ public enum VisitorBehavior {
     TAG("点击标签", ""),
     SEARCH("搜索博客", ""),
     CLICK_FRIEND("点击友链", ""),
-    LIKE_MOMENT("点赞动态", "");
+    LIKE_MOMENT("点赞动态", ""),
+    COMMENT("发表评论", "");
 
     /**
      * 行为

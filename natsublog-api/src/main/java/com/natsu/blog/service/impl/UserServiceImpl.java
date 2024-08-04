@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,6 +21,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return findUserByUsername(username);
+    }
+
+    @Override
+    public User findUserByUsernameAndPassword(String username, String password) {
+        User user = findUserByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("用户不存在");
+        }
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        if (!encoder.matches(password, user.getPassword())) {
+            throw new UsernameNotFoundException("密码错误");
+        }
+        return user;
     }
 
     @Override

@@ -2,10 +2,12 @@ package com.natsu.blog.aspect;
 
 import com.alibaba.fastjson.JSON;
 import com.natsu.blog.annotation.VisitorLogger;
+import com.natsu.blog.enums.PageEnum;
 import com.natsu.blog.enums.VisitorBehavior;
 import com.natsu.blog.model.dto.ArticleDTO;
 import com.natsu.blog.model.dto.ArticleQueryDTO;
 import com.natsu.blog.model.dto.BaseQueryDTO;
+import com.natsu.blog.model.dto.CommentDTO;
 import com.natsu.blog.model.entity.VisitLog;
 import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.service.VisitLogService;
@@ -153,6 +155,18 @@ public class VisitorLogAspect {
                 String id = (String) requestParams;
                 content = "动态ID：" + requestParams;
                 break;
+            case COMMENT:
+                CommentDTO commentDTO = (CommentDTO) requestParams;
+                Integer page = commentDTO.getPage();
+                if (page.equals(PageEnum.ARTICLE.getPageCode())) {
+                    content = "文章ID：" + commentDTO.getArticleId();
+                }
+                if (page.equals(PageEnum.FRIEND.getPageCode())) {
+                    content = "位置：友情链接";
+                }
+                if (page.equals(PageEnum.ABOUT.getPageCode())) {
+                    content = "位置：关于我";
+                }
         }
         return content;
     }

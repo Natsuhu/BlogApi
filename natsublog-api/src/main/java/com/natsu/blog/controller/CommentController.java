@@ -3,15 +3,17 @@ package com.natsu.blog.controller;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.natsu.blog.annotation.AccessLimit;
+import com.natsu.blog.annotation.VisitorLogger;
 import com.natsu.blog.constant.Constants;
+import com.natsu.blog.enums.VisitorBehavior;
 import com.natsu.blog.model.dto.CommentDTO;
 import com.natsu.blog.model.dto.CommentQueryDTO;
 import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.model.entity.Comment;
 import com.natsu.blog.service.CommentService;
 import com.natsu.blog.utils.IPUtils;
+import com.natsu.blog.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,6 +64,7 @@ public class CommentController {
      * 保存评论
      */
     @AccessLimit(seconds = 20, maxCount = 1, msg = "20秒内只能评论一次")
+    @VisitorLogger(VisitorBehavior.COMMENT)
     @PostMapping("/save")
     public Result saveComment(@RequestBody CommentDTO commentDTO, HttpServletRequest req) {
         //参数校验
@@ -73,6 +76,17 @@ public class CommentController {
         }
         if (commentDTO.getParentCommentId() == null) {
             return Result.fail("参数错误!");
+        }
+        //验证是否博主评论
+        String token = req.getHeader("Authorization");
+        if (StrUtil.isBlank(token)) {
+            commentDTO.setIsAdminComment(false);
+        } else {
+            String role = null;
+            try {
+                 role = (String) JwtUtils.checkToken(token).get("roles");
+            } catch (Exception ignore) {}
+            commentDTO.setIsAdminComment("admin".equals(role));
         }
         //开始保存
         try {

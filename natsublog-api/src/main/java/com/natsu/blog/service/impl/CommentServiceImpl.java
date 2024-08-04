@@ -102,7 +102,6 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             commentDTO.setAvatar(String.valueOf(randomAvatar));
         }
         commentDTO.setIsPublished(Constants.PUBLISHED);
-        commentDTO.setIsAdminComment(false);
         //开始保存
         commentMapper.insert(commentDTO);
     }

@@ -5,7 +5,8 @@ public enum PageEnum {
     INDEX("index", 0),
     ARTICLE("article", 1),
     FRIEND("friend", 2),
-    ABOUT("about", 3);
+    ABOUT("about", 3),
+    LOGIN("login", 4);
 
     /**
      * 页面名称

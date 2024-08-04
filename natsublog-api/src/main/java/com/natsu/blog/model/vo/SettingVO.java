@@ -116,4 +116,14 @@ public class SettingVO {
      */
     private String adminCommentLabel;
 
+    /**
+     * 设置值--博客前台登录页背景图
+     */
+    private String frontLoginImage;
+
+    /**
+     * 设置值--博客后台登录页背景图
+     */
+    private String backLoginImage;
+
 }
