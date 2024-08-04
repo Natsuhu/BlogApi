@@ -1,6 +1,7 @@
 package com.natsu.blog.service.impl;
 
 import cn.hutool.core.date.DateUtil;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -79,6 +80,9 @@ public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> impl
         settingVO.setAdminCommentLabel(allSettingMap.get(Constants.SETTING_KEY_ADMIN_COMMENT_LABEL));
         settingVO.setFrontLoginImage(allSettingMap.get(Constants.SETTING_KET_FRONT_LOGIN_IMAGE));
         settingVO.setBackLoginImage(allSettingMap.get(Constants.SETTING_KET_BACK_LOGIN_IMAGE));
+        settingVO.setIcpInfo(allSettingMap.get(Constants.SETTING_KET_ICPINFO));
+        settingVO.setCopyright(JSON.parseObject(allSettingMap.get(Constants.SETTING_KET_COPYRIGHT)));
+        settingVO.setBadgeList(JSON.parseArray(allSettingMap.get(Constants.SETTING_KET_BADGELIST)));
         //所有图片使用文件管理处理地址
         settingVO.setCardAvatar(annexService.getAnnexAccessAddress(allSettingMap.get(Constants.SETTING_KEY_CARD_AVATAR)));
         settingVO.setHeaderImage(annexService.getAnnexAccessAddress(allSettingMap.get(Constants.SETTING_KET_HEADER_IMAGE)));

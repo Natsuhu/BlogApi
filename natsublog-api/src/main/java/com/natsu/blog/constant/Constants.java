@@ -159,6 +159,21 @@ public class Constants {
     public static final String SETTING_KET_BACK_LOGIN_IMAGE = "backLoginImage";
 
     /**
+     * 设置值--版权信息
+     */
+    public static final String SETTING_KET_COPYRIGHT = "copyright";
+
+    /**
+     * 设置值--ICP备案信息
+     */
+    public static final String SETTING_KET_ICPINFO = "icpInfo";
+
+    /**
+     * 设置值--徽标组
+     */
+    public static final String SETTING_KET_BADGELIST = "badgeList";
+
+    /**
      * 评论中QQ头像存储方式-本地
      */
     public static final String LOCAL = "local";

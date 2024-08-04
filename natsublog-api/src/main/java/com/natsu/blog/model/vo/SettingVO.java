@@ -1,5 +1,7 @@
 package com.natsu.blog.model.vo;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 
 /**
@@ -125,5 +127,20 @@ public class SettingVO {
      * 设置值--博客后台登录页背景图
      */
     private String backLoginImage;
+
+    /**
+     * 设置值--版权信息
+     */
+    private JSONObject copyright;
+
+    /**
+     * 设置值--ICP备案信息
+     */
+    private String icpInfo;
+
+    /**
+     * 设置值--徽标组
+     */
+    private JSONArray badgeList;
 
 }
