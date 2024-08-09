@@ -1,6 +1,7 @@
 package com.natsu.blog.controller.admin;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
 import com.natsu.blog.annotation.Admin;
 import com.natsu.blog.annotation.OperationLogger;
 import com.natsu.blog.constant.Constants;
@@ -112,6 +113,36 @@ public class AdminSettingController {
         } catch (Exception e) {
             log.error("更新资料卡配置失败：{}", e.getMessage());
             return Result.fail("更新资料卡配置失败：" + e.getMessage());
+        }
+    }
+
+    @OperationLogger(type = OperationTypeEnum.QUERY, description = "网站设置-页脚")
+    @PostMapping("/getFooterSetting")
+    public Result getFooterSetting() {
+        try {
+            SettingVO settingVO = new SettingVO();
+            settingVO.setIcpInfo(settingService.getSetting(Constants.SETTING_KET_ICPINFO));
+            settingVO.setCopyright(JSON.parseObject(settingService.getSetting(Constants.SETTING_KET_COPYRIGHT)));
+            settingVO.setBadgeList(JSON.parseArray(settingService.getSetting(Constants.SETTING_KET_BADGELIST)));
+            return Result.success(settingVO);
+        } catch (Exception e) {
+            log.error("获取页脚设置失败：{}", e.getMessage());
+            return Result.fail("获取页脚设置失败：" + e.getMessage());
+        }
+    }
+
+    @Admin
+    @OperationLogger(type = OperationTypeEnum.UPDATE, description = "网站设置-页脚")
+    @PostMapping("/updateFooterSetting")
+    public Result updateFooterSetting(@RequestBody SettingVO settingVO) {
+        try {
+            settingService.updateSetting(Constants.SETTING_KET_ICPINFO, settingVO.getIcpInfo());
+            settingService.updateSetting(Constants.SETTING_KET_COPYRIGHT, settingVO.getCopyright().toJSONString());
+            settingService.updateSetting(Constants.SETTING_KET_BADGELIST, settingVO.getBadgeList().toJSONString());
+            return Result.success("更新成功");
+        } catch (Exception e) {
+            log.error("更新页脚设置失败：{}", e.getMessage());
+            return Result.fail("更新页脚设置失败：" + e.getMessage());
         }
     }
 
