@@ -83,6 +83,7 @@ public class AdminSettingController {
             settingVO.setBilibili(settingService.getSetting(Constants.SETTING_KET_BILIBILI));
             settingVO.setNetease(settingService.getSetting(Constants.SETTING_KET_NETEASE));
             settingVO.setEmail(settingService.getSetting(Constants.SETTING_KET_EMAIL));
+            settingVO.setCardCustom(JSON.parseArray(settingService.getSetting(Constants.SETTING_KEY_CARD_CUSTOM)));
             return Result.success(settingVO);
         } catch (Exception e) {
             log.error("获取资料卡设置失败：{}", e.getMessage());
@@ -109,6 +110,7 @@ public class AdminSettingController {
             settingService.updateSetting(Constants.SETTING_KET_BILIBILI, settingVO.getBilibili());
             settingService.updateSetting(Constants.SETTING_KET_NETEASE, settingVO.getNetease());
             settingService.updateSetting(Constants.SETTING_KET_EMAIL, settingVO.getEmail());
+            settingService.updateSetting(Constants.SETTING_KEY_CARD_CUSTOM, settingVO.getCardCustom().toJSONString());
             return Result.success("更新成功");
         } catch (Exception e) {
             log.error("更新资料卡配置失败：{}", e.getMessage());

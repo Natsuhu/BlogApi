@@ -83,6 +83,7 @@ public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> impl
         settingVO.setIcpInfo(allSettingMap.get(Constants.SETTING_KET_ICPINFO));
         settingVO.setCopyright(JSON.parseObject(allSettingMap.get(Constants.SETTING_KET_COPYRIGHT)));
         settingVO.setBadgeList(JSON.parseArray(allSettingMap.get(Constants.SETTING_KET_BADGELIST)));
+        settingVO.setCardCustom(JSON.parseArray(allSettingMap.get(Constants.SETTING_KEY_CARD_CUSTOM)));
         //所有图片使用文件管理处理地址
         settingVO.setCardAvatar(annexService.getAnnexAccessAddress(allSettingMap.get(Constants.SETTING_KEY_CARD_AVATAR)));
         settingVO.setHeaderImage(annexService.getAnnexAccessAddress(allSettingMap.get(Constants.SETTING_KET_HEADER_IMAGE)));

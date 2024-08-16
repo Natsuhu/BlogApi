@@ -174,6 +174,11 @@ public class Constants {
     public static final String SETTING_KET_BADGELIST = "badgeList";
 
     /**
+     * 设置值--资料卡自定义内容
+     */
+    public static final String SETTING_KEY_CARD_CUSTOM = "cardCustom";
+
+    /**
      * 评论中QQ头像存储方式-本地
      */
     public static final String LOCAL = "local";

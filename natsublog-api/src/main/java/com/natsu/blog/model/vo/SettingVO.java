@@ -143,4 +143,9 @@ public class SettingVO {
      */
     private JSONArray badgeList;
 
+    /**
+     * 设置值--资料卡自定义内容
+     */
+    private JSONArray cardCustom;
+
 }
