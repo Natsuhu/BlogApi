@@ -12,7 +12,8 @@
                        when 4 then '删除'
                        when 5 then '查询'
                        when 6 then '上传'
-                       when 7 then '下载' end) as typeString,
+                       when 7 then '下载'
+                       when 8 then '执行' end) as typeString,
             description,
             (case status when 0 then '失败' when 1 then '成功' end) as statusString,
             times, ip, ip_source, os, browser, create_time

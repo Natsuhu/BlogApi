@@ -8,7 +8,8 @@ public enum OperationTypeEnum {
     DELETE("删除", 4),
     QUERY("查询", 5),
     UPLOAD("上传", 6),
-    DOWNLOAD("下载", 7);
+    DOWNLOAD("下载", 7),
+    EXEC("执行", 8);
 
     private final String operationTypeName;
 

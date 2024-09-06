@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.natsu.blog.mapper.TaskMapper">
+
+    <select id="getTaskTable" resultType="com.natsu.blog.model.dto.TaskDTO">
+        select id, name, type, cron, param, content, description, status, current_count,
+               max_count, next_time, expire_time, create_time, update_time
+        from task
+        <where>
+            <if test="queryCond.keyword != null and queryCond.keyword != ''">
+                and name like concat('%',#{queryCond.keyword},'%')
+            </if>
+            <if test="queryCond.type != null and queryCond.type != ''">
+                and type = #{queryCond.type}
+            </if>
+            <if test="queryCond.status != null and queryCond.status != ''">
+                and status = #{queryCond.status}
+            </if>
+        </where>
+    </select>
+
+</mapper>

@@ -14,6 +14,11 @@ public class Constants {
     public static final Integer COM_NUM_ZERO = 0;
 
     /**
+     * 通用INT 1
+     */
+    public static final Integer COM_NUM_ONE = 1;
+
+    /**
      * 文件（读写）缓存大小
      */
     public static final Integer FILE_BUFFER_SIZE = 2097152;
@@ -232,5 +237,10 @@ public class Constants {
      * 文件扩展名 - IMAGE
      */
     public static final String[] FILE_EXTENSION_IMG = {"jpg", "jpeg", "bmp", "png", "gif", "wbmp", "webp", "tiff"};
+
+    /**
+     * QuartzDataMapKey
+     */
+    public static final String QUARTZ_MAP_KEY = "JOB_ID";
 
 }
