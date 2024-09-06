@@ -94,28 +94,28 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
         BeanUtils.copyProperties(task, taskDTO);
         if (Constants.COM_NUM_ZERO.equals(task.getStatus())) {
             //原本是禁用，现启用
-            task.setStatus(Constants.COM_NUM_ONE);
+            taskDTO.setStatus(Constants.COM_NUM_ONE);
             //前置检查
             checkMaxCount(taskDTO);
             checkExpireTime(taskDTO);
             //计算下次执行时间
             setNextTime(taskDTO);
             //恢复或新建
-            if (scheduleService.getCronTrigger(task.getId()) == null) {
+            if (scheduleService.getCronTrigger(taskDTO.getId()) == null) {
                 log.info("恢复任务：[创建]");
-                scheduleService.createScheduleJob(task.getId(), task.getCron());
+                scheduleService.createScheduleJob(taskDTO.getId(), taskDTO.getCron());
             } else {
                 log.info("恢复任务：[启动]");
-                scheduleService.resumeJob(task.getId());
+                scheduleService.resumeJob(taskDTO.getId());
             }
         } else {
-            log.info("暂停任务：{}", task.getId());
+            log.info("暂停任务：{}", taskDTO.getId());
             //原本是启用，现禁用
-            task.setStatus(Constants.COM_NUM_ZERO);
-            task.setNextTime(null);
+            taskDTO.setStatus(Constants.COM_NUM_ZERO);
+            taskDTO.setNextTime(null);
             scheduleService.pauseJob(task.getId());
         }
-        updateById(task);
+        updateById(taskDTO);
     }
 
     @Override
