@@ -26,6 +26,7 @@ public class LocalChannel implements AnnexChannel {
      *
      * @return 存储方式代码
      */
+    @Override
     public Integer getType() {
         return StorageType.LOCAL.getType();
     }
@@ -35,6 +36,7 @@ public class LocalChannel implements AnnexChannel {
      *
      * @return 存储方式描述
      */
+    @Override
     public String getDescription() {
         return StorageType.LOCAL.getDescription();
     }

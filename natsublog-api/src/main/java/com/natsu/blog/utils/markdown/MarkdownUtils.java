@@ -12,51 +12,55 @@ import org.commonmark.node.Link;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.AttributeProvider;
-import org.commonmark.renderer.html.AttributeProviderContext;
-import org.commonmark.renderer.html.AttributeProviderFactory;
 import org.commonmark.renderer.html.HtmlRenderer;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class MarkdownUtils {
-    //为h标签生成id 供tocbot目录生成
-    private static final Set<Extension> headingAnchorExtensions = Collections.singleton(HeadingAnchorExtension.create());
-    //转换table的HTML
-    private static final List<Extension> tableExtension = Arrays.asList(TablesExtension.create());
-    //任务列表
-    private static final Set<Extension> taskListExtension = Collections.singleton(TaskListItemsExtension.create());
-    //删除线
-    private static final Set<Extension> delExtension = Collections.singleton(StrikethroughExtension.create());
-    //黑幕
-    private static final Set<Extension> heimuExtension = Collections.singleton(HeimuExtension.create());
-    //遮盖层
-    private static final Set<Extension> coverExtension = Collections.singleton(CoverExtension.create());
+    /**
+     * 为h标签生成id 供tocbot目录生成
+     */
+    private static final Set<Extension> HEADING_ANCHOR_EXTENSIONS = Collections.singleton(HeadingAnchorExtension.create());
+    /**
+     * 转换table的HTML
+     */
+    private static final List<Extension> TABLE_EXTENSION = Collections.singletonList(TablesExtension.create());
+    /**
+     * 任务列表
+     */
+    private static final Set<Extension> TASK_LIST_EXTENSION = Collections.singleton(TaskListItemsExtension.create());
+    /**
+     * 删除线
+     */
+    private static final Set<Extension> DEL_EXTENSION = Collections.singleton(StrikethroughExtension.create());
+    /**
+     * 黑幕
+     */
+    private static final Set<Extension> HEIMU_EXTENSION = Collections.singleton(HeimuExtension.create());
+    /**
+     * 遮盖层
+     */
+    private static final Set<Extension> COVER_EXTENSION = Collections.singleton(CoverExtension.create());
 
-    private static final Parser parser = Parser.builder()
-            .extensions(tableExtension)
-            .extensions(taskListExtension)
-            .extensions(delExtension)
-            .extensions(heimuExtension)
-            .extensions(coverExtension)
+    private static final Parser PARSER = Parser.builder()
+            .extensions(TABLE_EXTENSION)
+            .extensions(TASK_LIST_EXTENSION)
+            .extensions(DEL_EXTENSION)
+            .extensions(HEIMU_EXTENSION)
+            .extensions(COVER_EXTENSION)
             .build();
 
-    private static final HtmlRenderer renderer = HtmlRenderer.builder()
-            .extensions(headingAnchorExtensions)
-            .extensions(tableExtension)
-            .extensions(taskListExtension)
-            .extensions(delExtension)
-            .extensions(heimuExtension)
-            .extensions(coverExtension)
-            .attributeProviderFactory(new AttributeProviderFactory() {
-                @Override
-                public AttributeProvider create(AttributeProviderContext context) {
-                    return new CustomAttributeProvider();
-                }
-            })
+    private static final HtmlRenderer RENDERER = HtmlRenderer.builder()
+            .extensions(HEADING_ANCHOR_EXTENSIONS)
+            .extensions(TABLE_EXTENSION)
+            .extensions(TASK_LIST_EXTENSION)
+            .extensions(DEL_EXTENSION)
+            .extensions(HEIMU_EXTENSION)
+            .extensions(COVER_EXTENSION)
+            .attributeProviderFactory(context -> new CustomAttributeProvider())
             .build();
 
     /**
@@ -98,8 +102,8 @@ public class MarkdownUtils {
      * 增加扩展
      */
     public static String markdownToHtmlExtensions(String markdown) {
-        Node document = parser.parse(markdown);
-        return renderer.render(document);
+        Node document = PARSER.parse(markdown);
+        return RENDERER.render(document);
     }
 
     public static void main(String[] args) {

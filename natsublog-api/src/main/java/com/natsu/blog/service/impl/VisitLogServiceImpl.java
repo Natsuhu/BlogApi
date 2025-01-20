@@ -21,6 +21,7 @@ public class VisitLogServiceImpl extends ServiceImpl<VisitLogMapper, VisitLog> i
     @Autowired
     private AsyncTaskService asyncTaskService;
 
+    @Override
     public void saveVisitLog(VisitLog visitLog) {
         asyncTaskService.saveVisitLog(visitLogMapper, visitLog);
     }

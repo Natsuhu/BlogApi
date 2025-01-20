@@ -108,7 +108,7 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend> impleme
 
     @Override
     public void updateFriendSetting(SettingVO settingVO) {
-        if (settingVO.getFriendIsComment().equalsIgnoreCase("true") || settingVO.getFriendIsComment().equalsIgnoreCase("false")) {
+        if ("true".equalsIgnoreCase(settingVO.getFriendIsComment()) || "false".equalsIgnoreCase(settingVO.getFriendIsComment())) {
             settingService.updateSetting(Constants.SETTING_KEY_FRIEND_IS_COMMENT, settingVO.getFriendIsComment());
         }
         settingService.updateSetting(Constants.SETTING_KEY_FRIEND_CONTENT, settingVO.getFriendContent());

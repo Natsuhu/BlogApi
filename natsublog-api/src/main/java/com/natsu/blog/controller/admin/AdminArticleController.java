@@ -22,6 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 文章管理控制层
+ *
+ * @author NatsuKaze
+ * @since 2025/01/20
+ */
 @RestController
 @Slf4j
 @RequestMapping("/admin/article")

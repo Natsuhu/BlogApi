@@ -8,6 +8,11 @@ import com.natsu.blog.model.entity.Tag;
 
 import java.util.List;
 
+/**
+ * 标签服务接口层
+ *
+ * @author NatsuKaze
+ */
 public interface TagService extends IService<Tag> {
 
     /**
@@ -18,17 +23,17 @@ public interface TagService extends IService<Tag> {
     /**
      * 保存标签
      */
-    void saveTag(TagDTO TagDTO);
+    void saveTag(TagDTO tagDTO);
 
     /**
      * 更新标签
      */
-    void updateTag(TagDTO TagDTO);
+    void updateTag(TagDTO tagDTO);
 
     /**
      * 删除标签
      */
-    void deleteTag(TagDTO TagDTO);
+    void deleteTag(TagDTO tagDTO);
 
     /**
      * 获取标签表格

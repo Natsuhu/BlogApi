@@ -17,6 +17,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 分类管理控制层
+ *
+ * @author NatsuKaze
+ * @since 2025/01/20
+ */
 @RestController
 @Slf4j
 @RequestMapping("/admin/category")

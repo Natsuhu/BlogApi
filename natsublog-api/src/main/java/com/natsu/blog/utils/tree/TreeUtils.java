@@ -15,7 +15,7 @@ public class TreeUtils {
      * List转树结构，并过滤出符合条件的子树
      */
     public static List<TreeNode> listToTree(List<TreeNode> zoneList, Predicate<? super TreeNode> predicate) {
-        Map<Long, List<TreeNode>> zoneByParentIdMap = new HashMap<>();
+        Map<Long, List<TreeNode>> zoneByParentIdMap = new HashMap<>(zoneList.size());
 
         //将parentId相同的Zone放在同一个列表中，parentId作为key
         for (TreeNode treeNode : zoneList) {

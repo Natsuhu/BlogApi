@@ -53,7 +53,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Autowired
     private AnnexService annexService;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveComment(CommentDTO commentDTO) {
         //验证目标页面能否评论
@@ -136,7 +136,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
         //开始构建commentTree
         List<TreeNode> comments = new ArrayList<>();
-        Map<String, Object> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>(3);
         List<TreeNode> treeNodes = buildCommentTreeNode(allComment);
         treeNodes = TreeUtils.listToTree(treeNodes, node -> node.getPid().equals(Constants.TOP_COMMENT_PARENT_ID));
 
@@ -179,14 +179,14 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         IPage<CommentDTO> page = new Page<>(commentQueryDTO.getPageNo(), commentQueryDTO.getPageSize());
         IPage<CommentDTO> commentTable = commentMapper.getCommentTable(page, commentQueryDTO);
         //处理头像和IP
-        List<CommentDTO> commentDTOS = commentTable.getRecords();
-        for (CommentDTO commentDTO : commentDTOS) {
+        List<CommentDTO> commentDTOList = commentTable.getRecords();
+        for (CommentDTO commentDTO : commentDTOList) {
             commentDTO.setAvatar(annexService.getAnnexAccessAddress(commentDTO.getAvatar()));
             commentDTO.setCity(IPUtils.getCityInfo(commentDTO.getIp()));
         }
         //封装处理结果
         IPage<CommentDTO> pageResult = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
-        pageResult.setRecords(commentDTOS);
+        pageResult.setRecords(commentDTOList);
         return pageResult;
     }
 
@@ -196,7 +196,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
      *
      * @param commentDTO commentDTO
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateComment(CommentDTO commentDTO) {
         //先查到这条记录
@@ -226,7 +226,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         }
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public Integer deleteComment(CommentDTO commentDTO) {
         //删除评论时，顺带删除所有子评论
@@ -312,13 +312,13 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 friendPageQuery.eq(Setting::getSettingKey, Constants.SETTING_KEY_FRIEND_IS_COMMENT);
                 friendPageQuery.eq(Setting::getPage, PageEnum.FRIEND.getPageCode());
                 Setting friendPageSetting = settingService.getOne(friendPageQuery);
-                return !friendPageSetting.getSettingValue().equals("false");
+                return !"false".equals(friendPageSetting.getSettingValue());
             case 3:
                 LambdaQueryWrapper<Setting> aboutPageQuery = new LambdaQueryWrapper<>();
                 aboutPageQuery.eq(Setting::getSettingKey, Constants.SETTING_KEY_ABOUT_IS_COMMENT);
                 aboutPageQuery.eq(Setting::getPage, PageEnum.ABOUT.getPageCode());
                 Setting aboutPageSetting = settingService.getOne(aboutPageQuery);
-                return !aboutPageSetting.getSettingValue().equals("false");
+                return !"false".equals(aboutPageSetting.getSettingValue());
             default:
                 return false;
         }

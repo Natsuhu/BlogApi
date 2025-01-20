@@ -34,6 +34,7 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper, Moment> impleme
     @Autowired
     private SettingService settingService;
 
+    @Override
     public IPage<MomentDTO> getMoments(MomentQueryDTO queryCond) {
         IPage<MomentDTO> page = new Page<>(queryCond.getPageNo(), queryCond.getPageSize());
         IPage<MomentDTO> moments = momentMapper.getMoments(page, queryCond);

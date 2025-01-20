@@ -17,9 +17,9 @@ import java.nio.charset.Charset;
 public class QQInfoUtils {
 
     private static final String QQ_NICKNAME_URL = "https://users.qzone.qq.com/fcg-bin/cgi_get_portrait.fcg?uins={1}";
-/*    private static final String QQ_NICKNAME_URL = "https://api.oioweb.cn/api/qq/info?qq={1}";*/
+    //private static final String QQ_NICKNAME_URL = "https://api.oioweb.cn/api/qq/info?qq={1}";
     private static final String QQ_AVATAR_URL = "https://q.qlogo.cn/g?b=qq&nk=%s&s=100";
-    private static final RestTemplate restTemplate = new RestTemplate();
+    private static final RestTemplate REST_TEMPLATE = new RestTemplate();
 
     /**
      * 判断是否为QQ
@@ -33,7 +33,8 @@ public class QQInfoUtils {
 
     /**
      * 获取QQ昵称
-     * @param qq　ｑｑ
+     *
+     * @param qq 　ｑｑ
      * @return String
      */
     public static String getQQNickname(String qq) {
@@ -41,7 +42,7 @@ public class QQInfoUtils {
             throw new RuntimeException("非标准格式QQ");
         }
         //发送请求
-        String res = restTemplate.getForObject(QQ_NICKNAME_URL, String.class, qq);
+        String res = REST_TEMPLATE.getForObject(QQ_NICKNAME_URL, String.class, qq);
         //处理结果
         if (StringUtils.isNotBlank(res)) {
             byte[] bytes = res.getBytes(Charset.forName("ISO_8859_1"));
@@ -54,7 +55,7 @@ public class QQInfoUtils {
         return "nickname";
     }
 
-/*    *//**
+    /*    *//**
      * 获取QQ昵称，新版接口
      * @param qq qq
      * @return String
@@ -81,7 +82,7 @@ public class QQInfoUtils {
         }
         //发送请求
         String url = String.format(QQ_AVATAR_URL, qq);
-        ResponseEntity<byte[]> res = restTemplate.getForEntity(url, byte[].class);
+        ResponseEntity<byte[]> res = REST_TEMPLATE.getForEntity(url, byte[].class);
         //处理响应
         if (res.getStatusCode().equals(HttpStatus.OK)) {
             byte[] data = res.getBody();

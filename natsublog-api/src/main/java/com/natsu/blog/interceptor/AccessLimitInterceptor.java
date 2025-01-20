@@ -9,7 +9,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +17,9 @@ import java.io.PrintWriter;
 
 /**
  * 访问控制拦截器
+ *
+ * @author NatsuKaze
+ * @since 2025/01/20
  */
 @Component
 @Order(5)
@@ -38,8 +40,8 @@ public class AccessLimitInterceptor implements HandlerInterceptor {
         int maxCount = accessLimit.maxCount();
         String ip = IPUtils.getIpAddress(request);
         String method = request.getMethod();
-        String requestURI = request.getRequestURI();
-        String redisKey = ip + ":" + method + ":" + requestURI;
+        String requestUri = request.getRequestURI();
+        String redisKey = ip + ":" + method + ":" + requestUri;
         //从redis获取访问次数，若无这个值，则表示第一次访问
         Integer count = (Integer) RedisUtils.get(redisKey);
         if (count == null) {

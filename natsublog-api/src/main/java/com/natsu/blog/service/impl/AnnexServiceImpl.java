@@ -48,7 +48,7 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
     @Autowired
     private BlogProperties blogProperties;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public String upload(MultipartFile multipartFile, Boolean isPublished) {
         //获取文件信息
@@ -72,7 +72,7 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
         return annexDTO.getId();
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public String saveQQAvatar(String qq, Integer storageType) {
         try {
@@ -213,7 +213,7 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
      *
      * @param annexDTO annexDTO
      */
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteAnnex(AnnexDTO annexDTO) {
         //获取记录

@@ -32,7 +32,16 @@ public class AdminInterceptor implements HandlerInterceptor {
     @Autowired
     private OperationLogService operationLogService;
 
-    //调用controller方法之前执行
+    /**
+     * 调用controller方法之前执行
+     *
+     * @param request  请求
+     * @param response 响应
+     * @param handler  处理器
+     * @return boolean
+     * @throws Exception 所有异常
+     */
+    @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //如果handler为非controller的方法，可以直接放行
         if (!(handler instanceof HandlerMethod)) {
@@ -47,8 +56,8 @@ public class AdminInterceptor implements HandlerInterceptor {
         }
         //打印一手日志，控制台打印
         log.info("=================request start===========================");
-        String requestURI = request.getRequestURI();
-        log.info("request uri:{}", requestURI);
+        String requestUri = request.getRequestURI();
+        log.info("request uri:{}", requestUri);
         log.info("request method:{}", request.getMethod());
         log.info("token:{}", token);
         log.info("=================request end=============================");
@@ -72,7 +81,7 @@ public class AdminInterceptor implements HandlerInterceptor {
         String role = (String) claims.get("roles");
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Admin admin = handlerMethod.getMethodAnnotation(Admin.class);
-        if (role.equals("visitor") && admin != null) {
+        if ("visitor".equals(role) && admin != null) {
             Result result = Result.fail("访客模式下无法进行此操作");
             response.setContentType("application/json;charset=utf-8");
             response.getWriter().print(JSON.toJSONString(result));

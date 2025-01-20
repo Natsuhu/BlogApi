@@ -48,6 +48,7 @@ public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> impl
         return settingMapper.selectOne(wrapper).getSettingValue();
     }
 
+    @Override
     public SettingVO getPageSetting(Integer page) {
         LambdaQueryWrapper<Setting> wrapper = new LambdaQueryWrapper<>();
         if (page >= 0) {

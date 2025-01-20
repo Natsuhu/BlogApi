@@ -16,6 +16,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 关于我页面控制层
+ *
+ * @author NatsuKaze
+ * @since 2025/01/20
+ */
 @Slf4j
 @RestController
 @RequestMapping("/admin/about")
@@ -49,7 +55,7 @@ public class AdminAboutController {
                 return Result.fail("关于我标题不能为空");
             }
             //更新配置
-            if (settingVO.getAboutIsComment().equalsIgnoreCase("true") || settingVO.getAboutIsComment().equalsIgnoreCase("false")) {
+            if ("true".equalsIgnoreCase(settingVO.getAboutIsComment()) || "false".equalsIgnoreCase(settingVO.getAboutIsComment())) {
                 settingService.updateSetting(Constants.SETTING_KEY_ABOUT_IS_COMMENT, settingVO.getAboutIsComment());
             }
             settingService.updateSetting(Constants.SETTING_KEY_ABOUT_CONTENT, settingVO.getAboutContent());

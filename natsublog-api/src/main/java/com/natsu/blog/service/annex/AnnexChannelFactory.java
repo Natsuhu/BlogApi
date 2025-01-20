@@ -23,10 +23,9 @@ public class AnnexChannelFactory {
         switch (storageType) {
             case 1:
                 return SpringContextUtils.getBean(LocalChannel.class);
-            case 2:
-                return null;
+            default:
+                throw new RuntimeException("不支持的存储方式");
         }
-        throw new RuntimeException("不支持的存储方式");
     }
 
 }

@@ -18,6 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 评论管理控制层
+ *
+ * @author NatsuKaze
+ * @since 2025/01/20
+ */
 @RestController
 @RequestMapping("/admin/comment")
 @Slf4j

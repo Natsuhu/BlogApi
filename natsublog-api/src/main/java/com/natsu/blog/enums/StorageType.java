@@ -8,7 +8,13 @@ package com.natsu.blog.enums;
  */
 public enum StorageType {
 
+    /**
+     * 本地存储
+     */
     LOCAL(1, "本地存储"),
+    /**
+     * Minio存储
+     */
     MINIO(2, "MinIO存储");
 
     private final Integer type;

@@ -27,17 +27,17 @@ public class AdminTagController {
     @Admin
     @OperationLogger(type = OperationTypeEnum.INSERT, description = "标签")
     @PostMapping("/saveTag")
-    public Result saveTag(@RequestBody TagDTO TagDTO) {
+    public Result saveTag(@RequestBody TagDTO tagDTO) {
         //参数校验
-        if (TagDTO.getId() != null) {
+        if (tagDTO.getId() != null) {
             return Result.fail("请勿携带ID");
         }
-        if (StringUtils.isBlank(TagDTO.getName())) {
+        if (StringUtils.isBlank(tagDTO.getName())) {
             return Result.fail("标签名称必填");
         }
         //开始保存
         try {
-            tagService.saveTag(TagDTO);
+            tagService.saveTag(tagDTO);
             return Result.success("新增标签成功");
         } catch (Exception e) {
             log.error("新增标签失败：{}", e.getMessage());
@@ -48,14 +48,14 @@ public class AdminTagController {
     @Admin
     @OperationLogger(type = OperationTypeEnum.DELETE, description = "标签")
     @PostMapping("/deleteTag")
-    public Result deleteTag(@RequestBody TagDTO TagDTO) {
+    public Result deleteTag(@RequestBody TagDTO tagDTO) {
         //参数校验
-        if (TagDTO.getId() == null) {
+        if (tagDTO.getId() == null) {
             return Result.fail("删除标签失败，ID必填");
         }
         //开始删除分类
         try {
-            tagService.deleteTag(TagDTO);
+            tagService.deleteTag(tagDTO);
             return Result.success("删除标签成功");
         } catch (Exception e) {
             log.error("删除标签失败：{}", e.getMessage());

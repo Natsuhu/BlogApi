@@ -34,6 +34,12 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+/**
+ * 文件管理控制层
+ *
+ * @author NatsuKaze
+ * @since 2025/01/20
+ */
 @RestController
 @RequestMapping("/admin/annex")
 @Slf4j

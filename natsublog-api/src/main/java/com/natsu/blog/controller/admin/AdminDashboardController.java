@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 
+/**
+ * 主页数据统计控制层
+ *
+ * @author NatsuKaze
+ * @since 2025/01/20
+ */
 @RestController
 @RequestMapping("/admin/dashboard")
 @Slf4j
@@ -31,7 +37,7 @@ public class AdminDashboardController {
         try {
             Integer articleCount = dashboardService.getArticleCount();
             Integer commentCount = dashboardService.getCommentCount();
-            HashMap<String, Integer> result = new HashMap<>();
+            HashMap<String, Integer> result = new HashMap<>(4);
             result.put("pv", 100);
             result.put("uv", 100);
             result.put("articleCount", articleCount);

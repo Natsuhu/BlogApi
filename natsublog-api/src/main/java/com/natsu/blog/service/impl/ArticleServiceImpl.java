@@ -154,7 +154,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return articleMapper.getArticleTable(page, queryCond);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void saveArticle(ArticleDTO articleDTO) {
         //组装实体
@@ -181,7 +181,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         }
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateArticle(ArticleDTO articleDTO) {
         //若文章内容变化，则更新编辑时间

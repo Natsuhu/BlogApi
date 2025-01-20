@@ -54,8 +54,8 @@ public class FriendsController {
     @VisitorLogger(VisitorBehavior.FRIEND)
     @GetMapping
     public Result getFriends() {
-        List<FriendDTO> friendDTOS = friendService.getFriends();
-        return Result.success(friendDTOS);
+        List<FriendDTO> friendDTOList = friendService.getFriends();
+        return Result.success(friendDTOList);
     }
 
     /**
