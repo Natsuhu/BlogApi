@@ -3,4 +3,25 @@
 
 <mapper namespace="com.natsu.blog.mapper.VisitorMapper">
 
+    <select id="getYesterdayVisitorInfo" resultType="com.natsu.blog.model.entity.Visitor">
+        select visitor_id as id, max(create_time) as last_time, count(*) as pv
+        from visit_log
+        where date(create_time) = date_sub(curdate(), interval 1 day)
+        group by visitor_id
+    </select>
+
+    <select id="getVisitorTable" resultType="com.natsu.blog.model.dto.VisitorDTO">
+        select id, ip, ip_source, os, browser, pv, create_time, last_time
+        from visitor
+        <where>
+            <if test="queryCond.keyword != null and queryCond.keyword != ''">
+                1 = 1
+            </if>
+            <if test="queryCond.startTime != null and queryCond.endTime != null">
+                and last_time between #{queryCond.startTime} and #{queryCond.endTime}
+            </if>
+        </where>
+        order by last_time desc
+    </select>
+
 </mapper>

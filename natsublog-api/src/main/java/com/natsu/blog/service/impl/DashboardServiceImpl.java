@@ -15,6 +15,11 @@ public class DashboardServiceImpl implements DashboardService {
     private DashboardMapper dashboardMapper;
 
     @Override
+    public Integer getTodayVisitCount() {
+        return dashboardMapper.getTodayVisitCount();
+    }
+
+    @Override
     public Integer getArticleCount() {
         return dashboardMapper.getArticleCount();
     }

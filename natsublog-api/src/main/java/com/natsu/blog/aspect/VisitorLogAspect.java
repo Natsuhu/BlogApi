@@ -1,7 +1,9 @@
 package com.natsu.blog.aspect;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.natsu.blog.annotation.VisitorLogger;
+import com.natsu.blog.constant.Constants;
 import com.natsu.blog.enums.PageEnum;
 import com.natsu.blog.enums.VisitorBehavior;
 import com.natsu.blog.model.dto.ArticleDTO;
@@ -10,8 +12,11 @@ import com.natsu.blog.model.dto.BaseQueryDTO;
 import com.natsu.blog.model.dto.CommentDTO;
 import com.natsu.blog.model.entity.VisitLog;
 import com.natsu.blog.model.dto.Result;
+import com.natsu.blog.model.entity.Visitor;
 import com.natsu.blog.service.VisitLogService;
+import com.natsu.blog.service.VisitorService;
 import com.natsu.blog.utils.IPUtils;
+import com.natsu.blog.utils.RedisUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -22,6 +27,10 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.UUID;
 
 /**
  * AOP切面配置
@@ -38,6 +47,12 @@ public class VisitorLogAspect {
      */
     @Autowired
     private VisitLogService visitLogService;
+
+    /**
+     * 注入VisitorService
+     */
+    @Autowired
+    private VisitorService visitorService;
 
     /**
      * 记录每次请求的响应时间
@@ -63,17 +78,61 @@ public class VisitorLogAspect {
     @Around(value = "pointcut(visitorLogger)", argNames = "joinPoint,visitorLogger")
     public Object around(ProceedingJoinPoint joinPoint, VisitorLogger visitorLogger) throws Throwable {
         //计算响应时间，毫秒
-        // TODO 计算响应时间后续改为StopWatch工具 (SpringUtil)
         currentTime.set(System.currentTimeMillis());
         Result result = (Result) joinPoint.proceed();
         int times = (int) (System.currentTimeMillis() - currentTime.get());
         currentTime.remove();
-
-        //获取request对象,处理VisitLog对象并保存
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        //保存访客和访客记录
+        String visitorId = getVisitorId(request);
         VisitLog visitLog = handleLog(joinPoint, visitorLogger, request, result, times);
+        visitLog.setVisitorId(visitorId);
         visitLogService.saveVisitLog(visitLog);
+        //添加访客标识码UUID至响应头
+        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        response.addHeader("Identification", visitorId);
+        response.addHeader("Access-Control-Expose-Headers", "Identification");
         return result;
+    }
+
+    private String getVisitorId(HttpServletRequest request) {
+        String ip = IPUtils.getIpAddress(request);
+        String userAgent = request.getHeader("User-Agent");
+        String visitorId = request.getHeader("Identification");
+        //判断访客标识是否存在
+        if (StrUtil.isNotBlank(visitorId)) {
+            //校验Redis中是否存在
+            boolean redisHas = RedisUtils.sHasKey(Constants.IDENTIFICATION_SET, visitorId);
+            if (redisHas) {
+                return visitorId;
+            }
+            //校验数据库中是否存在
+            Visitor visitor = visitorService.getById(visitorId);
+            if (visitor != null) {
+                RedisUtils.sSet(Constants.IDENTIFICATION_SET, visitorId);
+                return visitorId;
+            }
+        }
+        //生成访客标识
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        String timestamp = Long.toString(calendar.getTimeInMillis() / 1000);
+        String nameUUID = timestamp + ip + userAgent;
+        visitorId = UUID.nameUUIDFromBytes(nameUUID.getBytes()).toString().replace("-", "");
+        //保存至Redis
+        RedisUtils.sSet(Constants.IDENTIFICATION_SET, visitorId);
+        //保存至数据库
+        if (visitorService.getById(visitorId) == null) {
+            Visitor visitor = new Visitor();
+            visitor.setId(visitorId);
+            visitor.setPv(0L);
+            visitor.setIp(ip);
+            visitor.setUserAgent(userAgent);
+            visitor.setLastTime(new Date());
+            visitorService.saveVisitor(visitor);
+        }
+        return visitorId;
     }
 
     /**

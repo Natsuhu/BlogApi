@@ -5,7 +5,7 @@
     <!-- 获取访客记录表格 -->
     <select id="getVisitLogTable" resultType="com.natsu.blog.model.dto.VisitLogDTO">
         select
-            uuid, behavior, if(content = '', remark, content) as content, ip, ip_source, os,
+            id, behavior, if(content = '', remark, content) as content, ip, ip_source, os,
             browser, create_time
         from
             visit_log

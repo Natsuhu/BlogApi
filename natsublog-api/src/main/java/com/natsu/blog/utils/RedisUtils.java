@@ -23,7 +23,7 @@ public class RedisUtils {
     /**
      * RedisTemplate<String, Object>
      */
-    private static final RedisTemplate<String, Object> REDIS_TEMPLATE = (RedisTemplate<String, Object>) SpringContextUtils.getBean("REDIS_TEMPLATE");
+    private static final RedisTemplate<String, Object> REDIS_TEMPLATE = (RedisTemplate<String, Object>) SpringContextUtils.getBean("redisTemplate");
 
     //=============================common============================
 
@@ -373,7 +373,7 @@ public class RedisUtils {
             return REDIS_TEMPLATE.opsForSet().size(key);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return 0L;
         }
     }
 

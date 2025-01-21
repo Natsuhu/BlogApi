@@ -21,8 +21,8 @@ public class Visitor implements Serializable {
     /**
      * 访客标识码
      */
-    @TableId(value = "uuid", type = IdType.ASSIGN_UUID)
-    private String uuid;
+    @TableId(value = "id", type = IdType.ASSIGN_UUID)
+    private String id;
 
     /**
      * ip
@@ -37,6 +37,18 @@ public class Visitor implements Serializable {
     private String ipSource;
 
     /**
+     * 省
+     */
+    @TableField("province")
+    private String province;
+
+    /**
+     * 市
+     */
+    @TableField("city")
+    private String city;
+
+    /**
      * 操作系统
      */
     @TableField("os")
@@ -49,6 +61,12 @@ public class Visitor implements Serializable {
     private String browser;
 
     /**
+     * 访问页数统计
+     */
+    @TableField("pv")
+    private Long pv;
+
+    /**
      * 首次访问时间
      */
     @TableField(value = "create_time", fill = FieldFill.INSERT)
@@ -59,13 +77,8 @@ public class Visitor implements Serializable {
      * 最后访问时间
      */
     @TableField("last_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date lastTime;
-
-    /**
-     * 访问页数统计
-     */
-    @TableField("pv")
-    private Long pv;
 
     /**
      * user-agent用户代理

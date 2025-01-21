@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.natsu.blog.mapper.ArticleMapper;
 import com.natsu.blog.mapper.OperationLogMapper;
 import com.natsu.blog.mapper.VisitLogMapper;
+import com.natsu.blog.mapper.VisitorMapper;
 import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.entity.Friend;
 import com.natsu.blog.model.entity.Moment;
 import com.natsu.blog.model.entity.OperationLog;
 import com.natsu.blog.model.entity.VisitLog;
+import com.natsu.blog.model.entity.Visitor;
 import com.natsu.blog.service.FriendService;
 import com.natsu.blog.service.MomentService;
 import com.natsu.blog.utils.IPUtils;
@@ -89,12 +91,36 @@ public class AsyncTaskService {
     }
 
     /**
+     * 保存访客
+     */
+    public void saveVisitor(VisitorMapper visitorMapper, Visitor visitor) {
+        HashMap<String, String> userAgent = userAgentUtils.parseOsAndBrowser(visitor.getUserAgent());
+        visitor.setBrowser(userAgent.get("browser"));
+        visitor.setOs(userAgent.get("os"));
+        //设置省与市
+        String ipSource = IPUtils.getCityInfo(visitor.getIp());
+        if (ipSource.startsWith("中国")) {
+            String[] split = ipSource.split("\\|");
+            if (split.length == 4) {
+                visitor.setProvince(split[1]);
+                visitor.setCity(split[2]);
+            }
+        }
+        visitor.setIpSource(ipSource);
+        try {
+            visitorMapper.insert(visitor);
+        } catch (Exception e) {
+            log.error("保存访客记录失败：{}", e.getMessage());
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    /**
      * 保存访问记录
      */
     public void saveVisitLog(VisitLogMapper visitLogMapper, VisitLog visitLog) {
-        String city = IPUtils.getCityInfo(visitLog.getIp());
         HashMap<String, String> userAgent = userAgentUtils.parseOsAndBrowser(visitLog.getUserAgent());
-        visitLog.setIpSource(city);
+        visitLog.setIpSource(IPUtils.getCityInfo(visitLog.getIp()));
         visitLog.setBrowser(userAgent.get("browser"));
         visitLog.setOs(userAgent.get("os"));
         try {

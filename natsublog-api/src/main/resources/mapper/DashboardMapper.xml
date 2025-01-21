@@ -3,6 +3,10 @@
 
 <mapper namespace="com.natsu.blog.mapper.DashboardMapper">
 
+    <select id="getTodayVisitCount" resultType="java.lang.Integer">
+        select count(*) from visit_log where date(create_time) = curdate()
+    </select>
+
     <select id="getArticleCount" resultType="java.lang.Integer">
         select count(*) as articleCount from article
     </select>

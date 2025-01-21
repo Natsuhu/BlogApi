@@ -1,9 +1,11 @@
 package com.natsu.blog.controller.admin;
 
 import com.natsu.blog.annotation.OperationLogger;
+import com.natsu.blog.constant.Constants;
 import com.natsu.blog.enums.OperationTypeEnum;
 import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.service.DashboardService;
+import com.natsu.blog.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,11 +37,13 @@ public class AdminDashboardController {
     @PostMapping("/getTopBaseData")
     public Result getTopBaseData() {
         try {
+            Integer pv = dashboardService.getTodayVisitCount();
+            Integer uv = Math.toIntExact(RedisUtils.sGetSetSize(Constants.IDENTIFICATION_SET));
             Integer articleCount = dashboardService.getArticleCount();
             Integer commentCount = dashboardService.getCommentCount();
             HashMap<String, Integer> result = new HashMap<>(4);
-            result.put("pv", 100);
-            result.put("uv", 100);
+            result.put("pv", pv);
+            result.put("uv", uv);
             result.put("articleCount", articleCount);
             result.put("commentCount", commentCount);
             return Result.success(result);

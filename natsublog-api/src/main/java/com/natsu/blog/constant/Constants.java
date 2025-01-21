@@ -243,4 +243,8 @@ public class Constants {
      */
     public static final String QUARTZ_MAP_KEY = "JOB_ID";
 
+    /**
+     * redis访客标识缓存
+     */
+    public static final String IDENTIFICATION_SET = "identificationSet";
 }

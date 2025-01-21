@@ -8,6 +8,8 @@ import java.util.List;
 @Repository
 public interface DashboardMapper {
 
+    Integer getTodayVisitCount();
+
     Integer getArticleCount();
 
     Integer getCommentCount();
@@ -15,5 +17,4 @@ public interface DashboardMapper {
     List<DashboardVO> getCategoryEcharts();
 
     List<DashboardVO> getTagEcharts();
-
 }

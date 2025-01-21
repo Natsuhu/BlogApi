@@ -19,10 +19,16 @@ import java.util.Date;
 public class VisitLog implements Serializable {
 
     /**
-     * 访客标识码
+     * 主键
      */
-    @TableId(value = "uuid", type = IdType.ASSIGN_UUID)
-    private String uuid;
+    @TableId(value = "id", type = IdType.ASSIGN_UUID)
+    private String id;
+
+    /**
+     * 关联访客Id
+     */
+    @TableField("visitor_id")
+    private String visitorId;
 
     /**
      * 请求接口

@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface DashboardService {
 
+    Integer getTodayVisitCount();
+
     Integer getArticleCount();
 
     Integer getCommentCount();
