@@ -55,7 +55,7 @@ public interface ArticleService extends IService<Article> {
      *
      * @param articleDTO articleDTO
      */
-    void saveArticle(ArticleDTO articleDTO);
+    Long saveArticle(ArticleDTO articleDTO);
 
     /**
      * 后台。更新文章

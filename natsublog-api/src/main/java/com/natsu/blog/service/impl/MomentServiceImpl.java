@@ -57,7 +57,7 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper, Moment> impleme
     }
 
     @Override
-    public void saveMoment(MomentDTO momentDTO) {
+    public Long saveMoment(MomentDTO momentDTO) {
         //组装实体
         momentDTO.setId(null);
         if (momentDTO.getLikes() == null) {
@@ -76,6 +76,7 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper, Moment> impleme
         momentDTO.setAvatar(settingService.getSetting(Constants.SETTING_KEY_CARD_AVATAR));
         //保存动态
         momentMapper.insert(momentDTO);
+        return momentDTO.getId();
     }
 
     @Override

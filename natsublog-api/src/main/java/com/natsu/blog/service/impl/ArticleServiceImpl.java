@@ -156,7 +156,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveArticle(ArticleDTO articleDTO) {
+    public Long saveArticle(ArticleDTO articleDTO) {
         //组装实体
         articleDTO.setId(null);
         if (articleDTO.getEditTime() == null) {
@@ -179,6 +179,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             }
             articleTagService.saveBatch(tagRefs);
         }
+        return articleDTO.getId();
     }
 
     @Transactional(rollbackFor = Exception.class)

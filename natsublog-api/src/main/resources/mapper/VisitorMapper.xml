@@ -11,7 +11,7 @@
     </select>
 
     <select id="getVisitorTable" resultType="com.natsu.blog.model.dto.VisitorDTO">
-        select id, ip, ip_source, os, browser, pv, create_time, last_time
+        select ip, ip_source, os, browser, pv, create_time, last_time
         from visitor
         <where>
             <if test="queryCond.keyword != null and queryCond.keyword != ''">

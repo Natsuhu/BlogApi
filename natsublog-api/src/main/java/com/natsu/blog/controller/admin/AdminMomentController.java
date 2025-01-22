@@ -60,8 +60,8 @@ public class AdminMomentController {
         }
         //开始保存
         try {
-            momentService.saveMoment(momentDTO);
-            return Result.success("保存成功！");
+            Long momentId = momentService.saveMoment(momentDTO);
+            return Result.success(momentId);
         } catch (Exception e) {
             log.error("保存动态失败，{}", e.getMessage());
             return Result.fail("保存失败，" + e.getMessage());

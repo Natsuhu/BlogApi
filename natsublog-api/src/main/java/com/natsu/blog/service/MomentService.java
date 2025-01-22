@@ -29,7 +29,7 @@ public interface MomentService extends IService<Moment> {
      *
      * @param momentDTO momentDTO
      */
-    void saveMoment(MomentDTO momentDTO);
+    Long saveMoment(MomentDTO momentDTO);
 
     /**
      * 后台。更新动态

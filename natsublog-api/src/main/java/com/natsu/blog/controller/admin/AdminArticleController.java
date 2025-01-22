@@ -95,8 +95,8 @@ public class AdminArticleController {
         }
         //开始保存
         try {
-            articleService.saveArticle(articleDTO);
-            return Result.success("保存成功！");
+            Long articleId = articleService.saveArticle(articleDTO);
+            return Result.success(articleId);
         } catch (Exception e) {
             log.error("保存文章失败，{}", e.getMessage());
             return Result.fail("保存失败，" + e);
