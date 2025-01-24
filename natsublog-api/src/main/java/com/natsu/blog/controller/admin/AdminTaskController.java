@@ -101,6 +101,23 @@ public class AdminTaskController {
     }
 
     @Admin
+    @OperationLogger(type = OperationTypeEnum.UPDATE, description = "定时任务更新")
+    @PostMapping("/updateTask")
+    public Result updateTask(@RequestBody TaskDTO taskDTO) {
+        if (StrUtil.isBlank(taskDTO.getId())) {
+            return Result.fail("ID必填");
+        }
+        //更新定时任务
+        try {
+            taskService.updateTask(taskDTO);
+            return Result.success("更新定时任务成功");
+        } catch (Exception e) {
+            log.error("更新定时任务失败，{}", e.getMessage());
+            return Result.fail("更新定时任务失败：" + e);
+        }
+    }
+
+    @Admin
     @OperationLogger(type = OperationTypeEnum.DELETE, description = "定时任务")
     @PostMapping("/deleteTask")
     public Result deleteTask(@RequestBody TaskDTO taskDTO) {

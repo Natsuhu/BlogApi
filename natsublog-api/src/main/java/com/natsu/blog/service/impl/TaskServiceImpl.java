@@ -80,7 +80,23 @@ public class TaskServiceImpl extends ServiceImpl<TaskMapper, Task> implements Ta
 
     @Override
     public void updateTask(TaskDTO taskDTO) {
-
+        Task task = getById(taskDTO);
+        //如果更新前在运行中，先删除任务
+        if (scheduleService.getCronTrigger(taskDTO.getId()) != null) {
+            scheduleService.deleteScheduleJob(taskDTO.getId());
+        }
+        //前置检查
+        taskDTO.setCurrentCount(task.getCurrentCount());
+        checkMaxCount(taskDTO);
+        checkExpireTime(taskDTO);
+        //计算下次执行时间
+        setNextTime(taskDTO);
+        //更新
+        updateById(taskDTO);
+        //此前是运行中，重新创建任务
+        if (Constants.COM_NUM_ONE.equals(task.getStatus())) {
+            scheduleService.createScheduleJob(taskDTO.getId(), taskDTO.getCron());
+        }
     }
 
     @Override
