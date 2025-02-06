@@ -1,8 +1,8 @@
 package com.natsu.blog.aspect;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.natsu.blog.annotation.OperationLogger;
-import com.natsu.blog.enums.OperationTypeEnum;
 import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.model.entity.OperationLog;
 import com.natsu.blog.service.OperationLogService;
@@ -92,8 +92,17 @@ public class OperationLogAspect {
         }
         operationLog.setDescription(operationLogger.description());
         operationLog.setType(operationLogger.type().getOperationTypeCode());
-        operationLog.setStatus(!result.isSuccess() ? 0 : 1);
-        operationLog.setUsername(JwtUtils.checkToken(request.getHeader("Authorization")).getSubject());
+        //设置状态，验证Token
+        if (result != null && !result.isSuccess()) {
+            operationLog.setStatus(0);
+        } else {
+            operationLog.setStatus(1);
+        }
+        String token = request.getHeader("Authorization");
+        if (StrUtil.isBlank(token)) {
+            token = request.getParameter("token");
+        }
+        operationLog.setUsername(JwtUtils.checkToken(token).getSubject());
         return operationLog;
     }
 
