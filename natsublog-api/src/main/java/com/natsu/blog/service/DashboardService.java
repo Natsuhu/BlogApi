@@ -16,4 +16,6 @@ public interface DashboardService {
 
     List<DashboardVO> getTagEcharts();
 
+    List<DashboardVO> getMapEcharts();
+
 }

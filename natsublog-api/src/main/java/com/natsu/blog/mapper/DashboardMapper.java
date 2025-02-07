@@ -17,4 +17,6 @@ public interface DashboardMapper {
     List<DashboardVO> getCategoryEcharts();
 
     List<DashboardVO> getTagEcharts();
+
+    List<DashboardVO> getMapEcharts();
 }

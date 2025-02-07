@@ -90,7 +90,12 @@ public class AdminDashboardController {
      */
     @PostMapping("/getMapEcharts")
     public Result getMapEcharts() {
-        return Result.success("OK");
+        try {
+            return Result.success(dashboardService.getMapEcharts());
+        } catch (Exception e) {
+            log.error("获取访客地图数据失败：{}", e.getMessage());
+            return Result.fail("获取访客地图数据失败：" + e.getMessage());
+        }
     }
 
     /**

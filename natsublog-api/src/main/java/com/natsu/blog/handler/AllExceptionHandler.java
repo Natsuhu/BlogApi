@@ -25,7 +25,7 @@ public class AllExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public Result doException(HttpServletRequest request, Exception e) {
-        log.error("Request URL : {}, Exception : {}", request.getRequestURL(), e.getMessage());
+        log.error("Request URL : {}, Exception : {}", request.getRequestURL(), e);
         return Result.fail(e.getMessage());
     }
 }

@@ -31,4 +31,13 @@
         group by a.id
     </select>
 
+    <select id="getMapEcharts" resultType="com.natsu.blog.model.vo.DashboardVO">
+        select
+            city as name, count(*) as value
+        from
+            visitor
+        group by city
+        having city is not null
+    </select>
+
 </mapper>

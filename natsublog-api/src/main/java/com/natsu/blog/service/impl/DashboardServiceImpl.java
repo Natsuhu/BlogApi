@@ -38,4 +38,9 @@ public class DashboardServiceImpl implements DashboardService {
     public List<DashboardVO> getTagEcharts() {
         return dashboardMapper.getTagEcharts();
     }
+
+    @Override
+    public List<DashboardVO> getMapEcharts() {
+        return dashboardMapper.getMapEcharts();
+    }
 }
