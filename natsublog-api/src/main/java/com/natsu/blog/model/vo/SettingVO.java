@@ -148,4 +148,9 @@ public class SettingVO {
      */
     private JSONArray cardCustom;
 
+    /**
+     * 设置值--删除文章时，是否顺带删除文章下的评论
+     */
+    private String isDeleteCommentInDeleteArticle;
+
 }

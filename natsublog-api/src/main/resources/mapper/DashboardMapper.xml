@@ -40,4 +40,24 @@
         having city is not null
     </select>
 
+    <select id="getLineEcharts" resultType="com.natsu.blog.model.vo.DashboardVO">
+        with recursive ta as (
+            select date(#{queryCond.startTime}) as date
+            union all
+            select date_add(date, interval 1 day)
+            from ta
+            where date(#{queryCond.endTime}) > date
+        ),
+        tb as (
+            select date, count(*) as uv, sum(count) as pv
+            from (
+                select count(*) as count, date(create_time) as date
+                from visit_log
+                where create_time between #{queryCond.startTime} and #{queryCond.endTime}
+                group by date(create_time) , visitor_id) as a
+            group by date
+        )
+        select ta.date, coalesce(uv, 0) as uv, coalesce(pv, 0) as pv from ta left join tb on ta.date = tb.date
+    </select>
+
 </mapper>

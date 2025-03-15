@@ -129,6 +129,24 @@ public class AdminArticleController {
         }
     }
 
+    @Admin
+    @OperationLogger(type = OperationTypeEnum.DELETE, description = "博客")
+    @PostMapping("/deleteArticle")
+    public Result deleteArticle(@RequestBody ArticleDTO articleDTO) {
+        //参数校验
+        if (articleDTO.getId() == null) {
+            return Result.fail("参数错误！必须填写文章ID");
+        }
+        //开始删除
+        try {
+            articleService.deleteArticle(articleDTO);
+            return Result.success("删除成功");
+        } catch (Exception e) {
+            log.error("删除文章失败！{}", e.getMessage());
+            return Result.fail("删除文章失败！" + e);
+        }
+    }
+
     private Result checkParam(ArticleDTO articleDTO) {
         if (StringUtils.isEmpty(articleDTO.getTitle())) {
             return Result.fail("参数错误！文章必须包含标题");

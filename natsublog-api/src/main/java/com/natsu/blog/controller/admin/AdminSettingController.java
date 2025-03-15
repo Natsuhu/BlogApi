@@ -37,6 +37,7 @@ public class AdminSettingController {
             settingVO.setAdminCommentLabel(settingService.getSetting(Constants.SETTING_KEY_ADMIN_COMMENT_LABEL));
             settingVO.setFrontLoginImage(settingService.getSetting(Constants.SETTING_KET_FRONT_LOGIN_IMAGE));
             settingVO.setBackLoginImage(settingService.getSetting(Constants.SETTING_KET_BACK_LOGIN_IMAGE));
+            settingVO.setIsDeleteCommentInDeleteArticle(settingService.getSetting(Constants.SETTING_KEY_IS_DELETE_COMMENT_IN_DELETE_ARTICLE));
             return Result.success(settingVO);
         } catch (Exception e) {
             log.error("获取通用设置失败：{}", e.getMessage());
@@ -63,6 +64,7 @@ public class AdminSettingController {
             settingService.updateSetting(Constants.SETTING_KEY_ADMIN_COMMENT_LABEL, settingVO.getAdminCommentLabel());
             settingService.updateSetting(Constants.SETTING_KET_FRONT_LOGIN_IMAGE, settingVO.getFrontLoginImage());
             settingService.updateSetting(Constants.SETTING_KET_BACK_LOGIN_IMAGE, settingVO.getBackLoginImage());
+            settingService.updateSetting(Constants.SETTING_KEY_IS_DELETE_COMMENT_IN_DELETE_ARTICLE, settingVO.getIsDeleteCommentInDeleteArticle());
             return Result.success("更新成功");
         } catch (Exception e) {
             log.error("更新通用配置失败：{}", e.getMessage());

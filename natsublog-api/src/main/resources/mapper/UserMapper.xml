@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.natsu.blog.mapper.UserMapper">
+
+    <select id="getUserTable" resultType="com.natsu.blog.model.dto.UserDTO">
+        select id, nickname as username, avatar, email,
+               if(role = 'admin', '管理员', '访客') as role,
+               create_time, update_time
+        from
+            user
+        <where>
+            <if test="queryCond.keyword != null and queryCond.keyword != ''">
+                nickname like concat('%', #{queryCond.keyword}, '%')
+            </if>
+        </where>
+    </select>
+
+</mapper>

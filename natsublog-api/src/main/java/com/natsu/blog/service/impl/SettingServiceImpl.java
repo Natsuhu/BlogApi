@@ -82,6 +82,7 @@ public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> impl
         settingVO.setFrontLoginImage(allSettingMap.get(Constants.SETTING_KET_FRONT_LOGIN_IMAGE));
         settingVO.setBackLoginImage(allSettingMap.get(Constants.SETTING_KET_BACK_LOGIN_IMAGE));
         settingVO.setIcpInfo(allSettingMap.get(Constants.SETTING_KET_ICPINFO));
+        settingVO.setIsDeleteCommentInDeleteArticle(allSettingMap.get(Constants.SETTING_KEY_IS_DELETE_COMMENT_IN_DELETE_ARTICLE));
         settingVO.setCopyright(JSON.parseObject(allSettingMap.get(Constants.SETTING_KET_COPYRIGHT)));
         settingVO.setBadgeList(JSON.parseArray(allSettingMap.get(Constants.SETTING_KET_BADGELIST)));
         settingVO.setCardCustom(JSON.parseArray(allSettingMap.get(Constants.SETTING_KEY_CARD_CUSTOM)));

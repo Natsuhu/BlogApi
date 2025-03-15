@@ -184,6 +184,11 @@ public class Constants {
     public static final String SETTING_KEY_CARD_CUSTOM = "cardCustom";
 
     /**
+     * 设置值--删除文章时，是否顺带删除文章下的评论
+     */
+    public static final String SETTING_KEY_IS_DELETE_COMMENT_IN_DELETE_ARTICLE = "isDeleteCommentInDeleteArticle";
+
+    /**
      * 评论中QQ头像存储方式-本地
      */
     public static final String LOCAL = "local";

@@ -1,21 +1,24 @@
 package com.natsu.blog.service.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.natsu.blog.constant.Constants;
+import com.natsu.blog.enums.PageEnum;
 import com.natsu.blog.mapper.ArticleMapper;
 import com.natsu.blog.model.dto.ArticleDTO;
 import com.natsu.blog.model.dto.ArticleQueryDTO;
 import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.entity.ArticleTag;
+import com.natsu.blog.model.entity.Comment;
 import com.natsu.blog.model.entity.Tag;
 import com.natsu.blog.service.AnnexService;
 import com.natsu.blog.service.ArticleService;
 import com.natsu.blog.service.ArticleTagService;
 import com.natsu.blog.service.CategoryService;
+import com.natsu.blog.service.CommentService;
+import com.natsu.blog.service.SettingService;
 import com.natsu.blog.service.TagService;
 import com.natsu.blog.service.async.AsyncTaskService;
 import com.natsu.blog.utils.CommonUtils;
@@ -58,6 +61,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Autowired
     private AsyncTaskService asyncTaskService;
+
+    @Autowired
+    private SettingService settingService;
+
+    @Autowired
+    private CommentService commentService;
 
     @Override
     public Map<String, Object> getArchives() {
@@ -219,6 +228,25 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             }
             articleTagService.saveBatch(articleTags);
         }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void deleteArticle(ArticleDTO articleDTO) {
+        //解除博客与标签关联关系
+        LambdaQueryWrapper<ArticleTag> deleteTagRel = new LambdaQueryWrapper<>();
+        deleteTagRel.eq(ArticleTag::getArticleId, articleDTO.getId());
+        articleTagService.remove(deleteTagRel);
+        //读取配置判断是否删除评论
+        String isDeleteComment = settingService.getSetting(Constants.SETTING_KEY_IS_DELETE_COMMENT_IN_DELETE_ARTICLE);
+        if ("true".equals(isDeleteComment)) {
+            LambdaQueryWrapper<Comment> deleteComment = new LambdaQueryWrapper<>();
+            deleteComment.eq(Comment::getPage, PageEnum.ARTICLE.getPageCode());
+            deleteComment.eq(Comment::getArticleId, articleDTO.getId());
+            commentService.remove(deleteComment);
+        }
+        //删除文章
+        articleMapper.deleteById(articleDTO);
     }
 
 }

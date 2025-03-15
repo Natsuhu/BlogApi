@@ -1,5 +1,6 @@
 package com.natsu.blog.controller.admin;
 
+import com.alibaba.fastjson.JSONObject;
 import com.natsu.blog.annotation.OperationLogger;
 import com.natsu.blog.constant.Constants;
 import com.natsu.blog.enums.OperationTypeEnum;
@@ -105,7 +106,13 @@ public class AdminDashboardController {
      */
     @PostMapping("/getVisitRecordEcharts")
     public Result getVisitRecordEcharts() {
-        return Result.success("OK");
+        try {
+            JSONObject lineEcharts = dashboardService.getLineEcharts();
+            return Result.success(lineEcharts);
+        } catch (Exception e) {
+            log.error("获取访客记录折线图失败：{}", e.getMessage());
+            return Result.fail("获取访客访客记录折线图失败：" + e.getMessage());
+        }
     }
 
 }

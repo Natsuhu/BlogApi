@@ -15,4 +15,10 @@ public class DashboardVO {
 
     public Integer value;
 
+    public String date;
+
+    public Integer uv;
+
+    public Integer pv;
+
 }

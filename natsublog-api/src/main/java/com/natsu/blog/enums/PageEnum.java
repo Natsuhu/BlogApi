@@ -27,7 +27,11 @@ public enum PageEnum {
     /**
      * 登录页面
      */
-    LOGIN("login", 4);
+    LOGIN("login", 4),
+    /**
+     * 资料卡
+     */
+    CARD("card", 5);
 
     /**
      * 页面名称

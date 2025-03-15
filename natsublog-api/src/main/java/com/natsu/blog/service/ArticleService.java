@@ -71,4 +71,11 @@ public interface ArticleService extends IService<Article> {
      * @return IPage<ArticleDTO>
      */
     IPage<ArticleDTO> getArticleTable(ArticleQueryDTO queryCond);
+
+    /**
+     * 删除文章
+     *
+     * @param articleDTO articleDto
+     */
+    void deleteArticle(ArticleDTO articleDTO);
 }

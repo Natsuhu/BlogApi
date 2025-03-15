@@ -33,4 +33,19 @@ public class IndexController {
         }
     }
 
+    /**
+     * 获取资料卡配置项
+     * @return settingVO
+     */
+    @GetMapping("/getCardSetting")
+    public Result getCardSetting() {
+        try {
+            SettingVO pageSetting = settingService.getPageSetting(PageEnum.CARD.getPageCode());
+            return Result.success(pageSetting);
+        } catch (Exception e) {
+            log.error("获取资料卡配置失败：{}", e.getMessage());
+            return Result.fail("获取资料卡配置失败：" + e.getMessage());
+        }
+    }
+
 }
