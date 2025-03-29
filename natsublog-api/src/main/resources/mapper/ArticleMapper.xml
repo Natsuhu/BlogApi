@@ -30,7 +30,7 @@
         from
             article
         where
-            is_published = true
+            is_published = true and is_recommend = true
         order by rand() limit ${count}
     </select>
 
@@ -61,7 +61,7 @@
             and a.is_published = true
         </where>
         group by a.id
-        order by is_top desc , is_recommend desc , create_time desc
+        order by is_top desc ,create_time desc
     </select>
 
     <select id="getArticleTable" resultType="com.natsu.blog.model.dto.ArticleDTO">
