@@ -9,6 +9,7 @@ import com.natsu.blog.enums.PageEnum;
 import com.natsu.blog.mapper.ArticleMapper;
 import com.natsu.blog.model.dto.ArticleDTO;
 import com.natsu.blog.model.dto.ArticleQueryDTO;
+import com.natsu.blog.model.dto.BaseQueryDTO;
 import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.entity.ArticleTag;
 import com.natsu.blog.model.entity.Comment;
@@ -248,5 +249,37 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         //删除文章
         articleMapper.deleteById(articleDTO);
     }
+
+    /**
+     * 按关键字搜索文章内容
+     *
+     * @param keyword 关键字
+     * @return 文章列表
+     */
+    @Override
+    public List<ArticleDTO> searchArticles(String keyword) {
+        //封装为查询对象
+        BaseQueryDTO queryCond = new BaseQueryDTO();
+        queryCond.setKeyword(keyword.toUpperCase().trim());
+        //处理内容
+        List<ArticleDTO> articleDTOList = articleMapper.searchArticles(queryCond);
+        for (ArticleDTO articleDTO : articleDTOList) {
+            //以关键字字符串为中心返回21个字
+            String content = articleDTO.getContent();
+            int contentLength = content.length();
+            int index = content.indexOf(keyword) - 10;
+            index = Math.max(index, 0);
+            int end = index + 21;
+            end = Math.min(end, contentLength - 1);
+            //去掉内容中的markdown关键字和尖括号
+            String newContent = content.substring(index, end)
+                    .replace("<", "")
+                    .replace("#", "")
+                    .replace(">", "");
+            articleDTO.setContent(newContent);
+        }
+        return articleDTOList;
+    }
+
 
 }

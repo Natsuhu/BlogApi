@@ -78,4 +78,12 @@ public interface ArticleService extends IService<Article> {
      * @param articleDTO articleDto
      */
     void deleteArticle(ArticleDTO articleDTO);
+
+    /**
+     * 按关键字搜索文章内容
+     *
+     * @param keyword 关键字
+     * @return 文章列表
+     */
+    List<ArticleDTO> searchArticles(String keyword);
 }

@@ -1,7 +1,9 @@
 package com.natsu.blog.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.natsu.blog.annotation.AccessLimit;
 import com.natsu.blog.annotation.VisitorLogger;
 import com.natsu.blog.constant.Constants;
 import com.natsu.blog.enums.VisitorBehavior;
@@ -12,6 +14,7 @@ import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -121,6 +124,23 @@ public class ArticleController {
         queryCond.setKeyword(null);
         IPage<ArticleDTO> articles = articleService.getArticles(queryCond);
         return Result.success(articles.getPages(), 0, articles.getRecords());
+    }
+
+    @VisitorLogger(VisitorBehavior.SEARCH)
+    @GetMapping("/search/{keyword}")
+    @AccessLimit(seconds = 1, maxCount = 1)
+    public Result searchArticle(@PathVariable("keyword") String keyword) {
+        if (StrUtil.isBlank(keyword)
+                || keyword.contains("%")
+                || keyword.contains("_")
+                || keyword.contains("[")
+                || keyword.contains("#")
+                || keyword.contains("*")
+                || keyword.length() > 20) {
+            return Result.fail("请勿传空参数");
+        }
+        List<ArticleDTO> articles = articleService.searchArticles(keyword);
+        return Result.success(articles);
     }
 
 }

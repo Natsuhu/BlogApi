@@ -84,4 +84,17 @@
         order by a.create_time desc
     </select>
 
+    <select id="searchArticles" resultType="com.natsu.blog.model.dto.ArticleDTO">
+        select
+            a.id, a.title, a.content, b.name as category_name
+        from
+            article as a left join category as b on a.category_id = b.id
+        <where>
+            <if test="queryCond.keyword != null and queryCond.keyword != ''">
+                a.content like concat('%',#{queryCond.keyword},'%')
+            </if>
+            and a.is_published = true
+        </where>
+    </select>
+
 </mapper>

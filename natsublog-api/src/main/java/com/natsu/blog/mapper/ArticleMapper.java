@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.natsu.blog.model.dto.ArticleDTO;
 import com.natsu.blog.model.dto.ArticleQueryDTO;
+import com.natsu.blog.model.dto.BaseQueryDTO;
 import com.natsu.blog.model.entity.Article;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -37,4 +38,6 @@ public interface ArticleMapper extends BaseMapper<Article> {
      * 后台管理系统--文章Table
      */
     IPage<ArticleDTO> getArticleTable(IPage<ArticleDTO> page, @Param("queryCond") ArticleQueryDTO queryCond);
+
+    List<ArticleDTO> searchArticles(@Param("queryCond") BaseQueryDTO queryCond);
 }
