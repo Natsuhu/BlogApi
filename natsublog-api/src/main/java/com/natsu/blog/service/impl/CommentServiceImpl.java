@@ -207,7 +207,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         commentMapper.updateById(commentDTO);
         if (!comment.getIsPublished().equals(commentDTO.getIsPublished())) {
             //修改了权限，要同时修改所有子评论的权限,先获取同树的全部评论
-            List<Comment> comments = getSameOrgCommons(commentDTO.getOriginId());
+            List<Comment> comments = getSameOrgCommons(comment.getOriginId());
             //转为树结构并过滤出目标子树
             List<TreeNode> treeNodes = buildCommentTreeNode(comments);
             TreeNode rootNode = TreeUtils.listToTree(treeNodes, node -> node.getId().equals(comment.getId())).get(Constants.COM_NUM_ZERO);
