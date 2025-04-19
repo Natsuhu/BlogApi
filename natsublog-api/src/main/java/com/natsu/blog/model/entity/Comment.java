@@ -121,6 +121,6 @@ public class Comment implements Serializable {
      * 归属ID
      */
     @TableField("origin_id")
-    private Long originId;
+    private String originId;
 
 }

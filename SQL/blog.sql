@@ -90,7 +90,7 @@ CREATE TABLE `comment`  (
   `page` int NOT NULL COMMENT '1文章2友链3关于我',
   `reply_nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '回复的人昵称',
   `article_id` bigint NULL DEFAULT NULL COMMENT '评论的文章ID',
-  `origin_id` bigint NULL DEFAULT NULL COMMENT '归属ID',
+  `origin_id` varchar(32) NULL DEFAULT NULL COMMENT '归属ID',
   `parent_comment_id` bigint NOT NULL COMMENT '父论ID',
   `website` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '个人主页',
   `qq` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'QQ',

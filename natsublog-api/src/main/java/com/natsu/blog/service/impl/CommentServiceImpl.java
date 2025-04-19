@@ -63,12 +63,14 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         //组装实体
         if (commentDTO.getParentCommentId().equals(Constants.TOP_COMMENT_PARENT_ID)) {
             //设置8位的数字ID
-            int begin = RandomUtils.nextInt(1, 9);
-            int end = begin + 8;
-            String uuid = UUID.randomUUID().toString().replace("-", "");
-            String unmUUid = new BigInteger(uuid, 16).toString().replace("0", String.valueOf(begin));
-            Long uuidL = Long.parseLong(unmUUid.substring(begin, end));
-            commentDTO.setOriginId(uuidL);
+            //int begin = RandomUtils.nextInt(1, 9);
+            //int end = begin + 8;
+            //String uuid = UUID.randomUUID().toString().replace("-", "");
+            //String unmUUid = new BigInteger(uuid, 16).toString().replace("0", String.valueOf(begin));
+            //Long uuidL = Long.parseLong(unmUUid.substring(begin, end));
+            //改为用时间戳
+            String orgId = System.currentTimeMillis() + commentDTO.getIp().replace(".", "");
+            commentDTO.setOriginId(orgId);
         } else {
             //如果是回复评论，则检查上级评论状态，并设置originId
             Comment parentComment = commentMapper.selectById(commentDTO.getParentCommentId());
@@ -119,7 +121,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         List<Comment> rootComments = pageResult.getRecords();
 
         //根据rootComment查找childComment。Stream操作。
-        Map<Long, Long> queryMap = rootComments.stream().collect(Collectors.toMap(Comment::getId, Comment::getOriginId));
+        Map<Long, String> queryMap = rootComments.stream().collect(Collectors.toMap(Comment::getId, Comment::getOriginId));
         List<Comment> childComments = new ArrayList<>();
         if (!MapUtils.isEmpty(queryMap)) {
             LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
@@ -205,9 +207,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         commentMapper.updateById(commentDTO);
         if (!comment.getIsPublished().equals(commentDTO.getIsPublished())) {
             //修改了权限，要同时修改所有子评论的权限,先获取同树的全部评论
-            LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
-            queryWrapper.eq(Comment::getOriginId, comment.getOriginId());
-            List<Comment> comments = commentMapper.selectList(queryWrapper);
+            List<Comment> comments = getSameOrgCommons(commentDTO.getOriginId());
             //转为树结构并过滤出目标子树
             List<TreeNode> treeNodes = buildCommentTreeNode(comments);
             TreeNode rootNode = TreeUtils.listToTree(treeNodes, node -> node.getId().equals(comment.getId())).get(Constants.COM_NUM_ZERO);
@@ -230,9 +230,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public Integer deleteComment(CommentDTO commentDTO) {
         //删除评论时，顺带删除所有子评论
-        LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Comment::getOriginId, commentDTO.getOriginId());
-        List<Comment> comments = commentMapper.selectList(queryWrapper);
+        List<Comment> comments = getSameOrgCommons(commentDTO.getOriginId());
         //转为树结构并过滤出目标子树
         List<TreeNode> treeNodes = buildCommentTreeNode(comments);
         TreeNode rootNode = TreeUtils.listToTree(treeNodes, node -> node.getId().equals(commentDTO.getId())).get(Constants.COM_NUM_ZERO);
@@ -255,6 +253,18 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public List<Article> getArticleSelector() {
         return commentMapper.getArticleSelector();
+    }
+
+    /**
+     * 获取同源排列
+     *
+     * @param originId 源ID
+     * @return comments
+     */
+    private List<Comment> getSameOrgCommons(String originId) {
+        LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Comment::getOriginId, originId);
+        return commentMapper.selectList(queryWrapper);
     }
 
     /**
