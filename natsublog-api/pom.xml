@@ -137,6 +137,12 @@
             <artifactId>commonmark-ext-task-list-items</artifactId>
             <version>0.20.0</version>
         </dependency>
+        <!-- HTML解析 -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.12.1</version>
+        </dependency>
         <!--IP地址工具-->
         <dependency>
             <groupId>org.lionsoul</groupId>

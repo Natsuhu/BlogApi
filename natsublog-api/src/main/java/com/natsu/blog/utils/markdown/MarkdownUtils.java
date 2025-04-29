@@ -1,5 +1,7 @@
 package com.natsu.blog.utils.markdown;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.natsu.blog.utils.markdown.ext.cover.CoverExtension;
 import com.natsu.blog.utils.markdown.ext.heimu.HeimuExtension;
 import org.commonmark.Extension;
@@ -13,15 +15,20 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.AttributeProvider;
 import org.commonmark.renderer.html.HtmlRenderer;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 public class MarkdownUtils {
     /**
-     * 为h标签生成id 供tocbot目录生成
+     * 为h标签生成id
      */
     private static final Set<Extension> HEADING_ANCHOR_EXTENSIONS = Collections.singleton(HeadingAnchorExtension.create());
     /**
@@ -69,6 +76,10 @@ public class MarkdownUtils {
     private static class CustomAttributeProvider implements AttributeProvider {
         @Override
         public void setAttributes(Node node, String tagName, Map<String, String> attributes) {
+            //为一二三级标题生成ID
+            if ("h1h2h3".contains(tagName)) {
+                attributes.put("id", "h" + UUID.randomUUID().toString().replace("-", ""));
+            }
             //改变a标签的target属性为_blank
             if (node instanceof Link) {
                 Link n = (Link) node;
@@ -106,7 +117,35 @@ public class MarkdownUtils {
         return RENDERER.render(document);
     }
 
+    /**
+     * 从html文本中获取目录
+     *
+     * @param htmlString html字符
+     * @return JSON数组
+     */
+    public static JSONArray getCatalog(String htmlString) {
+        Document document = Jsoup.parse(htmlString);
+        Elements allElements = document.getAllElements();
+        //遍历出h1h2h3
+        JSONArray catalog = new JSONArray();
+        for (Element element : allElements) {
+            if ("h1h2h3".contains(element.tagName())) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("id", element.attr("id"));
+                jsonObject.put("title", element.text());
+                catalog.add(jsonObject);
+            }
+        }
+        return catalog;
+    }
+
     public static void main(String[] args) {
-        System.out.println(markdownToHtmlExtensions(""));
+        String markdown = "# 快速入门\n" +
+                "## 安装步骤\n" +
+                "### 环境要求\n" +
+                "## 使用示例";
+        String s = markdownToHtmlExtensions(markdown);
+        System.out.println(s);
+        System.out.println(getCatalog(s));
     }
 }

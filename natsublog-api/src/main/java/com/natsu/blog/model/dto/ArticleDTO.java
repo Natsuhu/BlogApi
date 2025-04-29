@@ -1,5 +1,6 @@
 package com.natsu.blog.model.dto;
 
+import com.alibaba.fastjson.JSONArray;
 import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.entity.Tag;
 import lombok.Data;
@@ -19,5 +20,7 @@ public class ArticleDTO extends Article {
     private List<Long> tagIds;
 
     private List<Tag> tags;
+
+    private JSONArray catalog;
 
 }

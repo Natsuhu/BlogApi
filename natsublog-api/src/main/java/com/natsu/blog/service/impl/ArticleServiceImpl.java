@@ -105,8 +105,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             ArticleDTO articleDTO = new ArticleDTO();
             BeanUtils.copyProperties(article, articleDTO);
             //补充分类和标签
-            String content = article.getContent();
-            articleDTO.setContent(MarkdownUtils.markdownToHtmlExtensions(content));
+            String htmlContent = MarkdownUtils.markdownToHtmlExtensions(article.getContent());
+            articleDTO.setContent(htmlContent);
+            articleDTO.setCatalog(MarkdownUtils.getCatalog(htmlContent));
             articleDTO.setCategoryName(categoryService.getById(article.getCategoryId()).getName());
             articleDTO.setTags(tagService.getTagsByArticleId(article.getId()));
             //更新文章阅读数量

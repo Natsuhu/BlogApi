@@ -88,7 +88,9 @@ public class OperationLogAspect {
         operationLog.setIp(ip);
         operationLog.setUserAgent(userAgent);
         if (requestParams != null && !operationLogger.type().getOperationTypeCode().equals(6)) {
-            operationLog.setParam(JSON.toJSONString(requestParams));
+            //截取600字符，避免更新文章时内容过长导致丢失日志
+            String param = JSON.toJSONString(requestParams);
+            operationLog.setParam(param.length() > 600 ? param.substring(600) : param);
         }
         operationLog.setDescription(operationLogger.description());
         operationLog.setType(operationLogger.type().getOperationTypeCode());
