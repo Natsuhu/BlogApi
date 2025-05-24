@@ -1,6 +1,7 @@
 package com.natsu.blog.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -16,6 +17,7 @@ import com.natsu.blog.service.AnnexService;
 import com.natsu.blog.service.annex.AnnexStorageService;
 import com.natsu.blog.utils.FileUtils;
 import com.natsu.blog.utils.QQInfoUtils;
+import com.natsu.blog.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -25,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -109,15 +110,21 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
     @Override
     public AnnexDownloadVO download(String annexId) {
         try {
-            //从文件表获取记录
-            Annex annex = annexMapper.selectById(annexId);
-            //调用文件框架获取流
             AnnexDTO annexDTO = new AnnexDTO();
-            BeanUtils.copyProperties(annex, annexDTO);
-            InputStream is = annexStorageService.fetch(annexDTO);
+            //从Redis获取文件信息
+            String annexJSON = (String) RedisUtils.get(Constants.FILE_SET + ":" + annexId);
+            if (StrUtil.isNotBlank(annexJSON)) {
+                annexDTO = JSON.toJavaObject(JSON.parseObject(annexJSON), AnnexDTO.class);
+            } else {
+                //Redis没有，则从文件表获取记录
+                Annex annex = annexMapper.selectById(annexId);
+                BeanUtils.copyProperties(annex, annexDTO);
+                //将文件信息缓存至Redis
+                RedisUtils.set(Constants.FILE_SET + ":" + annexId, JSON.toJSONString(annexDTO), 86400);
+            }
             //封装结果
             AnnexDownloadVO result = new AnnexDownloadVO();
-            result.setInputStream(is);
+            result.setInputStream(annexStorageService.fetch(annexDTO));
             result.setName(annexDTO.getName());
             result.setSize(annexDTO.getSize());
             result.setIsPublished(annexDTO.getIsPublished());
@@ -206,6 +213,8 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
             annexDTO.setSuffix(FileUtils.getFileSuffix(annexDTO.getName()));
         }
         updateById(annexDTO);
+        //删除Redis缓存
+        RedisUtils.del(Constants.FILE_SET + ":" + annexDTO.getId());
     }
 
     /**
@@ -222,5 +231,7 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
         //删除文件
         annexStorageService.remove(annexDTO);
         annexMapper.deleteById(annex);
+        //删除Redis缓存
+        RedisUtils.del(Constants.FILE_SET + ":" + annexDTO.getId());
     }
 }

@@ -153,4 +153,14 @@ public class SettingVO {
      */
     private String isDeleteCommentInDeleteArticle;
 
+    /**
+     * 设置值--首图是否用Base64传输
+     */
+    private String isHeaderImageBase64;
+
+    /**
+     * 设置值--首图标题颜色
+     */
+    private String headerTitleColor;
+
 }

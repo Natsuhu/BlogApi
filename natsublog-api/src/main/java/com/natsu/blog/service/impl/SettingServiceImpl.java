@@ -83,12 +83,15 @@ public class SettingServiceImpl extends ServiceImpl<SettingMapper, Setting> impl
         settingVO.setBackLoginImage(allSettingMap.get(Constants.SETTING_KET_BACK_LOGIN_IMAGE));
         settingVO.setIcpInfo(allSettingMap.get(Constants.SETTING_KET_ICPINFO));
         settingVO.setIsDeleteCommentInDeleteArticle(allSettingMap.get(Constants.SETTING_KEY_IS_DELETE_COMMENT_IN_DELETE_ARTICLE));
+        settingVO.setHeaderImage(allSettingMap.get(Constants.SETTING_KET_HEADER_IMAGE));
+        settingVO.setIsHeaderImageBase64(allSettingMap.get(Constants.SETTING_KEY_IS_HEADER_IMAGE_BASE64));
+        settingVO.setHeaderTitleColor(allSettingMap.get(Constants.SETTING_KEY_HEADER_TITLE_COLOR));
         settingVO.setCopyright(JSON.parseObject(allSettingMap.get(Constants.SETTING_KET_COPYRIGHT)));
         settingVO.setBadgeList(JSON.parseArray(allSettingMap.get(Constants.SETTING_KET_BADGELIST)));
         settingVO.setCardCustom(JSON.parseArray(allSettingMap.get(Constants.SETTING_KEY_CARD_CUSTOM)));
         //所有图片使用文件管理处理地址
         settingVO.setCardAvatar(annexService.getAnnexAccessAddress(allSettingMap.get(Constants.SETTING_KEY_CARD_AVATAR)));
-        settingVO.setHeaderImage(annexService.getAnnexAccessAddress(allSettingMap.get(Constants.SETTING_KET_HEADER_IMAGE)));
+//        settingVO.setHeaderImage(annexService.getAnnexAccessAddress(allSettingMap.get(Constants.SETTING_KET_HEADER_IMAGE)));
         settingVO.setBodyImage(annexService.getAnnexAccessAddress(allSettingMap.get(Constants.SETTING_KET_BODY_IMAGE)));
         return settingVO;
     }

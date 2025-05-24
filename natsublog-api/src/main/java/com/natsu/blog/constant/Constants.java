@@ -189,6 +189,16 @@ public class Constants {
     public static final String SETTING_KEY_IS_DELETE_COMMENT_IN_DELETE_ARTICLE = "isDeleteCommentInDeleteArticle";
 
     /**
+     * 设置值--首图是否用Base64传输
+     */
+    public static final String SETTING_KEY_IS_HEADER_IMAGE_BASE64 = "isHeaderImageBase64";
+
+    /**
+     * 设置值--首图标题颜色
+     */
+    public static final String SETTING_KEY_HEADER_TITLE_COLOR = "headerTitleColor";
+
+    /**
      * 评论中QQ头像存储方式-本地
      */
     public static final String LOCAL = "local";
@@ -252,4 +262,9 @@ public class Constants {
      * redis访客标识缓存
      */
     public static final String IDENTIFICATION_SET = "identificationSet";
+
+    /**
+     * redis文件缓存标识
+     */
+    public static final String FILE_SET = "fileSet";
 }
