@@ -12,6 +12,8 @@ import java.util.Map;
 
 public interface CommentService extends IService<Comment> {
 
+    Integer getCommentCount(Integer page, Long id);
+
     void updateComment(CommentDTO commentDTO);
 
     Integer deleteComment(CommentDTO commentDTO);

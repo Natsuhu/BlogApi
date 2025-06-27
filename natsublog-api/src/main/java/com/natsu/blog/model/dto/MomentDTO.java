@@ -8,4 +8,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class MomentDTO extends Moment {
 
+    /**
+     * 评论数量
+     */
+    private Integer commentCount;
+
 }

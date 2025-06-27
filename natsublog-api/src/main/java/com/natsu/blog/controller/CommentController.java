@@ -1,15 +1,12 @@
 package com.natsu.blog.controller;
 
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.natsu.blog.annotation.AccessLimit;
 import com.natsu.blog.annotation.VisitorLogger;
-import com.natsu.blog.constant.Constants;
 import com.natsu.blog.enums.VisitorBehavior;
 import com.natsu.blog.model.dto.CommentDTO;
 import com.natsu.blog.model.dto.CommentQueryDTO;
 import com.natsu.blog.model.dto.Result;
-import com.natsu.blog.model.entity.Comment;
 import com.natsu.blog.service.CommentService;
 import com.natsu.blog.utils.IPUtils;
 import com.natsu.blog.utils.JwtUtils;
@@ -43,12 +40,9 @@ public class CommentController {
     /**
      * 获取评论数量
      */
-    @GetMapping("/count")
-    public Result getCommentCount() {
-        LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Comment::getIsPublished, Constants.PUBLISHED);
-        Integer commentCount = commentService.count(wrapper);
-        return Result.success(commentCount);
+    @GetMapping("/getCommentCount")
+    public Result getCommentCount(CommentQueryDTO commentQueryDTO) {
+        return Result.success(commentService.getCommentCount(commentQueryDTO.getPage(), commentQueryDTO.getArticleId()));
     }
 
     /**

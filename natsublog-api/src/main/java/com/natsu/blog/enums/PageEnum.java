@@ -31,7 +31,11 @@ public enum PageEnum {
     /**
      * 资料卡
      */
-    CARD("card", 5);
+    CARD("card", 5),
+    /**
+     * 动态
+     */
+    MOMENT("moment", 6);
 
     /**
      * 页面名称

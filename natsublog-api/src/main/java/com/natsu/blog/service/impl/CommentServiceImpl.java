@@ -6,17 +6,17 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.natsu.blog.constant.Constants;
-import com.natsu.blog.enums.PageEnum;
 import com.natsu.blog.enums.StorageType;
 import com.natsu.blog.mapper.CommentMapper;
 import com.natsu.blog.model.dto.CommentDTO;
 import com.natsu.blog.model.dto.CommentQueryDTO;
 import com.natsu.blog.model.entity.Article;
 import com.natsu.blog.model.entity.Comment;
-import com.natsu.blog.model.entity.Setting;
+import com.natsu.blog.model.entity.Moment;
 import com.natsu.blog.service.AnnexService;
 import com.natsu.blog.service.ArticleService;
 import com.natsu.blog.service.CommentService;
+import com.natsu.blog.service.MomentService;
 import com.natsu.blog.service.SettingService;
 import com.natsu.blog.utils.IPUtils;
 import com.natsu.blog.utils.QQInfoUtils;
@@ -25,19 +25,16 @@ import com.natsu.blog.utils.tree.TreeNode;
 import com.natsu.blog.utils.tree.TreeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,6 +49,16 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Autowired
     private AnnexService annexService;
+
+    @Override
+    public Integer getCommentCount(Integer page, Long id) {
+        LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Comment::getPage, page);
+        if (id != null) {
+            queryWrapper.eq(Comment::getArticleId, id);
+        }
+        return commentMapper.selectCount(queryWrapper);
+    }
 
     @Transactional(rollbackFor = Exception.class)
     @Override
@@ -155,7 +162,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         LambdaQueryWrapper<Comment> queryCount = new LambdaQueryWrapper<>();
         queryCount.eq(Comment::getIsPublished, Constants.PUBLISHED);
         queryCount.eq(Comment::getPage, commentQueryDTO.getPage());
-        if (commentQueryDTO.getPage().equals(PageEnum.ARTICLE.getPageCode())) {
+        if (commentQueryDTO.getArticleId() != null) {
             queryCount.eq(Comment::getArticleId, commentQueryDTO.getArticleId());
         }
         Integer commentCount = commentMapper.selectCount(queryCount);
@@ -309,26 +316,25 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
      * 验证目标页面能否评论
      */
     private Boolean checkPageIsComment(Integer page, Long articleId) {
-        ArticleService articleService = SpringContextUtils.getBean(ArticleService.class);
         switch (page) {
             case 1:
+                ArticleService articleService = SpringContextUtils.getBean(ArticleService.class);
                 Article article = articleService.getById(articleId);
                 if (article == null) {
                     return false;
                 }
                 return article.getIsPublished().equals(Constants.PUBLISHED) && article.getIsCommentEnabled().equals(Constants.ALLOW_COMMENT);
             case 2:
-                LambdaQueryWrapper<Setting> friendPageQuery = new LambdaQueryWrapper<>();
-                friendPageQuery.eq(Setting::getSettingKey, Constants.SETTING_KEY_FRIEND_IS_COMMENT);
-                friendPageQuery.eq(Setting::getPage, PageEnum.FRIEND.getPageCode());
-                Setting friendPageSetting = settingService.getOne(friendPageQuery);
-                return !"false".equals(friendPageSetting.getSettingValue());
+                return !"false".equals(settingService.getSetting(Constants.SETTING_KEY_FRIEND_IS_COMMENT));
             case 3:
-                LambdaQueryWrapper<Setting> aboutPageQuery = new LambdaQueryWrapper<>();
-                aboutPageQuery.eq(Setting::getSettingKey, Constants.SETTING_KEY_ABOUT_IS_COMMENT);
-                aboutPageQuery.eq(Setting::getPage, PageEnum.ABOUT.getPageCode());
-                Setting aboutPageSetting = settingService.getOne(aboutPageQuery);
-                return !"false".equals(aboutPageSetting.getSettingValue());
+                return !"false".equals(settingService.getSetting(Constants.SETTING_KEY_ABOUT_IS_COMMENT));
+            case 6:
+                MomentService momentService = SpringContextUtils.getBean(MomentService.class);
+                Moment moment = momentService.getById(articleId);
+                if (moment == null) {
+                    return false;
+                }
+                return moment.getIsPublished().equals(Constants.PUBLISHED) && moment.getIsCommentEnabled().equals(Constants.ALLOW_COMMENT);
             default:
                 return false;
         }

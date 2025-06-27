@@ -226,6 +226,9 @@ public class VisitorLogAspect {
                 if (page.equals(PageEnum.ABOUT.getPageCode())) {
                     content = "位置：关于我";
                 }
+                if (page.equals(PageEnum.MOMENT.getPageCode())) {
+                    content = "动态ID：" + commentDTO.getArticleId();
+                }
                 break;
             default:
                 content = VisitorBehavior.UNKNOWN.getContent();

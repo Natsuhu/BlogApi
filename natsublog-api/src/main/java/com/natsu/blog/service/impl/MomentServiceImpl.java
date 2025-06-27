@@ -1,15 +1,16 @@
 package com.natsu.blog.service.impl;
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.natsu.blog.constant.Constants;
+import com.natsu.blog.enums.PageEnum;
 import com.natsu.blog.mapper.MomentMapper;
 import com.natsu.blog.model.dto.MomentDTO;
 import com.natsu.blog.model.dto.MomentQueryDTO;
 import com.natsu.blog.model.entity.Moment;
 import com.natsu.blog.service.AnnexService;
+import com.natsu.blog.service.CommentService;
 import com.natsu.blog.service.MomentService;
 import com.natsu.blog.service.SettingService;
 import com.natsu.blog.utils.CommonUtils;
@@ -34,15 +35,19 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper, Moment> impleme
     @Autowired
     private SettingService settingService;
 
+    @Autowired
+    private CommentService commentService;
+
     @Override
     public IPage<MomentDTO> getMoments(MomentQueryDTO queryCond) {
         IPage<MomentDTO> page = new Page<>(queryCond.getPageNo(), queryCond.getPageSize());
         IPage<MomentDTO> moments = momentMapper.getMoments(page, queryCond);
-        //Markdown转义HTML，设置头像地址
+        //Markdown转义HTML，设置头像地址，查询评论数量
         List<MomentDTO> records = moments.getRecords();
         for (MomentDTO momentDTO : records) {
             momentDTO.setContent(MarkdownUtils.markdownToHtmlExtensions(momentDTO.getContent()));
             momentDTO.setAvatar(annexService.getAnnexAccessAddress(momentDTO.getAvatar()));
+            momentDTO.setCommentCount(commentService.getCommentCount(PageEnum.MOMENT.getPageCode(), momentDTO.getId()));
         }
         moments.setRecords(records);
         return moments;
