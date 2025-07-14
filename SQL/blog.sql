@@ -300,5 +300,7 @@ INSERT INTO `setting` (`id`, `setting_key`, `setting_value`, `remark`, `page`, `
 INSERT INTO `setting` (`id`, `setting_key`, `setting_value`, `remark`, `page`, `create_time`, `update_time`) VALUES (26, 'badgeList', null , '页脚徽标', 0, now(), now());
 INSERT INTO `setting` (`id`, `setting_key`, `setting_value`, `remark`, `page`, `create_time`, `update_time`) VALUES (27, 'cardCustom', null , '资料卡自定义', 5, now(), now());
 INSERT INTO `setting` (`id`, `setting_key`, `setting_value`, `remark`, `page`, `create_time`, `update_time`) VALUES (28, 'isDeleteCommentInDeleteArticle', 'false', '删除文章时，是否顺带删除文章下的评论', 99, now(), now());
+INSERT INTO `setting` (`id`, `setting_key`, `setting_value`, `remark`, `page`, `create_time`, `update_time`) VALUES (29, 'isHeaderImageBase64', 'true', '首图是否用Base64传输', 0, now(), now());
+INSERT INTO `setting` (`id`, `setting_key`, `setting_value`, `remark`, `page`, `create_time`, `update_time`) VALUES (30, 'headerTitleColor', '#66ccff', '首图标题颜色', 0, now(), now());
 INSERT INTO `user` (`id`, `username`, `password`, `nickname`, `avatar`, `email`, `role`, `create_time`, `update_time`) VALUES (1, 'admin', '$2a$10$VNkYnWM5DPVUDWthcO.Pz.k5k8j/7hQEPrUhwaU7uhNkjqLA3j7pi', '管理员', '1', 'xxx@xxx.com', 'admin', now(), now());
 INSERT INTO `user` (`id`, `username`, `password`, `nickname`, `avatar`, `email`, `role`, `create_time`, `update_time`) VALUES (2, 'Visitor', '$2a$10$VNkYnWM5DPVUDWthcO.Pz.k5k8j/7hQEPrUhwaU7uhNkjqLA3j7pi', '访客', '1', 'xxx@xxx.com', 'visitor', now(), now());
