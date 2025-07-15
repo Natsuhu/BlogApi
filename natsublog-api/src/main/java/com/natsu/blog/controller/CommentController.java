@@ -42,7 +42,7 @@ public class CommentController {
      */
     @GetMapping("/getCommentCount")
     public Result getCommentCount(CommentQueryDTO commentQueryDTO) {
-        return Result.success(commentService.getCommentCount(commentQueryDTO.getPage(), commentQueryDTO.getArticleId()));
+        return Result.success(commentService.getCommentCount(commentQueryDTO.getObjectType(), commentQueryDTO.getObjectId()));
     }
 
     /**

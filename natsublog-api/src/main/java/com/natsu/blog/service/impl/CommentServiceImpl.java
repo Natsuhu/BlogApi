@@ -51,11 +51,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     private AnnexService annexService;
 
     @Override
-    public Integer getCommentCount(Integer page, Long id) {
+    public Integer getCommentCount(Integer objectType, Long objectId) {
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Comment::getPage, page);
-        if (id != null) {
-            queryWrapper.eq(Comment::getArticleId, id);
+        queryWrapper.eq(Comment::getObjectType, objectType);
+        queryWrapper.eq(Comment::getIsPublished, true);
+        if (objectId != null) {
+            queryWrapper.eq(Comment::getObjectId, objectId);
         }
         return commentMapper.selectCount(queryWrapper);
     }
@@ -64,7 +65,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public void saveComment(CommentDTO commentDTO) {
         //验证目标页面能否评论
-        if (!checkPageIsComment(commentDTO.getPage(), commentDTO.getArticleId())) {
+        if (!checkPageIsComment(commentDTO.getObjectType(), commentDTO.getObjectId())) {
             throw new RuntimeException("评论区已关闭");
         }
         //组装实体
@@ -76,8 +77,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             //String unmUUid = new BigInteger(uuid, 16).toString().replace("0", String.valueOf(begin));
             //Long uuidL = Long.parseLong(unmUUid.substring(begin, end));
             //改为用时间戳
-            String orgId = System.currentTimeMillis() + commentDTO.getIp().replace(".", "");
-            commentDTO.setOriginId(orgId);
+            String treeId = System.currentTimeMillis() + commentDTO.getIp().replace(".", "");
+            commentDTO.setTreeId(treeId);
         } else {
             //如果是回复评论，则检查上级评论状态，并设置originId
             Comment parentComment = commentMapper.selectById(commentDTO.getParentCommentId());
@@ -85,7 +86,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 throw new RuntimeException("目标评论无法回复");
             }
             commentDTO.setReplyNickname(parentComment.getNickname());
-            commentDTO.setOriginId(parentComment.getOriginId());
+            commentDTO.setTreeId(parentComment.getTreeId());
         }
         //如果是QQ则直接使用QQ的头像和昵称
         String qqNum = commentDTO.getQq();
@@ -118,7 +119,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public Map<String, Object> getComments(CommentQueryDTO commentQueryDTO) {
         //验证目标页面能否评论
-        if (!checkPageIsComment(commentQueryDTO.getPage(), commentQueryDTO.getArticleId())) {
+        if (!checkPageIsComment(commentQueryDTO.getObjectType(), commentQueryDTO.getObjectId())) {
             throw new RuntimeException("评论区已关闭");
         }
 
@@ -128,13 +129,13 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         List<Comment> rootComments = pageResult.getRecords();
 
         //根据rootComment查找childComment。Stream操作。
-        Map<Long, String> queryMap = rootComments.stream().collect(Collectors.toMap(Comment::getId, Comment::getOriginId));
+        Map<Long, String> queryMap = rootComments.stream().collect(Collectors.toMap(Comment::getId, Comment::getTreeId));
         List<Comment> childComments = new ArrayList<>();
         if (!MapUtils.isEmpty(queryMap)) {
             LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
             wrapper.eq(Comment::getIsPublished, Constants.PUBLISHED);
             wrapper.notIn(Comment::getId, queryMap.keySet());
-            wrapper.in(Comment::getOriginId, queryMap.values());
+            wrapper.in(Comment::getTreeId, queryMap.values());
             childComments = commentMapper.selectList(wrapper);
         }
 
@@ -161,9 +162,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         //获取当前页面的评论数量和分页总页数
         LambdaQueryWrapper<Comment> queryCount = new LambdaQueryWrapper<>();
         queryCount.eq(Comment::getIsPublished, Constants.PUBLISHED);
-        queryCount.eq(Comment::getPage, commentQueryDTO.getPage());
-        if (commentQueryDTO.getArticleId() != null) {
-            queryCount.eq(Comment::getArticleId, commentQueryDTO.getArticleId());
+        queryCount.eq(Comment::getObjectType, commentQueryDTO.getObjectType());
+        if (commentQueryDTO.getObjectId() != null) {
+            queryCount.eq(Comment::getObjectId, commentQueryDTO.getObjectId());
         }
         Integer commentCount = commentMapper.selectCount(queryCount);
         Long totalPage = pageResult.getPages();
@@ -214,7 +215,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         commentMapper.updateById(commentDTO);
         if (!comment.getIsPublished().equals(commentDTO.getIsPublished())) {
             //修改了权限，要同时修改所有子评论的权限,先获取同树的全部评论
-            List<Comment> comments = getSameOrgCommons(comment.getOriginId());
+            List<Comment> comments = getSameOrgCommons(comment.getTreeId());
             //转为树结构并过滤出目标子树
             List<TreeNode> treeNodes = buildCommentTreeNode(comments);
             TreeNode rootNode = TreeUtils.listToTree(treeNodes, node -> node.getId().equals(comment.getId())).get(Constants.COM_NUM_ZERO);
@@ -237,7 +238,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     public Integer deleteComment(CommentDTO commentDTO) {
         //删除评论时，顺带删除所有子评论
-        List<Comment> comments = getSameOrgCommons(commentDTO.getOriginId());
+        List<Comment> comments = getSameOrgCommons(commentDTO.getTreeId());
         //转为树结构并过滤出目标子树
         List<TreeNode> treeNodes = buildCommentTreeNode(comments);
         TreeNode rootNode = TreeUtils.listToTree(treeNodes, node -> node.getId().equals(commentDTO.getId())).get(Constants.COM_NUM_ZERO);
@@ -265,12 +266,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     /**
      * 获取同源排列
      *
-     * @param originId 源ID
+     * @param treeId 树ID
      * @return comments
      */
-    private List<Comment> getSameOrgCommons(String originId) {
+    private List<Comment> getSameOrgCommons(String treeId) {
         LambdaQueryWrapper<Comment> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(Comment::getOriginId, originId);
+        queryWrapper.eq(Comment::getTreeId, treeId);
         return commentMapper.selectList(queryWrapper);
     }
 
@@ -282,7 +283,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         for (Comment comment : comments) {
             Map<String, Object> contentMap = new HashMap<>(6);
             contentMap.put("nickname", comment.getNickname());
-            contentMap.put("originId", comment.getOriginId());
+            contentMap.put("treeId", comment.getTreeId());
             contentMap.put("content", comment.getContent());
             contentMap.put("avatar", annexService.getAnnexAccessAddress(comment.getAvatar()));
             contentMap.put("createTime", comment.getCreateTime());

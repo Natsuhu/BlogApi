@@ -6,15 +6,15 @@
     <select id="getRootComments" resultType="com.natsu.blog.model.entity.Comment" >
         select
             id, nickname, email, content, avatar, create_time, ip, is_published, website, qq,
-            is_admin_comment, page, reply_nickname, article_id, origin_id, parent_comment_id
+            is_admin_comment, object_type, reply_nickname, object_id, tree_id, parent_comment_id
         from
             comment
         <where>
-            <if test="queryCond.page != null">
-                and page = ${queryCond.page}
+            <if test="queryCond.objectType != null">
+                and object_type = ${queryCond.objectType}
             </if>
-            <if test="queryCond.articleId != null">
-                and article_id = ${queryCond.articleId}
+            <if test="queryCond.objectId != null">
+                and object_id = ${queryCond.objectId}
             </if>
             and parent_comment_id = -1
             and is_published = true
@@ -24,15 +24,16 @@
 
     <select id="getCommentTable" resultType="com.natsu.blog.model.dto.CommentDTO">
         select
-            c.id, avatar, nickname, c.content, c.origin_id,
-            (case page when 1 then a.title when 2 then '友链' when 3 then '关于我' end) as 'page_name',
-            c.is_published, ip,
-            ifnull(email, '--') as email,
-            ifnull(website, '--') as website,
-            ifnull(qq, '--') as qq,
+            c.id, c.avatar, c.nickname, c.content, c.tree_id,
+            (case object_type when 1 then a.title when 2 then '友链' when 3 then '关于我' when 6 then '动态' end) as page_name,
+            c.is_published,
+            c.ip,
+            c.email,
+            c.website,
+            c.qq,
             c.create_time
         from
-            comment as c left join article as a on c.article_id = a.id
+            comment as c left join article as a on c.object_id = a.id
         <where>
             <if test="queryCond.keyword != null and queryCond.keyword != ''">
                 and c.nickname like concat('%',#{queryCond.keyword},'%')
@@ -41,11 +42,11 @@
             <if test="queryCond.startTime != null and queryCond.endTime != null">
                 and c.create_time between #{queryCond.startTime} and #{queryCond.endTime}
             </if>
-            <if test="queryCond.page != null">
-                and c.page = #{queryCond.page}
+            <if test="queryCond.objectType != null">
+                and c.object_type = #{queryCond.objectType}
             </if>
-            <if test="queryCond.articleId != null">
-                and a.id = #{queryCond.articleId}
+            <if test="queryCond.objectId != null">
+                and a.id = #{queryCond.objectId}
             </if>
         </where>
         order by c.create_time desc
@@ -57,7 +58,7 @@
         from
             article
         where
-            id in (select article_id from comment where article_id is not null group by article_id)
+            id in (select object_id from comment where object_type = '1' and object_id is not null group by object_id)
     </select>
 
 </mapper>

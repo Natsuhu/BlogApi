@@ -12,7 +12,7 @@ import java.util.Map;
 
 public interface CommentService extends IService<Comment> {
 
-    Integer getCommentCount(Integer page, Long id);
+    Integer getCommentCount(Integer objectType, Long objectId);
 
     void updateComment(CommentDTO commentDTO);
 

@@ -7,9 +7,9 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class CommentQueryDTO extends BaseQueryDTO {
 
-    private Integer page;
+    private Integer objectType;
 
-    private Long articleId;
+    private Long objectId;
 
     private Long parentCommentId;
 

@@ -84,8 +84,8 @@ public class Comment implements Serializable {
     /**
      * 1文章2友链3关于我
      */
-    @TableField("page")
-    private Integer page;
+    @TableField("object_type")
+    private Integer objectType;
 
     /**
      * 回复的人昵称
@@ -96,8 +96,8 @@ public class Comment implements Serializable {
     /**
      * 评论的文章ID
      */
-    @TableField("article_id")
-    private Long articleId;
+    @TableField("object_id")
+    private Long objectId;
 
     /**
      * 父论ID
@@ -120,7 +120,7 @@ public class Comment implements Serializable {
     /**
      * 归属ID
      */
-    @TableField("origin_id")
-    private String originId;
+    @TableField("tree_id")
+    private String treeId;
 
 }

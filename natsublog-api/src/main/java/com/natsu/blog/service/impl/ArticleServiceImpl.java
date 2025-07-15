@@ -243,8 +243,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         String isDeleteComment = settingService.getSetting(Constants.SETTING_KEY_IS_DELETE_COMMENT_IN_DELETE_ARTICLE);
         if ("true".equals(isDeleteComment)) {
             LambdaQueryWrapper<Comment> deleteComment = new LambdaQueryWrapper<>();
-            deleteComment.eq(Comment::getPage, PageEnum.ARTICLE.getPageCode());
-            deleteComment.eq(Comment::getArticleId, articleDTO.getId());
+            deleteComment.eq(Comment::getObjectType, PageEnum.ARTICLE.getPageCode());
+            deleteComment.eq(Comment::getObjectId, articleDTO.getId());
             commentService.remove(deleteComment);
         }
         //删除文章

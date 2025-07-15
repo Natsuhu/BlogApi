@@ -216,9 +216,9 @@ public class VisitorLogAspect {
                 break;
             case COMMENT:
                 CommentDTO commentDTO = (CommentDTO) requestParams;
-                Integer page = commentDTO.getPage();
+                Integer page = commentDTO.getObjectType();
                 if (page.equals(PageEnum.ARTICLE.getPageCode())) {
-                    content = "文章ID：" + commentDTO.getArticleId();
+                    content = "文章ID：" + commentDTO.getObjectId();
                 }
                 if (page.equals(PageEnum.FRIEND.getPageCode())) {
                     content = "位置：友情链接";
@@ -227,7 +227,7 @@ public class VisitorLogAspect {
                     content = "位置：关于我";
                 }
                 if (page.equals(PageEnum.MOMENT.getPageCode())) {
-                    content = "动态ID：" + commentDTO.getArticleId();
+                    content = "动态ID：" + commentDTO.getObjectId();
                 }
                 break;
             default:
