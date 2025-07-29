@@ -1,5 +1,6 @@
 package com.natsu.blog.utils;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpException;
 
 public class HttpRangeUtils {
@@ -28,6 +29,9 @@ public class HttpRangeUtils {
         int cacheB = cacheA.indexOf("-");
         String end = cacheA.substring(cacheB + 1);
         try {
+            if (StrUtil.isBlank(end)) {
+                return null;
+            }
             return Long.parseLong(end);
         } catch (Exception e) {
             throw new HttpException("Range格式错误");

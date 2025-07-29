@@ -96,9 +96,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         if (QQInfoUtils.isQQNumber(qqNum)) {
             //尝试获取QQ头像和昵称，获取失败使用随机头像
             try {
-                String annexId = annexService.saveQQAvatar(qqNum, StorageType.LOCAL.getType());
+                String nickname = QQInfoUtils.getQQNickname(qqNum);
+                String annexId = annexService.saveQQAvatar(qqNum, nickname, StorageType.LOCAL.getType());
                 commentDTO.setAvatar(annexId);
-                commentDTO.setNickname(QQInfoUtils.getQQNickname(qqNum));
+                commentDTO.setNickname(nickname);
             } catch (Exception e) {
                 log.error("获取QQ头像失败：{}", e.getMessage());
                 commentDTO.setNickname("nickname");

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.natsu.blog.mapper.MusicMapper">
+
+    <!--  查询歌单下的歌曲列表  -->
+    <select id="getMusicTable" resultType="com.natsu.blog.model.dto.MusicDTO">
+        select id, title, author, catalog_id, music_url, lrc_url, pic_url,
+               is_published, create_time, update_time
+        from music
+        <where>
+            <if test="queryCond.catalogId != null and queryCond.catalogId != ''">
+                and catalog_id = #{queryCond.catalogId}
+            </if>
+            <if test="queryCond.keyword != null and queryCond.keyword != ''">
+                and title like concat('%',#{queryCond.keyword},'%')
+            </if>
+            <if test="queryCond.isPublished != null">
+                and is_published = #{queryCond.isPublished}
+            </if>
+            <if test="queryCond.startTime != null and queryCond.endTime != null">
+                and create_time between #{queryCond.startTime} and #{queryCond.endTime}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+</mapper>

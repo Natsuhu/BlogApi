@@ -1,7 +1,5 @@
 package com.natsu.blog.controller.admin;
 
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.http.HttpException;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.natsu.blog.annotation.Admin;
 import com.natsu.blog.annotation.OperationLogger;
@@ -12,7 +10,6 @@ import com.natsu.blog.model.dto.AnnexQueryDTO;
 import com.natsu.blog.model.dto.Result;
 import com.natsu.blog.model.vo.AnnexDownloadVO;
 import com.natsu.blog.service.AnnexService;
-import com.natsu.blog.utils.HttpRangeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -52,9 +49,10 @@ public class AdminAnnexController {
     @OperationLogger(type = OperationTypeEnum.UPLOAD, description = "文件")
     @PostMapping("/upload")
     public Result upload(@RequestParam(value = "file") MultipartFile multipartFile,
-                         @RequestParam(value = "isPublished", defaultValue = "false", required = false) Boolean isPublished) {
+                         @RequestParam(value = "isPublished", defaultValue = "false", required = false) Boolean isPublished,
+                         @RequestParam(value = "fileType", defaultValue = "1", required = false) String fileType) {
         try {
-            String annexId = annexService.upload(multipartFile, isPublished);
+            String annexId = annexService.upload(multipartFile, isPublished, fileType);
             return Result.success(annexService.getAnnexAccessAddress(annexId));
         } catch (Exception e) {
             log.error("上传失败：{}", e.getMessage());
@@ -62,6 +60,13 @@ public class AdminAnnexController {
         }
     }
 
+    /**
+     * Admin文件下载接口。取消断点续传支持。
+     *
+     * @param annexId  文件ID
+     * @param request  请求
+     * @param response 响应
+     */
     @Admin
     @OperationLogger(type = OperationTypeEnum.DOWNLOAD, description = "文件")
     @GetMapping("/download/{annexId}")
@@ -69,11 +74,6 @@ public class AdminAnnexController {
         OutputStream os = null;
         BufferedInputStream bis = null;
         try {
-//            Enumeration<String> headerNames = request.getHeaderNames();
-//            while (headerNames.hasMoreElements()) {
-//                String a = headerNames.nextElement();
-//                System.out.println("请求头：" + a + "：" + request.getHeader(a));
-//            }
             //获取文件信息
             AnnexDownloadVO result = annexService.download(annexId);
             String fileName = result.getName();
@@ -83,43 +83,22 @@ public class AdminAnnexController {
             bis = new BufferedInputStream(is, Constants.FILE_BUFFER_SIZE);
             os = response.getOutputStream();
             //设置公共请求头
-            response.addHeader("Accept-Ranges", "bytes");
+            response.addHeader("Accept-Ranges", "none");
             response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
             response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-            //判断是否断分片传输
-            String range = request.getHeader("range");
-            if (StrUtil.isNotBlank(range) && range.startsWith("bytes=")) {
-                try {
-                    long rangeStart = HttpRangeUtils.getRangeStart(range);
-                    Long rangeEnd = HttpRangeUtils.getRangeEnd(range);
-                    long rangeLength = Long.parseLong(size) - rangeStart;
-                    //response.addHeader("Digest", "sha-256=" + sha256Hex);
-                    response.addHeader("Content-Range", "bytes " + rangeStart + "-" + rangeEnd + "/" + size);
-                    response.addHeader("Content-Length", Long.toString(rangeLength));
-                    int len;
-                    byte[] buffer = new byte[(int) rangeLength];
-                    bis.skip(rangeStart);
-                    while ((len = bis.read(buffer, 0, (int) rangeLength)) != -1) {
-                        os.write(buffer, 0, len);
-                    }
-                } catch (HttpException e) {
-                    response.setStatus(HttpServletResponse.SC_REQUESTED_RANGE_NOT_SATISFIABLE);
-                }
-            } else {
-                //文件大小 (可以不设置长度，这样在size字段和文件实际大小不同情况下，也可保证下载成功)
-                response.addHeader("Content-Length", size);
-                String utf8FileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
-                response.addHeader("Content-Disposition", Constants.CONTENT_DISPOSITION_ANNEX + ";filename=" + utf8FileName);
-                //流处理
-                int len;
-                byte[] buffer = new byte[Constants.FILE_BUFFER_SIZE];
-                while ((len = bis.read(buffer)) != -1) {
-                    os.write(buffer, 0, len);
-                }
+            //文件大小 (可以不设置长度，这样在size字段和文件实际大小不同情况下，也可保证下载成功)
+            response.addHeader("Content-Length", size);
+            String utf8FileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
+            response.addHeader("Content-Disposition", Constants.CONTENT_DISPOSITION_ANNEX + ";filename=" + utf8FileName);
+            //流处理
+            int len;
+            byte[] buffer = new byte[Constants.FILE_BUFFER_SIZE];
+            while ((len = bis.read(buffer)) != -1) {
+                os.write(buffer, 0, len);
             }
         } catch (Exception e) {
-            log.error("文件：[{}]，下载失败：{}",annexId, e.getMessage());
+            log.error("文件：[{}]，下载失败：{}", annexId, e.getMessage());
         } finally {
             try {
                 if (os != null) {

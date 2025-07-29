@@ -19,16 +19,25 @@ public interface AnnexService extends IService<Annex> {
      * @param isPublished   是否公开
      * @return ID
      */
-    String upload(MultipartFile multipartFile, Boolean isPublished);
+    String upload(MultipartFile multipartFile, Boolean isPublished, String fileType);
 
     /**
      * 保存qq头像，目前仅评论功能使用
      *
-     * @param qq          　qq号
+     * @param qq          　 qq号
+     * @param nickname    昵称
      * @param storageType 　存储类型
      * @return 文件ID
      */
-    String saveQQAvatar(String qq, Integer storageType);
+    String saveQQAvatar(String qq, String nickname, Integer storageType);
+
+    /**
+     * 查询附件信息
+     *
+     * @param annexId 文件ID
+     * @return AnnexDTO
+     */
+    AnnexDTO getAnnexInfo(String annexId);
 
     /**
      * 下载文件

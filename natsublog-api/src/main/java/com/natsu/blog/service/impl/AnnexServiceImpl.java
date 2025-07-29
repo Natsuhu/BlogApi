@@ -2,11 +2,13 @@ package com.natsu.blog.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.natsu.blog.config.properties.BlogProperties;
 import com.natsu.blog.constant.Constants;
+import com.natsu.blog.enums.FileType;
 import com.natsu.blog.enums.StorageType;
 import com.natsu.blog.mapper.AnnexMapper;
 import com.natsu.blog.model.dto.AnnexDTO;
@@ -51,7 +53,7 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public String upload(MultipartFile multipartFile, Boolean isPublished) {
+    public String upload(MultipartFile multipartFile, Boolean isPublished, String fileType) {
         //获取文件信息
         String reflectId = UUID.randomUUID().toString().replace("-", "");
         String fileName = multipartFile.getOriginalFilename();
@@ -64,8 +66,7 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
         annexDTO.setIsPublished(isPublished);
         annexDTO.setPath(blogProperties.getAnnex().get(Constants.PATH) + File.separator + reflectId);
         annexDTO.setParentPath(blogProperties.getAnnex().get(Constants.PATH));
-        //TODO 额外信息--后续需针对媒体文件进行解析。存储方式--后续准备接入minio，目前默认磁盘存储
-        annexDTO.setExtra("{\"null\":\"null\"}");
+        annexDTO.setFileType(fileType);
         annexDTO.setStorageType(StorageType.LOCAL.getType());
         //开始保存
         annexStorageService.store(multipartFile, annexDTO);
@@ -75,7 +76,7 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public String saveQQAvatar(String qq, Integer storageType) {
+    public String saveQQAvatar(String qq, String nickname, Integer storageType) {
         try {
             String reflectId = UUID.randomUUID().toString().replace("-", "");
             //获取文件信息
@@ -89,8 +90,13 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
             annex.setIsPublished(Constants.PUBLISHED);
             annex.setStorageType(storageType);
             annex.setPath(blogProperties.getAnnex().get(Constants.PATH) + File.separator + reflectId);
-            annex.setExtra(qq);
             annex.setParentPath(blogProperties.getAnnex().get(Constants.PATH));
+            annex.setFileType(FileType.QQ_AVATAR.fileTypeCode);
+            //保存额外信息
+            JSONObject extra = new JSONObject();
+            extra.put("qq", qq);
+            extra.put("nickname", nickname);
+            annex.setExtra(extra.toJSONString());
             //保存文件
             annexStorageService.store(qqAvatar.getInputStream(), annex);
             annexMapper.insert(annex);
@@ -102,6 +108,28 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
     }
 
     /**
+     * 查询附件信息
+     *
+     * @param annexId 文件ID
+     * @return AnnexID
+     */
+    public AnnexDTO getAnnexInfo(String annexId) {
+        AnnexDTO annexDTO = new AnnexDTO();
+        //从Redis获取文件信息
+        String annexJSON = (String) RedisUtils.get(Constants.FILE_SET + ":" + annexId);
+        if (StrUtil.isNotBlank(annexJSON)) {
+            annexDTO = JSON.toJavaObject(JSON.parseObject(annexJSON), AnnexDTO.class);
+        } else {
+            //Redis没有，则从文件表获取记录
+            Annex annex = annexMapper.selectById(annexId);
+            BeanUtils.copyProperties(annex, annexDTO);
+            //将文件信息缓存至Redis
+            RedisUtils.set(Constants.FILE_SET + ":" + annexId, JSON.toJSONString(annexDTO), 86400);
+        }
+        return annexDTO;
+    }
+
+    /**
      * 下载文件
      *
      * @param annexId 文件Id
@@ -110,18 +138,7 @@ public class AnnexServiceImpl extends ServiceImpl<AnnexMapper, Annex> implements
     @Override
     public AnnexDownloadVO download(String annexId) {
         try {
-            AnnexDTO annexDTO = new AnnexDTO();
-            //从Redis获取文件信息
-            String annexJSON = (String) RedisUtils.get(Constants.FILE_SET + ":" + annexId);
-            if (StrUtil.isNotBlank(annexJSON)) {
-                annexDTO = JSON.toJavaObject(JSON.parseObject(annexJSON), AnnexDTO.class);
-            } else {
-                //Redis没有，则从文件表获取记录
-                Annex annex = annexMapper.selectById(annexId);
-                BeanUtils.copyProperties(annex, annexDTO);
-                //将文件信息缓存至Redis
-                RedisUtils.set(Constants.FILE_SET + ":" + annexId, JSON.toJSONString(annexDTO), 86400);
-            }
+            AnnexDTO annexDTO = getAnnexInfo(annexId);
             //封装结果
             AnnexDownloadVO result = new AnnexDownloadVO();
             result.setInputStream(annexStorageService.fetch(annexDTO));
