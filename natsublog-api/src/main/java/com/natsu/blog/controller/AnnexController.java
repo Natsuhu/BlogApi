@@ -63,8 +63,12 @@ public class AnnexController {
                 if (rangeStart < 0 || rangeStart >= fileSize -1) {
                     rangeStart = 0L;
                 }
-                //rangeEnd不能为空且大于文件体积
                 Long rangeEnd = HttpRangeUtils.getRangeEnd(range);
+                //如果是 bytes=0- 这种情况，返回前512KB数据
+                if (rangeStart == 0 && rangeEnd == null) {
+                    rangeEnd = 524288L;
+                }
+                //rangeEnd不能为空或大于文件体积
                 if (rangeEnd == null || rangeEnd >= fileSize - 1 || rangeEnd <= rangeStart) {
                     rangeEnd = fileSize - 1L;
                 }
